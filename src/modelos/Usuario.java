@@ -10,19 +10,21 @@ public class Usuario {
     protected String foto;
        
     public Integer getCodigo(){
-        return codigo;
+        return this.codigo;
     }
     
     public String getNombre(){
-        return nombre;
+        return this.nombre;
     }
     
     public String getApellido(){
-        return apellido;
+        return this.apellido;
     }
     
     public Integer getDni(){
-        return dni;
+        return this.dni;
     }
+    
+    public String getPass()
 }
 

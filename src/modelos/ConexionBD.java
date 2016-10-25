@@ -7,37 +7,48 @@ public class ConexionBD {
     protected String connect = "jdbc:postgresql://localhost:5432/cachito";
     protected String user = "postgres";
     protected String pass = "";
+    Connection c = null;
     
-    
-    public void conexion(){
-      Connection c = null;
+    public void ConexionBD(){
       try {
-         Class.forName(driver);
-         c = DriverManager
-            .getConnection(connect,user,pass);
+         
+          Class.forName(driver);
+         this.c = DriverManager.getConnection(connect,user,pass);
+         
       } catch (Exception e) {
-         e.printStackTrace();
+       
+          e.printStackTrace();
          System.err.println(e.getClass().getName()+": "+e.getMessage());
          System.exit(0);
       }
       System.out.println("Conexion establecida");
-   }
+    }
     
-    public void consulta(String sql) {
-        Connection c = null;
+    public ResultSet consult(String sql) {
         Statement stmt = null;
         ResultSet result = null;
         try{
-            stmt = c.createStatement();
+            stmt = this.c.createStatement();
             result = stmt.executeQuery(sql);
             stmt.close();
-            c.commit();
-            c.close();
+            this.c.commit();
+            this.c.close();
         }catch (Exception e){
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-         System.exit(0);
+            System.exit(0);
         }
         System.out.println("Consulta realizada");
+        return result;
+    }
+    
+    public void close(){
+        try{
+        this.c.close();
+        } catch (Exception e){
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Conexion cerrada");
     }
 }
 
