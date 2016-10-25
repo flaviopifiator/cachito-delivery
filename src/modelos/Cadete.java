@@ -3,6 +3,10 @@ public class Cadete extends Persona{
 
     protected Integer estado;
     protected String foto;
+    
+    public Cadete(){
+        
+    }
     public Cadete (Integer dni, String nombre, String apellido, String foto, 
                     Boolean activo, Integer estado){
         
