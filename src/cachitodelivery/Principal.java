@@ -5,6 +5,7 @@
  */
 package cachitodelivery;
 
+import Ventana_clases.Agregar_usuario;
 import Ventana_clases.Inicio_sesion;
 import Ventana_clases.Menu_admin;
 import java.awt.BorderLayout;
@@ -66,11 +67,15 @@ public class Principal extends javax.swing.JFrame {
         this.JL_Hora.setText(this.Hora());
         
         //TESTEANDO OTRAS VENTANAS
-        Principal.super.setVisible(false);
-        Menu_admin fondo_prueba = new Menu_admin(673,260);
-        JF_Menu_admin.add(fondo_prueba, BorderLayout.CENTER);
-        JF_Menu_admin.setSize(673,299);
-        JF_Menu_admin.setVisible(true);
+//        Menu_admin fondo_prueba = new Menu_admin(673,260);
+//        JF_Menu_admin.add(fondo_prueba, BorderLayout.CENTER);
+//        JF_Menu_admin.setSize(673,299);
+//        JF_Menu_admin.setVisible(true);
+        Agregar_usuario fondo_prueba = new Agregar_usuario(600,400);
+        JL_Foto_usuario.setIcon(new ImageIcon(getClass().getResource("/Prueba_GUI/Pipita.png")));
+        JF_Agregar_Usuario.add(fondo_prueba, BorderLayout.CENTER);
+        JF_Agregar_Usuario.setSize(616,439);
+        JF_Agregar_Usuario.setVisible(true);
         
     }
 
@@ -97,6 +102,16 @@ public class Principal extends javax.swing.JFrame {
         JL_Fecha_Admin = new javax.swing.JLabel();
         JL_Hora_Admin = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
+        JF_Agregar_Usuario = new javax.swing.JFrame();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        JL_Foto_usuario = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         JB_Ingresar = new javax.swing.JButton();
         Regla1 = new javax.swing.JLabel();
         JTF_PassUser = new javax.swing.JTextField();
@@ -247,6 +262,80 @@ public class Principal extends javax.swing.JFrame {
 
         jButton5.setText("jButton5");
 
+        jTextField1.setToolTipText("");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.setToolTipText("");
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
+        jTextField3.setToolTipText("");
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+
+        JL_Foto_usuario.setToolTipText("");
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
+
+        javax.swing.GroupLayout JF_Agregar_UsuarioLayout = new javax.swing.GroupLayout(JF_Agregar_Usuario.getContentPane());
+        JF_Agregar_Usuario.getContentPane().setLayout(JF_Agregar_UsuarioLayout);
+        JF_Agregar_UsuarioLayout.setHorizontalGroup(
+            JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JF_Agregar_UsuarioLayout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JL_Foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(JF_Agregar_UsuarioLayout.createSequentialGroup()
+                        .addGroup(JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
+                        .addGroup(JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(164, Short.MAX_VALUE))
+        );
+        JF_Agregar_UsuarioLayout.setVerticalGroup(
+            JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(JF_Agregar_UsuarioLayout.createSequentialGroup()
+                .addGroup(JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(JF_Agregar_UsuarioLayout.createSequentialGroup()
+                        .addGroup(JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JL_Foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)))
+                .addContainerGap(170, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImages(null);
 
@@ -327,6 +416,18 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_JB_IngresarActionPerformed
 
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -373,9 +474,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton JB_Pedidos;
     private javax.swing.JButton JB_Personal;
     private javax.swing.JButton JB_Zonas;
+    private javax.swing.JFrame JF_Agregar_Usuario;
     private javax.swing.JFrame JF_Menu_admin;
     private javax.swing.JLabel JL_Fecha;
     private javax.swing.JLabel JL_Fecha_Admin;
+    private javax.swing.JLabel JL_Foto_usuario;
     private javax.swing.JLabel JL_Hora;
     private javax.swing.JLabel JL_Hora_Admin;
     private javax.swing.JLabel JL_Usuario_admin;
@@ -384,5 +487,13 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel Regla1;
     private javax.swing.JLabel Regla2;
     private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 }
