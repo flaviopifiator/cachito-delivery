@@ -5,6 +5,13 @@
  */
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
+import Excepciones.UsuarioExistenteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import modelos.GestorUsuario;
+import modelos.Usuario;
+
 /**
  *
  * @author flavio
@@ -23,6 +30,19 @@ public class Cachitodelivery {
         p.setLocationRelativeTo(null);
         p.setResizable(false);
         p.setVisible(true);
-    }
+        
+        Usuario user  = new Usuario("FAC FAC", "ROBIN", 37548666, "galleta1234", 1, "-----",true);
+        GestorUsuario gesU = new GestorUsuario();
+        
+        
+        try {
+            gesU.agregarNuevoUsuario(user);
+        } catch (UsuarioExistenteException ex) {
+            System.out.println(ex);
+        } catch (DataAccessException ex) {
+            System.out.println(ex);
+        }
+        
     
+}
 }
