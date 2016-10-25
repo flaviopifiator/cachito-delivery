@@ -31,7 +31,7 @@ public class Cachitodelivery {
         p.setResizable(false);
         p.setVisible(true);
         
-        Usuario user  = new Usuario("FAC FAC", "ROBIN", 37548666, "galleta1234", 1, "-----",true);
+        Usuario user  = new Usuario("FAC FAC", "ROBIN", 37548666, "galleta1234", true, "-----",1);
         GestorUsuario gesU = new GestorUsuario();
         
         

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modelos;
 
 import Excepciones.DataAccessException;
@@ -10,10 +5,6 @@ import Excepciones.UsuarioExistenteException;
 import Excepciones.UsuarioInexistenteException;
 import java.util.ArrayList;
 
-/**
- *
- * @author Seba Cabrera
- */
 public class GestorUsuario {
     private ArrayList listaUsuarios = new ArrayList();
     private UsuarioDAO userDAO = new UsuarioDAO();
