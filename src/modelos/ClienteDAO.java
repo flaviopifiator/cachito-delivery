@@ -28,7 +28,7 @@ public class ClienteDAO {
             ps.setString(9, cliente.getCasa());
             ps.setString(10, cliente.getLocalidad());
             ps.setString(11, cliente.getObservacion());
-            ps.setBoolean(11, cliente.getActivo());
+            ps.setBoolean(12, cliente.getActivo());
             ps.execute();
         }catch(Exception ex){throw new DataAccessException("Error en ClienteDAO.agregar() "+ex);}
         
