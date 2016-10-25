@@ -15,7 +15,12 @@ public class Cachitodelivery {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Principal p= new Principal();
+        p.setSize(399,629); //DAR 39 PX MÁS DE ALTURA 
+        p.setTitle("Cachito Delivery");
+        p.setLocationRelativeTo(null);
+        p.setResizable(false);
+        p.setVisible(true);
     }
     
 }
