@@ -5,6 +5,8 @@
  */
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
+import Excepciones.UsuarioInexistenteException;
 import Ventana_clases.Inicio_sesion;
 import Ventana_clases.Menu_admin;
 import java.awt.BorderLayout;
@@ -13,6 +15,11 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import modelos.GestorUsuario;
+import modelos.Usuario;
 /**
  *
  * @author Cusipuma
@@ -70,7 +77,7 @@ public class Principal extends javax.swing.JFrame {
         Menu_admin fondo_prueba = new Menu_admin(673,260);
         JF_Menu_admin.add(fondo_prueba, BorderLayout.CENTER);
         JF_Menu_admin.setSize(673,299);
-        JF_Menu_admin.setVisible(true);
+        JF_Menu_admin.setVisible(false);
         
     }
 
@@ -99,11 +106,11 @@ public class Principal extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         JB_Ingresar = new javax.swing.JButton();
         Regla1 = new javax.swing.JLabel();
-        JTF_PassUser = new javax.swing.JTextField();
         JTF_IdUser = new javax.swing.JTextField();
         JL_Fecha = new javax.swing.JLabel();
         Regla2 = new javax.swing.JLabel();
         JL_Hora = new javax.swing.JLabel();
+        JPF_PassUser = new javax.swing.JPasswordField();
 
         JB_Caja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Sebas.png"))); // NOI18N
         JB_Caja.setBorder(null);
@@ -287,9 +294,9 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JB_Ingresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTF_PassUser, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JPF_PassUser, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JTF_IdUser, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addContainerGap(210, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(Regla2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -307,7 +314,7 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JTF_IdUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(41, 41, 41)
-                        .addComponent(JTF_PassUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(JPF_PassUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JB_Ingresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -324,7 +331,37 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JB_IngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_IngresarActionPerformed
-        // TODO add your handling code here:
+        try {
+            Usuario user = new Usuario();
+            
+            String pass;
+            
+            boolean ban;
+            
+            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+            pass= JPF_PassUser.getText().trim();
+            user.setPass(pass);
+            GestorUsuario gesUs =new GestorUsuario();
+            ban=gesUs.Acceso(user);
+            System.out.println("lalalaban"+ban);
+            if(ban){
+                
+                /*cuentaOficial=  gescuent.buscarCuenta(cuenta.getUsuario());
+                
+                BotonesAcceso();
+                
+                
+                
+                Ventana.setCuenta(cuentaOficial);
+                */ JOptionPane.showMessageDialog(rootPane, "INGRESO AL SISTEMA");
+                JF_Menu_admin.setVisible(true);
+                this.setVisible(false);
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Usuario o Clave Incorrectos");
+            }
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_JB_IngresarActionPerformed
 
     /**
@@ -379,8 +416,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel JL_Hora;
     private javax.swing.JLabel JL_Hora_Admin;
     private javax.swing.JLabel JL_Usuario_admin;
+    private javax.swing.JPasswordField JPF_PassUser;
     private javax.swing.JTextField JTF_IdUser;
-    private javax.swing.JTextField JTF_PassUser;
     private javax.swing.JLabel Regla1;
     private javax.swing.JLabel Regla2;
     private javax.swing.JButton jButton5;

@@ -319,10 +319,10 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="JB_Ingresar" min="-2" max="-2" attributes="0"/>
-                  <Component id="JTF_PassUser" min="-2" pref="184" max="-2" attributes="0"/>
+                  <Component id="JPF_PassUser" min="-2" pref="184" max="-2" attributes="0"/>
                   <Component id="JTF_IdUser" min="-2" pref="184" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="189" max="32767" attributes="0"/>
+              <EmptySpace pref="210" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <Component id="Regla2" min="-2" pref="26" max="-2" attributes="0"/>
@@ -343,7 +343,7 @@
                   <Group type="102" attributes="0">
                       <Component id="JTF_IdUser" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                      <Component id="JTF_PassUser" min="-2" max="-2" attributes="0"/>
+                      <Component id="JPF_PassUser" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="JB_Ingresar" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -398,8 +398,6 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="JTF_PassUser">
-    </Component>
     <Component class="javax.swing.JTextField" name="JTF_IdUser">
     </Component>
     <Component class="javax.swing.JLabel" name="JL_Fecha">
@@ -428,6 +426,8 @@
         </Property>
         <Property name="text" type="java.lang.String" value="HH:HH"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="JPF_PassUser">
     </Component>
   </SubComponents>
 </Form>
