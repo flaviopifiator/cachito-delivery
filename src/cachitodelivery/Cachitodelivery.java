@@ -31,8 +31,12 @@ public class Cachitodelivery {
 //        p.setResizable(false);
 //        p.setVisible(true);
         
-        Menu_cajero q = new Menu_cajero();
-        q.setSize(673,299);
+//        Menu_cajero q = new Menu_cajero();
+//        q.setSize(673,299);
+//        q.setVisible(true);
+        
+        Modificar_usuario q = new Modificar_usuario();
+        q.setSize(1000,706);
         q.setVisible(true);
         
         
