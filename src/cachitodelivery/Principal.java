@@ -5,6 +5,7 @@
  */
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
 import Ventana_clases.Agregar_usuario;
 import Ventana_clases.Inicio_sesion;
 import Ventana_clases.Menu_admin;
@@ -14,6 +15,11 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import modelos.GestorUsuario;
+import modelos.Usuario;
 /**
  *
  * @author Cusipuma
@@ -67,16 +73,18 @@ public class Principal extends javax.swing.JFrame {
         this.JL_Hora.setText(this.Hora());
         
         //TESTEANDO OTRAS VENTANAS
-//        Menu_admin fondo_prueba = new Menu_admin(673,260);
-//        JF_Menu_admin.add(fondo_prueba, BorderLayout.CENTER);
-//        JF_Menu_admin.setSize(673,299);
-//        JF_Menu_admin.setVisible(true);
+        Menu_admin fondo_prueba1 = new Menu_admin(673,260);
+        JF_Menu_admin.add(fondo_prueba1, BorderLayout.CENTER);
+        JF_Menu_admin.setBounds(500, 200, 673,299);
+        JF_Menu_admin.setVisible(false);
+        
         Agregar_usuario fondo_prueba = new Agregar_usuario(600,400);
         JL_Foto_usuario.setIcon(new ImageIcon(getClass().getResource("/Prueba_GUI/Pipita.png")));
-        JF_Agregar_Usuario.add(fondo_prueba, BorderLayout.CENTER);
+        JF_Agregar_Usuario.add(fondo_prueba, BorderLayout.CENTER);               
+        JF_Agregar_Usuario.setBounds(500, 200, 616,439);
+        JF_Agregar_Usuario.setVisible(false);
         
-        JF_Agregar_Usuario.setSize(616,439);
-        JF_Agregar_Usuario.setVisible(true);
+        
         
     }
 
@@ -111,7 +119,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<String>();
+        jList1 = new javax.swing.JList<>();
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jTextField7 = new javax.swing.JTextField();
@@ -129,11 +137,11 @@ public class Principal extends javax.swing.JFrame {
         JL_Hora_Admin1 = new javax.swing.JLabel();
         JB_Ingresar = new javax.swing.JButton();
         Regla1 = new javax.swing.JLabel();
-        JTF_PassUser = new javax.swing.JTextField();
         JTF_IdUser = new javax.swing.JTextField();
         JL_Fecha = new javax.swing.JLabel();
         Regla2 = new javax.swing.JLabel();
         JL_Hora = new javax.swing.JLabel();
+        JPF_PassUser = new javax.swing.JPasswordField();
 
         JB_Caja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Sebas.png"))); // NOI18N
         JB_Caja.setBorder(null);
@@ -148,6 +156,11 @@ public class Principal extends javax.swing.JFrame {
         JB_Personal.setContentAreaFilled(false);
         JB_Personal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         JB_Personal.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Personal_hover.png"))); // NOI18N
+        JB_Personal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JB_PersonalActionPerformed(evt);
+            }
+        });
 
         JB_Clientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cleintes.png"))); // NOI18N
         JB_Clientes.setBorder(null);
@@ -299,10 +312,10 @@ public class Principal extends javax.swing.JFrame {
         JL_Foto_usuario.setToolTipText("");
 
         jList1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel() {
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+            public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane1.setViewportView(jList1);
 
@@ -528,7 +541,7 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JB_Ingresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JTF_PassUser, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JPF_PassUser, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JTF_IdUser, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(189, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
@@ -548,7 +561,7 @@ public class Principal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JTF_IdUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(41, 41, 41)
-                        .addComponent(JTF_PassUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(JPF_PassUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JB_Ingresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -565,7 +578,37 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JB_IngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_IngresarActionPerformed
-        // TODO add your handling code here:
+        try {
+            Usuario user = new Usuario();
+            
+            String pass;
+            
+            boolean ban;
+            
+            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+            pass= JPF_PassUser.getText().trim();
+            user.setPass(pass);
+            GestorUsuario gesUs =new GestorUsuario();
+            ban=gesUs.Acceso(user);
+            System.out.println("lalalaban"+ban);
+            if(ban){
+                
+                /*cuentaOficial=  gescuent.buscarCuenta(cuenta.getUsuario());
+                
+                BotonesAcceso();
+                
+                
+                
+                Ventana.setCuenta(cuentaOficial);
+                */ JOptionPane.showMessageDialog(rootPane, "INGRESO AL SISTEMA");
+                JF_Menu_admin.setVisible(true);
+                this.setVisible(false);
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Usuario o Clave Incorrectos");
+            }
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_JB_IngresarActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
@@ -579,6 +622,11 @@ public class Principal extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void JB_PersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_PersonalActionPerformed
+        JF_Agregar_Usuario.setVisible(true);
+        JF_Menu_admin.setVisible(false);
+    }//GEN-LAST:event_JB_PersonalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -637,8 +685,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel JL_Hora_Admin1;
     private javax.swing.JLabel JL_Usuario_admin;
     private javax.swing.JLabel JL_Usuario_admin1;
+    private javax.swing.JPasswordField JPF_PassUser;
     private javax.swing.JTextField JTF_IdUser;
-    private javax.swing.JTextField JTF_PassUser;
     private javax.swing.JLabel Regla1;
     private javax.swing.JLabel Regla2;
     private javax.swing.JButton jButton1;

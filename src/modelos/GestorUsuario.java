@@ -4,6 +4,7 @@ import Excepciones.DataAccessException;
 import Excepciones.UsuarioExistenteException;
 import Excepciones.UsuarioInexistenteException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GestorUsuario {
     private ArrayList listaUsuarios = new ArrayList();
@@ -73,6 +74,20 @@ public class GestorUsuario {
             indice++;
             }
     }
-
+public boolean Acceso(Usuario user) throws DataAccessException{        
+       buscarTodo();
+       for (Object obj : listaUsuarios) {
+    
+           Usuario us = (Usuario) obj;
+             
+            if (Objects.equals(user.getDni(), us.getDni()) && user.getPass().trim().equals(us.getPass().trim())  ) {
+               
+                 return(true);
+            }
+            
+        }
+        return(false);
+       
+    } 
     
 }
