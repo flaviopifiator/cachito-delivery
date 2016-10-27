@@ -74,24 +74,5 @@ public class GestorUsuario {
             }
     }
 
-    public boolean Acceso(Usuario user) throws DataAccessException{        
-         int dni;
-         String pass;
-         buscarTodo();
-       for (Object obj : listaUsuarios) {
-            
-           Usuario us = (Usuario) obj;
-            
-            dni= us.getDni();
-            pass= us.getPass().trim();
-            
-             if (user.getDni()== dni && user.getPass().trim().equals(pass)  ) {
-                
-                 return(true);
-            }
-            
-        }
-        return(false);
-       
-     }
+    
 }

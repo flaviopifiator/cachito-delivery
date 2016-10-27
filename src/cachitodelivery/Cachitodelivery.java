@@ -7,7 +7,6 @@ package cachitodelivery;
 
 import Excepciones.DataAccessException;
 import Excepciones.UsuarioExistenteException;
-import Excepciones.UsuarioInexistenteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelos.GestorUsuario;
@@ -32,17 +31,16 @@ public class Cachitodelivery {
         p.setResizable(false);
         p.setVisible(true);
         
-        Usuario user  = new Usuario("CACHITO", "ROBIN", 1234,"",true, "galleta",1);
+        Usuario user  = new Usuario("FAC FAC", "ROBIN", 37548666, "galleta1234", true, "-----",1);
         GestorUsuario gesU = new GestorUsuario();
         
         
         try {
-            //user= gesU.buscarUsuario(37548666);
             gesU.agregarNuevoUsuario(user);
+        } catch (UsuarioExistenteException ex) {
+            System.out.println(ex);
         } catch (DataAccessException ex) {
             System.out.println(ex);
-        } catch (UsuarioExistenteException ex) {
-            Logger.getLogger(Cachitodelivery.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     
