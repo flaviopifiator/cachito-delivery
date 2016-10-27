@@ -31,8 +31,8 @@ public class Cachitodelivery {
 //        p.setResizable(false);
 //        p.setVisible(true);
         
-        Listado_empleados q = new Listado_empleados();
-        q.setSize(1000,598);
+        Menu_cajero q = new Menu_cajero();
+        q.setSize(673,299);
         q.setVisible(true);
         
         

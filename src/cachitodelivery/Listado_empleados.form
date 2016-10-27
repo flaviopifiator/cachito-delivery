@@ -258,7 +258,7 @@
                   <Component id="JL_Hora_Admin1" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
                   <Component id="jLabel15" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="420" max="32767" attributes="0"/>
+              <EmptySpace pref="169" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
