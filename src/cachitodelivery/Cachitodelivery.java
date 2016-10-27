@@ -24,12 +24,17 @@ public class Cachitodelivery {
     public static void main(String[] args) {
         
         
-        Principal p= new Principal();
-        p.setSize(399,629); //DAR 39 PX MÁS DE ALTURA 
-        p.setTitle("Cachito Delivery");
-        p.setLocationRelativeTo(null);
-        p.setResizable(false);
-        p.setVisible(true);
+//        Principal p= new Principal();
+//        p.setSize(399,629); //DAR 39 PX MÁS DE ALTURA 
+//        p.setTitle("Cachito Delivery");
+//        p.setLocationRelativeTo(null);
+//        p.setResizable(false);
+//        p.setVisible(true);
+        
+        Listado_empleados q = new Listado_empleados();
+        q.setSize(1000,598);
+        q.setVisible(true);
+        
         
         Usuario user  = new Usuario("FAC FAC", "ROBIN", 37548666, "galleta1234", true, "-----",1);
         GestorUsuario gesU = new GestorUsuario();
