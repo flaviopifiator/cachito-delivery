@@ -130,7 +130,7 @@ public class ClienteDAO {
             rs.close();
             st.close();
             return cliente;
-        }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
+        }catch (Exception ex){throw new DataAccessException("Error en ClienteDAO.buscarCliente() "+ex);}
    
     } 
 }
