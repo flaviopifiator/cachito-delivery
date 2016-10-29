@@ -17,7 +17,7 @@ public class BaseDeDatos {
      public static Connection getInstance() throws ClassNotFoundException, SQLException {
 
         if (instance == null) {
-            String url = "jdbc:postgresql://127.0.0.1:5432/cachito";  
+            String url = "jdbc:postgresql://localhost:5432/cachito";  
             String driver = "org.postgresql.Driver";
             String user = "postgres";
             String pass = "1234";
