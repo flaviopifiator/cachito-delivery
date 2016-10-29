@@ -31,6 +31,8 @@ public class Principal extends javax.swing.JFrame {
 
     Usuario cuentaOficial = new Usuario();
     
+    Listado_empleados vtListaEmpleados = null;
+    
     public String Fecha(){
         Calendar fecha = new GregorianCalendar();
         
@@ -95,7 +97,16 @@ public class Principal extends javax.swing.JFrame {
         
         
     }
-
+        public void  MenuAdminVisible(Boolean b){
+            JF_Menu_admin.setVisible(b);
+            
+        }
+        public void  AgregarUsVisible(Boolean b){
+            JF_Agregar_Usuario.setVisible(b);
+            JF_Agregar_Usuario.setLocation(183, 31);
+            
+        }
+        
     private void centrarPantalla(JFrame vt){
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         java.awt.Dimension dialogSize = getSize();
@@ -164,6 +175,7 @@ public class Principal extends javax.swing.JFrame {
         JL_Hora = new javax.swing.JLabel();
         JPF_PassUser = new javax.swing.JPasswordField();
 
+        JF_Menu_admin.setUndecorated(true);
         JF_Menu_admin.setResizable(false);
 
         JB_Caja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Sebas.png"))); // NOI18N
@@ -697,6 +709,7 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "INGRESO AL SISTEMA");
                 JF_Menu_admin.setVisible(true);
                 JL_Usuario_admin.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
+                JL_Usuario_admin1.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
                 limpiarLogin();
                 this.setVisible(false);
             }else{
@@ -720,15 +733,17 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTApellidoActionPerformed
 
     private void JB_PersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_PersonalActionPerformed
-        JF_Agregar_Usuario.setVisible(true);
+        
         JF_Menu_admin.setVisible(false);
-       JF_Agregar_Usuario.setLocation(183, 31);
+      
+         vtListaEmpleados= new Listado_empleados(this);        
+         vtListaEmpleados.setSize(1000, 559);
     }//GEN-LAST:event_JB_PersonalActionPerformed
 
     private void jBAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAtrasActionPerformed
         JF_Agregar_Usuario.dispose();
-        JF_Menu_admin.setVisible(true);
-        cuentaOficial = null;
+        vtListaEmpleados.setVisible(true);
+        
     }//GEN-LAST:event_jBAtrasActionPerformed
 
     private void jBRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBRegistrarActionPerformed
@@ -824,8 +839,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton JB_Pedidos;
     private javax.swing.JButton JB_Personal;
     private javax.swing.JButton JB_Zonas;
-    private javax.swing.JFrame JF_Agregar_Usuario;
-    private javax.swing.JFrame JF_Menu_admin;
+    public static javax.swing.JFrame JF_Agregar_Usuario;
+    private static javax.swing.JFrame JF_Menu_admin;
     private javax.swing.JLabel JL_Fecha;
     private javax.swing.JLabel JL_Fecha_Admin;
     private javax.swing.JLabel JL_Fecha_Admin1;

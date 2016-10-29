@@ -9,6 +9,8 @@ import Ventana_clases.Fondo_listado_empleados;
 import Ventana_clases.Inicio_sesion;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import modelos.Usuario;
 
 /**
  *
@@ -16,15 +18,18 @@ import javax.swing.ImageIcon;
  */
 public class Listado_empleados extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Listado_empleados
-     */
-    public Listado_empleados() {
+    Principal vent = null;
+    
+    public Listado_empleados(Principal vt) {
         initComponents();
         JL_Foto_empleado.setIcon(new ImageIcon(getClass().getResource("/Prueba_GUI/Facfac.png")));
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Fondo_listado_empleados fondo = new Fondo_listado_empleados(1000,559);
+        setLocation(183, 104);
         this.add(fondo, BorderLayout.CENTER);
+        setVisible(true);
+        vent = vt;
+        JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getNombre()+" "+vent.cuentaOficial.getApellido());
     }
 
     /**
@@ -55,10 +60,10 @@ public class Listado_empleados extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        jBEliminarUsuario = new javax.swing.JButton();
+        jBModificarUsuario = new javax.swing.JButton();
+        jBAgregarUsuario = new javax.swing.JButton();
+        jBAgregarCadete = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -150,33 +155,38 @@ public class Listado_empleados extends javax.swing.JFrame {
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Buscar_hover.png"))); // NOI18N
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Eliminar.png"))); // NOI18N
-        jButton2.setBorder(null);
-        jButton2.setBorderPainted(false);
-        jButton2.setContentAreaFilled(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Eliminar_hover.png"))); // NOI18N
+        jBEliminarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Eliminar.png"))); // NOI18N
+        jBEliminarUsuario.setBorder(null);
+        jBEliminarUsuario.setBorderPainted(false);
+        jBEliminarUsuario.setContentAreaFilled(false);
+        jBEliminarUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBEliminarUsuario.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Eliminar_hover.png"))); // NOI18N
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Modificar.png"))); // NOI18N
-        jButton3.setBorder(null);
-        jButton3.setBorderPainted(false);
-        jButton3.setContentAreaFilled(false);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Modificar_hover.png"))); // NOI18N
+        jBModificarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Modificar.png"))); // NOI18N
+        jBModificarUsuario.setBorder(null);
+        jBModificarUsuario.setBorderPainted(false);
+        jBModificarUsuario.setContentAreaFilled(false);
+        jBModificarUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBModificarUsuario.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Modificar_hover.png"))); // NOI18N
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Usuario.png"))); // NOI18N
-        jButton4.setBorder(null);
-        jButton4.setBorderPainted(false);
-        jButton4.setContentAreaFilled(false);
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Usuario_hover.png"))); // NOI18N
+        jBAgregarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Usuario.png"))); // NOI18N
+        jBAgregarUsuario.setBorder(null);
+        jBAgregarUsuario.setBorderPainted(false);
+        jBAgregarUsuario.setContentAreaFilled(false);
+        jBAgregarUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBAgregarUsuario.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Usuario_hover.png"))); // NOI18N
+        jBAgregarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBAgregarUsuarioActionPerformed(evt);
+            }
+        });
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cadete.png"))); // NOI18N
-        jButton5.setBorder(null);
-        jButton5.setBorderPainted(false);
-        jButton5.setContentAreaFilled(false);
-        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton5.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cadete_hover.png"))); // NOI18N
+        jBAgregarCadete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cadete.png"))); // NOI18N
+        jBAgregarCadete.setBorder(null);
+        jBAgregarCadete.setBorderPainted(false);
+        jBAgregarCadete.setContentAreaFilled(false);
+        jBAgregarCadete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBAgregarCadete.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cadete_hover.png"))); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(53, 94, 122));
@@ -267,13 +277,13 @@ public class Listado_empleados extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jButton2)
+                                                .addComponent(jBEliminarUsuario)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton3))
+                                                .addComponent(jBModificarUsuario))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jButton5)
+                                                .addComponent(jBAgregarCadete)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButton4))))
+                                                .addComponent(jBAgregarUsuario))))
                                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -375,23 +385,24 @@ public class Listado_empleados extends javax.swing.JFrame {
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jButton4)
+                                    .addComponent(jBAgregarUsuario)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton3))
+                                    .addComponent(jBModificarUsuario))
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jButton5)
+                                    .addComponent(jBAgregarCadete)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jButton2))))
+                                    .addComponent(jBEliminarUsuario))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton7))
                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JL_Fecha_Admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(JL_Hora_Admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(JL_Fecha_Admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(169, Short.MAX_VALUE))
         );
 
@@ -399,8 +410,16 @@ public class Listado_empleados extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+       vent.MenuAdminVisible(true);
+       this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jBAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarUsuarioActionPerformed
+         
+        vent.AgregarUsVisible(true);
+        this.setVisible(false);
+       
+    }//GEN-LAST:event_jBAgregarUsuarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -432,7 +451,7 @@ public class Listado_empleados extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Listado_empleados().setVisible(true);
+               // new Listado_empleados().setVisible(true);
             }
         });
     }
@@ -443,11 +462,11 @@ public class Listado_empleados extends javax.swing.JFrame {
     private javax.swing.JLabel JL_Hora_Admin1;
     private javax.swing.JLabel JL_Usuario_admin1;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jBAgregarCadete;
+    private javax.swing.JButton jBAgregarUsuario;
+    private javax.swing.JButton jBEliminarUsuario;
+    private javax.swing.JButton jBModificarUsuario;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
