@@ -82,7 +82,7 @@ public class Telefono_UsuarioDAO {
              while(rs.next())
             {
                 telefono = new Telefono_Usuario();
-                telefono.setDni_usuario(rs.getInt("cod_cliente"));
+                telefono.setDni_usuario(rs.getInt("dni_usuario"));
                 telefono.setTelefono(rs.getString("telefono_usuario").trim());
                 telefono.setDescripcion(rs.getString("descripcion").trim());
             }   
