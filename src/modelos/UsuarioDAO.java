@@ -8,19 +8,22 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class UsuarioDAO {
-    
+    Telefono_UsuarioDAO telDAO = new Telefono_UsuarioDAO();
     public void agregar (Usuario usuario) throws DataAccessException{
          try{
             Connection con = BaseDeDatos.getInstance();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO usuarios (dni_usuario, nombre_usuario, apellido_usuario, contraseña_usuario, cargo_usuario, foto_usuario, activo) VALUES (?,?,?,?,?,?,?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO usuarios (dni_usuario, "
+                    + "nombre_usuario, apellido_usuario, contraseña_usuario, cargo_usuario, "
+                    + "foto_usuario, activo) VALUES (?,?,?,?,?,?,?)");
             ps.setInt(1, usuario.getDni());
             ps.setString(2, usuario.getNombre());
             ps.setString(3, usuario.getApellido());
             ps.setString(4, usuario.getPass());
             ps.setInt(5, usuario.getCargo());
             ps.setString(6, usuario.getFoto());
-            ps.setBoolean(7, usuario.getActivo());
+            ps.setBoolean(7, usuario.getActivo());            
             ps.execute();
+            telDAO.agregar(usuario.getTel());
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
         
     }

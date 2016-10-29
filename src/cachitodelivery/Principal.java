@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import modelos.GestorUsuario;
+import modelos.Telefono_Usuario;
 import modelos.Usuario;
 /**
  *
@@ -368,8 +369,12 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jList1);
 
         jTPais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTPais.setForeground(new java.awt.Color(204, 204, 204));
+        jTPais.setText("+459");
 
         jTArea.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTArea.setForeground(new java.awt.Color(204, 204, 204));
+        jTArea.setText("383");
 
         jTtelefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -748,22 +753,25 @@ public class Principal extends javax.swing.JFrame {
 
     private void jBRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBRegistrarActionPerformed
         if(jTDni.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()
-               /* || jTtelefono.getText().isEmpty()*/){
+                || jTtelefono.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "No se permiten campos vacíos");
             return;
         }
-        
+        String telefono;
+        telefono=jTPais.getText().trim()+"-"+jTArea.getText().trim()+""+jTtelefono.getText().trim();
         
         Usuario user = new Usuario();
         int dni; 
         try
         {
         dni = Integer.parseInt(jTDni.getText().trim());
+        Telefono_Usuario tel = new Telefono_Usuario(dni, telefono, jTDescripcion.getText().trim());
         user.setDni(dni);
         user.setNombre(jTNombre.getText().trim());
         user.setApellido(jTApellido.getText().trim());
         user.setPass(jTContraseña.getText().trim());
         user.setCargo(jCCargo.getSelectedIndex());
+        user.setTel(tel);
         user.setFoto("");
         user.setActivo(true); 
         
