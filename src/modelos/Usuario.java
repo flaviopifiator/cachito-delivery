@@ -8,8 +8,8 @@ public class Usuario extends Persona{
     protected Integer cargo;
     protected String foto;
     protected Telefono_Usuario tel;
-     FileInputStream fis;
-     int longitud;
+    protected FileInputStream fis;
+    protected int longitud;
 
     
     public Usuario() {

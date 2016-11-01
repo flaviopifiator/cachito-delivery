@@ -837,6 +837,9 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="formKeyPressed"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -926,6 +929,7 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JB_IngresarActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JB_IngresarKeyPressed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="Regla1">
@@ -937,6 +941,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="JTF_IdUser">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JTF_IdUserKeyPressed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="JL_Fecha">
       <Properties>
@@ -966,6 +973,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JPasswordField" name="JPF_PassUser">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="JPF_PassUserKeyPressed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

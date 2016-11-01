@@ -15,15 +15,14 @@ public class UsuarioDAO {
             Connection con = BaseDeDatos.getInstance();
             PreparedStatement ps = con.prepareStatement("INSERT INTO usuarios (dni_usuario, "
                     + "nombre_usuario, apellido_usuario, contraseña_usuario, cargo_usuario, "
-                    + "foto_usuario, activo, foto ) VALUES (?,?,?,?,?,?,?,?)");
+                    + "foto_usuario, activo ) VALUES (?,?,?,?,?,?,?)");
             ps.setInt(1, usuario.getDni());
             ps.setString(2, usuario.getNombre());
             ps.setString(3, usuario.getApellido());
             ps.setString(4, usuario.getPass());
             ps.setInt(5, usuario.getCargo());
-            ps.setString(6, usuario.getFoto());
+            ps.setBinaryStream(6, usuario.getFis(),usuario.getLongitud());
             ps.setBoolean(7, usuario.getActivo()); 
-            ps.setBinaryStream(8, usuario.fis,usuario.longitud);
             ps.execute();
             telDAO.agregar(usuario.getTel());
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
@@ -74,7 +73,7 @@ public class UsuarioDAO {
                 user.setApellido(rs.getString("apellido_usuario").trim());
                 user.setPass(rs.getString("contraseña_usuario").trim());
                 user.setCargo(rs.getInt("cargo_usuario"));
-                user.setFoto(rs.getString("foto_usuario").trim());
+               // user.setFoto(rs.getString("foto_usuario").trim());
                 user.setActivo(rs.getBoolean("activo"));
                 lista.add(user);
             }

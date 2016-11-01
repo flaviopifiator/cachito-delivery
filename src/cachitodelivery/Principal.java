@@ -637,6 +637,11 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImages(null);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         JB_Ingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Ingresar.png"))); // NOI18N
         JB_Ingresar.setAlignmentX(200.0F);
@@ -652,9 +657,20 @@ public class Principal extends javax.swing.JFrame {
                 JB_IngresarActionPerformed(evt);
             }
         });
+        JB_Ingresar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JB_IngresarKeyPressed(evt);
+            }
+        });
 
         Regla1.setToolTipText("");
         Regla1.setMaximumSize(new java.awt.Dimension(108, 50));
+
+        JTF_IdUser.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JTF_IdUserKeyPressed(evt);
+            }
+        });
 
         JL_Fecha.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Fecha.setForeground(new java.awt.Color(255, 255, 255));
@@ -665,6 +681,12 @@ public class Principal extends javax.swing.JFrame {
         JL_Hora.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Hora.setForeground(new java.awt.Color(255, 255, 255));
         JL_Hora.setText("HH:HH");
+
+        JPF_PassUser.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                JPF_PassUserKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -853,6 +875,80 @@ public class Principal extends javax.swing.JFrame {
         fis=null;
         longitudBytes=0;
     }//GEN-LAST:event_jBQuitarFotoActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        
+    }//GEN-LAST:event_formKeyPressed
+
+    private void JB_IngresarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JB_IngresarKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JB_IngresarKeyPressed
+
+    private void JPF_PassUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JPF_PassUserKeyPressed
+                if(evt.getKeyCode() == evt.VK_ENTER){
+            try {
+            Usuario user = new Usuario();
+            
+            String pass;
+            
+            boolean ban;
+            
+            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+            pass= JPF_PassUser.getText().trim();
+            user.setPass(pass);
+            GestorUsuario gesUs =new GestorUsuario();
+            ban=gesUs.Acceso(user);
+            System.out.println("lalalaban"+ban);
+            if(ban){
+                
+                cuentaOficial=  gesUs.buscarUsuario(user.getDni());
+                
+                JOptionPane.showMessageDialog(rootPane, "INGRESO AL SISTEMA");
+                JF_Menu_admin.setVisible(true);
+                JL_Usuario_admin.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
+                JL_Usuario_admin1.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
+                limpiarLogin();
+                this.setVisible(false);
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Usuario o Clave Incorrectos");
+            }
+        } catch (DataAccessException ex) {JOptionPane.showMessageDialog(rootPane, ex);}        
+          catch (UsuarioInexistenteException ex) { }           
+        }
+    }//GEN-LAST:event_JPF_PassUserKeyPressed
+
+    private void JTF_IdUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTF_IdUserKeyPressed
+                if(evt.getKeyCode() == evt.VK_ENTER){
+            try {
+            Usuario user = new Usuario();
+            
+            String pass;
+            
+            boolean ban;
+            
+            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+            pass= JPF_PassUser.getText().trim();
+            user.setPass(pass);
+            GestorUsuario gesUs =new GestorUsuario();
+            ban=gesUs.Acceso(user);
+            System.out.println("lalalaban"+ban);
+            if(ban){
+                
+                cuentaOficial=  gesUs.buscarUsuario(user.getDni());
+                
+                JOptionPane.showMessageDialog(rootPane, "INGRESO AL SISTEMA");
+                JF_Menu_admin.setVisible(true);
+                JL_Usuario_admin.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
+                JL_Usuario_admin1.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
+                limpiarLogin();
+                this.setVisible(false);
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Usuario o Clave Incorrectos");
+            }
+        } catch (DataAccessException ex) {JOptionPane.showMessageDialog(rootPane, ex);}        
+          catch (UsuarioInexistenteException ex) { }           
+        }
+    }//GEN-LAST:event_JTF_IdUserKeyPressed
 
     /**
      * @param args the command line arguments
