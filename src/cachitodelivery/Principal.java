@@ -886,7 +886,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void JPF_PassUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JPF_PassUserKeyPressed
                 if(evt.getKeyCode() == evt.VK_ENTER){
-            try {
+                    try {
             Usuario user = new Usuario();
             
             String pass;
@@ -913,40 +913,13 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Usuario o Clave Incorrectos");
             }
         } catch (DataAccessException ex) {JOptionPane.showMessageDialog(rootPane, ex);}        
-          catch (UsuarioInexistenteException ex) { }           
+          catch (UsuarioInexistenteException ex) { }    
         }
     }//GEN-LAST:event_JPF_PassUserKeyPressed
 
     private void JTF_IdUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTF_IdUserKeyPressed
                 if(evt.getKeyCode() == evt.VK_ENTER){
-            try {
-            Usuario user = new Usuario();
-            
-            String pass;
-            
-            boolean ban;
-            
-            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
-            pass= JPF_PassUser.getText().trim();
-            user.setPass(pass);
-            GestorUsuario gesUs =new GestorUsuario();
-            ban=gesUs.Acceso(user);
-            System.out.println("lalalaban"+ban);
-            if(ban){
-                
-                cuentaOficial=  gesUs.buscarUsuario(user.getDni());
-                
-                JOptionPane.showMessageDialog(rootPane, "INGRESO AL SISTEMA");
-                JF_Menu_admin.setVisible(true);
-                JL_Usuario_admin.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
-                JL_Usuario_admin1.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
-                limpiarLogin();
-                this.setVisible(false);
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "Usuario o Clave Incorrectos");
-            }
-        } catch (DataAccessException ex) {JOptionPane.showMessageDialog(rootPane, ex);}        
-          catch (UsuarioInexistenteException ex) { }           
+                   
         }
     }//GEN-LAST:event_JTF_IdUserKeyPressed
 
