@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.io.FileInputStream;
 
 public class UsuarioDAO {
     Telefono_UsuarioDAO telDAO = new Telefono_UsuarioDAO();
@@ -14,14 +15,15 @@ public class UsuarioDAO {
             Connection con = BaseDeDatos.getInstance();
             PreparedStatement ps = con.prepareStatement("INSERT INTO usuarios (dni_usuario, "
                     + "nombre_usuario, apellido_usuario, contraseña_usuario, cargo_usuario, "
-                    + "foto_usuario, activo) VALUES (?,?,?,?,?,?,?)");
+                    + "foto_usuario, activo, foto ) VALUES (?,?,?,?,?,?,?,?)");
             ps.setInt(1, usuario.getDni());
             ps.setString(2, usuario.getNombre());
             ps.setString(3, usuario.getApellido());
             ps.setString(4, usuario.getPass());
             ps.setInt(5, usuario.getCargo());
             ps.setString(6, usuario.getFoto());
-            ps.setBoolean(7, usuario.getActivo());            
+            ps.setBoolean(7, usuario.getActivo()); 
+            ps.setBinaryStream(8, usuario.fis,usuario.longitud);
             ps.execute();
             telDAO.agregar(usuario.getTel());
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}

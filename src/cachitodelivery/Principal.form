@@ -330,7 +330,7 @@
                                       </Group>
                                       <Component id="jLabel8" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="JL_Foto_usuario" min="-2" pref="141" max="-2" attributes="0"/>
+                                          <Component id="foto_usuario" min="-2" pref="141" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="jBQuitarFoto" min="-2" max="-2" attributes="0"/>
@@ -443,7 +443,7 @@
                                   <Component id="jLabel8" min="-2" pref="27" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="JL_Foto_usuario" min="-2" pref="141" max="-2" attributes="0"/>
+                                      <Component id="foto_usuario" min="-2" pref="141" max="-2" attributes="0"/>
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="jBQuitarFoto" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -543,7 +543,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTContrase&#xf1;aActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="JL_Foto_usuario">
+        <Component class="javax.swing.JLabel" name="foto_usuario">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
@@ -667,6 +667,9 @@
               <Image iconType="3" name="/Botones/Examinar_hover.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBExaminarFotoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jBQuitarFoto">
           <Properties>
@@ -685,6 +688,9 @@
               <Image iconType="3" name="/Botones/Quitar_hover.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBQuitarFotoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="jTDni">
           <Properties>

@@ -12,6 +12,10 @@ import Ventana_clases.Agregar_usuario;
 import Ventana_clases.Inicio_sesion;
 import Ventana_clases.Menu_admin;
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.swing.ImageIcon;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -19,6 +23,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import modelos.GestorUsuario;
@@ -33,6 +39,9 @@ public class Principal extends javax.swing.JFrame {
     Usuario cuentaOficial = new Usuario();
     
     Listado_empleados vtListaEmpleados = null;
+    
+    FileInputStream fis;
+    int longitudBytes;
     
     public String Fecha(){
         Calendar fecha = new GregorianCalendar();
@@ -90,7 +99,6 @@ public class Principal extends javax.swing.JFrame {
         JF_Menu_admin.setLocation(346, 234);        
         Principal.super.setVisible(false);
         Agregar_usuario fondo_prueba = new Agregar_usuario(1000,667);
-        JL_Foto_usuario.setIcon(new ImageIcon(getClass().getResource("/Prueba_GUI/Pipita.png")));
         JF_Agregar_Usuario.add(fondo_prueba, BorderLayout.CENTER);               
         JF_Agregar_Usuario.setSize(1000,706);        
         JF_Agregar_Usuario.setVisible(false);
@@ -135,7 +143,7 @@ public class Principal extends javax.swing.JFrame {
         jTApellido = new javax.swing.JTextField();
         jTNombre = new javax.swing.JTextField();
         jTContraseña = new javax.swing.JTextField();
-        JL_Foto_usuario = new javax.swing.JLabel();
+        foto_usuario = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTDescripcion = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -356,7 +364,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        JL_Foto_usuario.setToolTipText("");
+        foto_usuario.setToolTipText("");
 
         jTDescripcion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -398,6 +406,11 @@ public class Principal extends javax.swing.JFrame {
         jBExaminarFoto.setContentAreaFilled(false);
         jBExaminarFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBExaminarFoto.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Examinar_hover.png"))); // NOI18N
+        jBExaminarFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBExaminarFotoActionPerformed(evt);
+            }
+        });
 
         jBQuitarFoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar.png"))); // NOI18N
         jBQuitarFoto.setBorder(null);
@@ -405,6 +418,11 @@ public class Principal extends javax.swing.JFrame {
         jBQuitarFoto.setContentAreaFilled(false);
         jBQuitarFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBQuitarFoto.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar_hover.png"))); // NOI18N
+        jBQuitarFoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBQuitarFotoActionPerformed(evt);
+            }
+        });
 
         jTDni.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTDni.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -479,7 +497,7 @@ public class Principal extends javax.swing.JFrame {
                                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(JF_Agregar_UsuarioLayout.createSequentialGroup()
-                                        .addComponent(JL_Foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jBQuitarFoto)
@@ -568,7 +586,7 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(JF_Agregar_UsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(JL_Foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JF_Agregar_UsuarioLayout.createSequentialGroup()
                                         .addComponent(jBQuitarFoto)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -774,6 +792,9 @@ public class Principal extends javax.swing.JFrame {
         user.setTel(tel);
         user.setFoto("");
         user.setActivo(true); 
+        user.setFis(fis);
+        user.setLongitud(longitudBytes);
+        
         
             GestorUsuario gesus = new GestorUsuario();
             gesus.agregarNuevoUsuario(user);
@@ -800,6 +821,38 @@ public class Principal extends javax.swing.JFrame {
         this.setVisible(true);
         JF_Menu_admin.dispose();
     }//GEN-LAST:event_JB_Cerrar_sesionActionPerformed
+
+    private void jBExaminarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExaminarFotoActionPerformed
+         JFileChooser j=new JFileChooser();
+        j.setFileSelectionMode(JFileChooser.FILES_ONLY);//solo archivos y no carpetas
+        int estado=j.showOpenDialog(null);
+        if(estado== JFileChooser.APPROVE_OPTION){
+            try{
+                fis=new FileInputStream(j.getSelectedFile());
+                //necesitamos saber la cantidad de bytes
+                this.longitudBytes=(int)j.getSelectedFile().length();
+                try {
+                    Image icono=ImageIO.read(j.getSelectedFile()).getScaledInstance
+                            (foto_usuario.getWidth(),foto_usuario.getHeight(),Image.SCALE_DEFAULT);
+                    foto_usuario.setIcon(new ImageIcon(icono));
+                    foto_usuario.updateUI();
+
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "imagen: "+ex);
+                }
+            }catch(FileNotFoundException ex){
+                ex.printStackTrace();
+            }
+        }
+        System.out.println("Fis "+fis);
+        System.out.println("Longitud: "+longitudBytes);
+    }//GEN-LAST:event_jBExaminarFotoActionPerformed
+
+    private void jBQuitarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBQuitarFotoActionPerformed
+        foto_usuario.setIcon(null);
+        fis=null;
+        longitudBytes=0;
+    }//GEN-LAST:event_jBQuitarFotoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -852,7 +905,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel JL_Fecha;
     private javax.swing.JLabel JL_Fecha_Admin;
     private javax.swing.JLabel JL_Fecha_Admin1;
-    private javax.swing.JLabel JL_Foto_usuario;
     private javax.swing.JLabel JL_Hora;
     private javax.swing.JLabel JL_Hora_Admin;
     private javax.swing.JLabel JL_Hora_Admin1;
@@ -862,6 +914,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField JTF_IdUser;
     private javax.swing.JLabel Regla1;
     private javax.swing.JLabel Regla2;
+    private javax.swing.JLabel foto_usuario;
     private javax.swing.JButton jBAgregarTel;
     private javax.swing.JButton jBAtras;
     private javax.swing.JButton jBExaminarFoto;
