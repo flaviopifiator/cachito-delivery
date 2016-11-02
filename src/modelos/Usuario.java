@@ -2,6 +2,7 @@
 package modelos;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class Usuario extends Persona{
     protected String pass;
@@ -10,6 +11,8 @@ public class Usuario extends Persona{
     protected Telefono_Usuario tel;
     protected FileInputStream fis;
     protected int longitud;
+    protected int cod;
+    protected InputStream codFoto;
 
     
     public Usuario() {
@@ -73,6 +76,22 @@ public class Usuario extends Persona{
     
     public void setLongitud(int longi){
         this.longitud=longi;
+    }
+    
+    public int getCod(){
+        return this.cod;
+    }
+    
+    public void setCod(int cod){
+        this.cod=cod;
+    }
+    
+    public InputStream getCodFoto(){
+        return this.codFoto;
+    }
+    
+    public void setCodFoto(InputStream fis){
+        this.codFoto=fis;
     }
 }
 

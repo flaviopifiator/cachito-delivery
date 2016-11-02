@@ -746,7 +746,6 @@ public class Principal extends javax.swing.JFrame {
             user.setPass(pass);
             GestorUsuario gesUs =new GestorUsuario();
             ban=gesUs.Acceso(user);
-            System.out.println("lalalaban"+ban);
             if(ban){
                 
                 cuentaOficial=  gesUs.buscarUsuario(user.getDni());
