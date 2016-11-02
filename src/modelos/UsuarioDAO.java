@@ -25,8 +25,6 @@ public class UsuarioDAO {
             ps.setBoolean(7, usuario.getActivo()); 
             ps.execute();
             
-            
-            telDAO.agregar(usuario.getTel());
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
         
     }

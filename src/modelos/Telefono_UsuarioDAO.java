@@ -94,4 +94,24 @@ public class Telefono_UsuarioDAO {
    
     } 
     
+        public void agregarGabe(Object[][] telefonos) throws DataAccessException{
+            try{
+            for(int i=0; i<telefonos.length;i++){
+                Connection con = BaseDeDatos.getInstance();
+                PreparedStatement ps = con.prepareStatement("INSERT INTO telefonos_usuarios"
+                    + "            (dni_usuario, telefono_usuario, descripcion)"
+                    + "             VALUES (?,?,?) ");
+                ps.setInt(1, Integer.parseInt(telefonos[i][0].toString()));
+                ps.setString(2, telefonos[i][1].toString());
+                ps.setString(3, telefonos[i][2].toString());
+                ps.execute();
+                ps.close();
+                
+            }
+            
+        }catch(Exception ex){throw new DataAccessException("Error en Telefono_UsuarioDAO.agregarGabe() "+ex);}
+        
+    }
+    
 }
+

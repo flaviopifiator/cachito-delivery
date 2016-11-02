@@ -8,7 +8,6 @@ public class Usuario extends Persona{
     protected String pass;
     protected Integer cargo;
     protected String foto;
-    protected Telefono_Usuario tel;
     protected FileInputStream fis;
     protected int longitud;
     protected int cod;
@@ -52,14 +51,6 @@ public class Usuario extends Persona{
     
     public void setFoto(String foto){
         this.foto = foto;
-    }
-
-    public Telefono_Usuario getTel() {
-        return tel;
-    }
-
-    public void setTel(Telefono_Usuario tel) {
-        this.tel = tel;
     }
     
     public FileInputStream getFis(){

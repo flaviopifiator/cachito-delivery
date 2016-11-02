@@ -9,6 +9,9 @@ import Ventana_clases.Fondo_listado_empleados;
 import Ventana_clases.Fondo_menu_cajero;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import modelos.Usuario;
+
+
 
 /**
  *
@@ -19,6 +22,9 @@ public class Menu_cajero extends javax.swing.JFrame {
     /**
      * Creates new form Menu_cajero
      */
+    
+    protected Usuario user = new Usuario();
+    
     public Menu_cajero() {
         initComponents();
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
@@ -26,6 +32,14 @@ public class Menu_cajero extends javax.swing.JFrame {
         this.add(fondo, BorderLayout.CENTER);
     }
 
+    public void setLabel(){
+        JL_Usuario_admin.setText("USUARIO:"+" "+user.getApellido()+" "+user.getNombre());
+    }
+    
+    public void setUser(Usuario user){
+        this.user=user;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -109,10 +123,15 @@ public class Menu_cajero extends javax.swing.JFrame {
         JB_Cerrar_sesion.setContentAreaFilled(false);
         JB_Cerrar_sesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         JB_Cerrar_sesion.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Salir_hover.png"))); // NOI18N
+        JB_Cerrar_sesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JB_Cerrar_sesionActionPerformed(evt);
+            }
+        });
 
         JL_Usuario_admin.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin.setForeground(new java.awt.Color(255, 255, 255));
-        JL_Usuario_admin.setText("USUARIO: FACFAC");
+        JL_Usuario_admin.setText("USUARIO:");
 
         JL_Fecha_Admin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Fecha_Admin.setForeground(new java.awt.Color(255, 255, 255));
@@ -188,6 +207,15 @@ public class Menu_cajero extends javax.swing.JFrame {
     private void JB_PersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_PersonalActionPerformed
         
     }//GEN-LAST:event_JB_PersonalActionPerformed
+
+    private void JB_Cerrar_sesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_Cerrar_sesionActionPerformed
+        Principal p= new Principal();
+        p.setSize(399,629);
+        p.setTitle("Cachito Delivery");
+        p.setResizable(false);
+        p.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_JB_Cerrar_sesionActionPerformed
 
     /**
      * @param args the command line arguments
