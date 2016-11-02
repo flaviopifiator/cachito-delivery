@@ -19,11 +19,11 @@ public class GestorUsuario {
         buscarTodo();
         for(Object obj:listaUsuarios)
             {
-            Usuario usuario =(Usuario)obj;                
-            if (usuario.getDni() == nuevo.getDni())
+            Usuario usuario =(Usuario)obj; 
+            if (Objects.equals(usuario.getDni(),nuevo.getDni()))
                 {
                     throw new UsuarioExistenteException("El Usuario ya existe");
-                }            
+                }
             }        
         userDAO.agregar(nuevo);
         listaUsuarios.add(nuevo);

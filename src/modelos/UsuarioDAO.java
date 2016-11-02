@@ -1,12 +1,14 @@
 package modelos;
 
 import Excepciones.DataAccessException;
+import Excepciones.UsuarioExistenteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.io.FileInputStream;
+import java.util.Objects;
 
 public class UsuarioDAO {
     Telefono_UsuarioDAO telDAO = new Telefono_UsuarioDAO();
@@ -276,5 +278,19 @@ public class UsuarioDAO {
         }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarUsuarioText() "+ex);}
    
     } 
+    
+    public int lastUser() throws DataAccessException{
+        ArrayList listaUsuarios = this.buscarTodo();
+        int codigo = 100;
+        for(Object obj:listaUsuarios){
+               Usuario usuario =(Usuario)obj;
+
+            if (usuario.getCod()>codigo)
+               {
+                   codigo = usuario.getCod();
+               }
+        }
+        return codigo;
+    }
 }
 
