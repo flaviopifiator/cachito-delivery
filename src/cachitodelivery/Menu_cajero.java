@@ -5,9 +5,12 @@
  */
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_listado_empleados;
 import Ventana_clases.Fondo_menu_cajero;
 import java.awt.BorderLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import modelos.Usuario;
 
@@ -209,12 +212,17 @@ public class Menu_cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_JB_PersonalActionPerformed
 
     private void JB_Cerrar_sesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_Cerrar_sesionActionPerformed
-        Principal p= new Principal();
-        p.setSize(399,629);
-        p.setTitle("Cachito Delivery");
-        p.setResizable(false);
-        p.setVisible(true);
-        this.dispose();
+        Principal p;
+        try {
+            p = new Principal();
+            p.setSize(399,629);
+            p.setTitle("Cachito Delivery");
+            p.setResizable(false);
+            p.setVisible(true);
+            this.dispose();
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Menu_cajero.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_JB_Cerrar_sesionActionPerformed
 
     /**

@@ -827,8 +827,10 @@
                 </Property>
               </Properties>
               <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()"/>
                 <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="Object[][] n=null;"/>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jTable2.setTableHeader(null);"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jTable2 = new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex,int columnIndex){&#xa;&#x9;return false;}&#xa;};"/>
               </AuxValues>
             </Component>
           </SubComponents>

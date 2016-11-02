@@ -4,6 +4,7 @@ import Excepciones.TelefonoUsuarioInexistenteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -116,6 +117,34 @@ public class Telefono_UsuarioDAO {
             catch(Exception ex){throw new DataAccessException("Error en Telefono_UsuarioDAO.agregarGabe() "+ex);}
          
         
+    }
+        
+    public Object[][] devolverTel(int cod) throws SQLException, ClassNotFoundException{
+        
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM telefonos_usuarios "
+        + "WHERE cod_usuario ='"+cod+"'");
+        int tam=0;
+        
+        while(rs.next())
+            tam++;
+        rs.close();
+        st.close();
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT * FROM telefonos_usuarios "
+        + "WHERE cod_usuario ='"+cod+"'");
+        
+        Object[][] tel = new Object[tam][2];
+        int i=0;
+        while(rs.next()){
+            tel[i][0]=rs.getString(3);
+            tel[i][1]=rs.getString(2);
+            i++;
+        }
+        rs.close();
+        st.close();
+        return tel;                
     }
     
 }

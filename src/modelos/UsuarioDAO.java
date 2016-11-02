@@ -159,6 +159,7 @@ public class UsuarioDAO {
                 user.setCargo(rs.getInt("cargo_usuario"));
                 user.setCodFoto(rs.getBinaryStream("foto_usuario"));
                 user.setActivo(rs.getBoolean("activo"));
+                user.setCod(rs.getInt("cod_usuario"));
             }   
             
             rs.close();
@@ -292,5 +293,6 @@ public class UsuarioDAO {
         }
         return codigo;
     }
+    
 }
 

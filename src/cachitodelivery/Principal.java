@@ -17,6 +17,7 @@ import java.awt.Image;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -109,15 +110,15 @@ public class Principal extends javax.swing.JFrame {
         
         
     }
-        public void  MenuAdminVisible(Boolean b){
-            JF_Menu_admin.setVisible(b);
-            
-        }
-        public void  AgregarUsVisible(Boolean b){
-            JF_Agregar_Usuario.setVisible(b);
-            JF_Agregar_Usuario.setLocation(183, 31);
-            
-        }
+    public void  MenuAdminVisible(Boolean b){
+        JF_Menu_admin.setVisible(b);
+
+    }
+    public void  AgregarUsVisible(Boolean b){
+        JF_Agregar_Usuario.setVisible(b);
+        JF_Agregar_Usuario.setLocation(183, 31);
+
+    }
         
     private void centrarPantalla(JFrame vt){
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -506,6 +507,10 @@ public class Principal extends javax.swing.JFrame {
         JL_Hora_Admin1.setForeground(new java.awt.Color(255, 255, 255));
         JL_Hora_Admin1.setText("HH:HH");
 
+        jTable2 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             n,
             new String [] { "", ""
@@ -830,7 +835,11 @@ public class Principal extends javax.swing.JFrame {
         
         JF_Menu_admin.setVisible(false);
       
-         vtListaEmpleados= new Listado_empleados(this);        
+        try {        
+            vtListaEmpleados= new Listado_empleados(this);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
          vtListaEmpleados.setSize(1000, 559);
     }//GEN-LAST:event_JB_PersonalActionPerformed
 
@@ -906,7 +915,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_JB_Cerrar_sesionActionPerformed
 
     private void jBExaminarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExaminarFotoActionPerformed
-         JFileChooser j=new JFileChooser();
+        JFileChooser j=new JFileChooser();
         j.setFileSelectionMode(JFileChooser.FILES_ONLY);//solo archivos y no carpetas
         int estado=j.showOpenDialog(null);
         if(estado== JFileChooser.APPROVE_OPTION){
@@ -1021,14 +1030,14 @@ public class Principal extends javax.swing.JFrame {
                 }
         }
         
-        Object[][] tel = telefono;
-        for(int i=0;i<tel.length;i++){
-            tel[i][0]=telefono[i][1];
-            tel[i][1]=telefono[i][0];
+        Object[][] aux = new Object[telefono.length][2];
+        for(int i=0;i<telefono.length;i++){
+            aux[i][0]=telefono[i][1];
+            aux[i][1]=telefono[i][0];
         }
         
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-                    tel,new String[] {"",""}));
+                    aux,new String[] {"",""}));
         jTDescripcion.setText("");
         jTPais.setText("54");
         jTArea.setText("383");
@@ -1040,7 +1049,7 @@ public class Principal extends javax.swing.JFrame {
         if(jTable2.getSelectedRow()==-1)
             return;
             
-        String numero=jTable2.getValueAt(jTable2.getSelectedRow(),0).toString();
+        String numero=jTable2.getValueAt(jTable2.getSelectedRow(),1).toString();
         Object[][] tel = telefono;
         telefono = new Object[telefono.length][2];
          for(int i=0; i<telefono.length;i++){
@@ -1054,13 +1063,14 @@ public class Principal extends javax.swing.JFrame {
              }
 
          }
+         
 
         tel = telefono;
         telefono = new Object[telefono.length-1][2];
 
         int i=0, j=0;
         while(i<tel.length){
-            if(tel[i][0]==null){
+            if(tel[i][1]==null){
                 i++;
             }
             else{
@@ -1069,16 +1079,17 @@ public class Principal extends javax.swing.JFrame {
                 i++;j++;
             }
         }
-             
-        tel = telefono;
-        for(int k=0;k<tel.length;k++){
-            tel[k][0]=telefono[k][1];
-            tel[k][1]=telefono[k][0];
+        
+        Object[][] aux = new Object[telefono.length][2];
+        for(int k=0;k<telefono.length;k++){
+            aux[k][0]=telefono[k][1];
+            aux[k][1]=telefono[k][0];
         }  
         
+             
+
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-                    tel,new String[] {"",""}));
-            
+                    aux,new String[] {"",""}));
     }//GEN-LAST:event_jBQuitarTelActionPerformed
 
     private void jTDniKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDniKeyReleased

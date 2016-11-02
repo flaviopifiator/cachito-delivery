@@ -5,10 +5,24 @@
  */
 package cachitodelivery;
 
+
 import Ventana_clases.Fondo_modificar_usuario;
-import Ventana_clases.Inicio_sesion;
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.Objects;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import modelos.Fecha;
+import modelos.Telefono_UsuarioDAO;
+import modelos.Usuario;
 
 /**
  *
@@ -16,14 +30,73 @@ import javax.swing.ImageIcon;
  */
 public class Modificar_usuario extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Modificar_usuario
-     */
-    public Modificar_usuario() {
+    Fecha fecha= new Fecha();
+    String user;
+    Listado_empleados vent = null;
+    Usuario cuentaOficial = new Usuario();
+    Telefono_UsuarioDAO telefonos = new Telefono_UsuarioDAO();
+    Object[][] telefono = new Object[0][2];
+    FileInputStream fis;
+    int longitudBytes=0;
+    
+    
+    public Modificar_usuario(Listado_empleados vt, Usuario user) throws IOException, SQLException, ClassNotFoundException {
         initComponents();
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Fondo_modificar_usuario fondo = new Fondo_modificar_usuario(1000,667);
         this.add(fondo, BorderLayout.CENTER);
+        this.JL_Fecha_Admin1.setText(""+fecha.getFecha());
+        this.JL_Hora_Admin1.setText(""+fecha.getHora());
+        vent = vt;
+        cuentaOficial = user;
+        JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getNombre()+" "+vent.cuentaOficial.getApellido());
+        jTextField1.setText(cuentaOficial.getApellido());
+        jTextField2.setText(cuentaOficial.getNombre());
+        jTextField8.setText(""+cuentaOficial.getDni());
+        jTextField5.setText("54");
+        jTextField6.setText("383");
+        jTextField9.setText(""+cuentaOficial.getCod());
+        jTextField3.setText(cuentaOficial.getPass());
+        jComboBox1.setSelectedIndex(cuentaOficial.getCargo());
+        jButton6.setEnabled(false);
+        if(cuentaOficial.getCodFoto()==null)
+            foto_usuario.setIcon(null);
+        else{
+            InputStream binario;
+            ImageIcon foto;
+
+            binario=user.getCodFoto();
+
+
+            BufferedImage bi = ImageIO.read(binario);
+            foto = new ImageIcon(bi);
+
+
+            Image img = foto.getImage();
+            Image newimg = img.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
+
+            ImageIcon newicon = new ImageIcon(newimg);
+
+
+            foto_usuario.setIcon(newicon);
+        }
+        iniciarTel(); 
+    }
+
+    
+    private void iniciarTel() throws SQLException, ClassNotFoundException{
+        jTable2.setTableHeader(null);
+        
+        Telefono_UsuarioDAO tele = new Telefono_UsuarioDAO();
+        Object[][] tel = tele.devolverTel(cuentaOficial.getCod());
+        
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        tel, new String[] {"",""}));
+        telefono=tele.devolverTel(cuentaOficial.getCod());
+    }
+    
+    public void setLabel(String user){
+        this.user="USUARIO: "+user;
     }
 
     /**
@@ -38,11 +111,9 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
-        JL_Foto_usuario = new javax.swing.JLabel();
+        foto_usuario = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jTextField7 = new javax.swing.JTextField();
@@ -71,6 +142,9 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        Object[][] n=null;
+        jTable2 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,12 +155,22 @@ public class Modificar_usuario extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField2.setToolTipText("");
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
+            }
+        });
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
             }
         });
 
@@ -97,24 +181,41 @@ public class Modificar_usuario extends javax.swing.JFrame {
                 jTextField3ActionPerformed(evt);
             }
         });
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
 
-        JL_Foto_usuario.setToolTipText("");
+        foto_usuario.setToolTipText("");
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
-        jList1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField4KeyTyped(evt);
+            }
         });
-        jScrollPane1.setViewportView(jList1);
 
         jTextField5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField5KeyTyped(evt);
+            }
+        });
 
         jTextField6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField6KeyTyped(evt);
+            }
+        });
 
         jTextField7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField7KeyTyped(evt);
+            }
+        });
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Telefono.png"))); // NOI18N
         jButton1.setBorder(null);
@@ -122,6 +223,11 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jButton1.setContentAreaFilled(false);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Telefono_hover.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar.png"))); // NOI18N
         jButton2.setBorder(null);
@@ -129,6 +235,11 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jButton2.setContentAreaFilled(false);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar_hover.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Examinar.png"))); // NOI18N
         jButton3.setBorder(null);
@@ -136,6 +247,11 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jButton3.setContentAreaFilled(false);
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Examinar_hover.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar.png"))); // NOI18N
         jButton4.setBorder(null);
@@ -143,19 +259,51 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jButton4.setContentAreaFilled(false);
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar_hover.png"))); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jTextField8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField8ActionPerformed(evt);
+            }
+        });
+        jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField8KeyTyped(evt);
+            }
+        });
 
         jTextField9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField9.setEnabled(false);
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador", "Cajero" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+        jComboBox1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jComboBox1MousePressed(evt);
+            }
+        });
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Guardar.png"))); // NOI18N
         jButton6.setBorder(null);
         jButton6.setBorderPainted(false);
         jButton6.setContentAreaFilled(false);
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton6.setEnabled(false);
         jButton6.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Guardar_hover.png"))); // NOI18N
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Atras.png"))); // NOI18N
@@ -182,6 +330,18 @@ public class Modificar_usuario extends javax.swing.JFrame {
         JL_Hora_Admin1.setForeground(new java.awt.Color(255, 255, 255));
         JL_Hora_Admin1.setText("HH:HH");
 
+        jTable2 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            n,
+            new String [] { "", ""
+            }
+        ));
+        jTable2.setTableHeader(null);
+        jScrollPane3.setViewportView(jTable2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -206,7 +366,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
                                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(JL_Foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jButton4)
@@ -226,13 +386,6 @@ public class Modificar_usuario extends javax.swing.JFrame {
                                         .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jButton2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jButton1)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -250,7 +403,15 @@ public class Modificar_usuario extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton5))))
+                                        .addComponent(jButton5))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addGap(2, 2, 2)
+                                            .addComponent(jButton2)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jButton1))
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))))
                             .addComponent(JL_Usuario_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 822, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -295,7 +456,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
                                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(JL_Foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(foto_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(jButton4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -312,7 +473,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton2)
@@ -360,8 +521,185 @@ public class Modificar_usuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+       vent.setVisible(true);
+       this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(jTextField5.getText().isEmpty() || jTextField6.getText().isEmpty() || jTextField7.getText().isEmpty()){
+            JOptionPane.showMessageDialog(rootPane, "No se ingreso un numero de telefono válido.");
+            return;
+        }
+        if(telefono.length==0){
+           telefono = new Object[telefono.length+1][2];
+           telefono[0][1]="+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText();
+           telefono[0][0]=jTextField4.getText();
+        }
+        else{
+                for(int i=0;i<telefono.length;i++){
+                    if(Objects.equals("+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText(),telefono[i][1])){
+                        JOptionPane.showMessageDialog(rootPane, "El telefono "+"+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText()+
+                                "\nYa ha sido ingresado.");
+                        return; 
+                    }
+                }
+                
+                Object[][] tel = telefono;
+                
+                telefono = new Object[telefono.length+1][2];
+                for(int i=0; i<telefono.length;i++){
+
+                    if(i==telefono.length-1){
+                        telefono[i][1]="+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText();
+                        telefono[i][0]=jTextField4.getText();
+                    }
+                    else{
+                        telefono[i][1]=tel[i][1];
+                        telefono[i][0]=tel[i][0];
+                    }    
+                }
+        }
+
+        
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                    telefono,new String[] {"",""}));
+        jTextField4.setText("");
+        jTextField5.setText("54");
+        jTextField6.setText("383");
+        jTextField7.setText("");
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if(jTable2.getSelectedRow()==-1)
+            return;
+            
+        String numero=jTable2.getValueAt(jTable2.getSelectedRow(),1).toString();
+        Object[][] tel = telefono;
+        telefono = new Object[telefono.length][2];
+         for(int i=0; i<telefono.length;i++){
+             if(Objects.equals(numero,tel[i][1])){
+                telefono[i][0]=null;
+                telefono[i][1]=null;
+             }
+             else{
+                 telefono[i][0]=tel[i][0];
+                 telefono[i][1]=tel[i][1];
+             }
+
+         }
+         
+
+        tel = telefono;
+        telefono = new Object[telefono.length-1][2];
+
+        int i=0, j=0;
+        while(i<tel.length){
+            if(tel[i][1]==null){
+                i++;
+            }
+            else{
+                telefono[j][0]=tel[i][0];
+                telefono[j][1]=tel[i][1];
+                i++;j++;
+            }
+        }   
+             
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                    telefono,new String[] {"",""}));
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
+
+    }//GEN-LAST:event_jTextField8ActionPerformed
+
+    private void jTextField8KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField8KeyTyped
+        if((evt.getKeyChar()>'9' || evt.getKeyChar()<'0') && (evt.getKeyChar() != evt.VK_BACK_SPACE))
+            evt.consume();
+        if(jTextField8.getText().length()>7)
+            evt.consume();
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jTextField8KeyTyped
+
+    private void jTextField5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyTyped
+        if((evt.getKeyChar()>'9' || evt.getKeyChar()<'0') && (evt.getKeyChar() != evt.VK_BACK_SPACE))
+            evt.consume();
+
+    }//GEN-LAST:event_jTextField5KeyTyped
+
+    private void jTextField6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyTyped
+        if((evt.getKeyChar()>'9' || evt.getKeyChar()<'0') && (evt.getKeyChar() != evt.VK_BACK_SPACE))
+            evt.consume();
+
+    }//GEN-LAST:event_jTextField6KeyTyped
+
+    private void jTextField7KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyTyped
+        if((evt.getKeyChar()>'9' || evt.getKeyChar()<'0') && (evt.getKeyChar() != evt.VK_BACK_SPACE))
+            evt.consume();
+
+    }//GEN-LAST:event_jTextField7KeyTyped
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jTextField2KeyTyped
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        foto_usuario.setIcon(null);
+        fis=null;
+        longitudBytes=0;
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        JFileChooser j=new JFileChooser();
+        j.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int estado=j.showOpenDialog(null);
+        if(estado== JFileChooser.APPROVE_OPTION){
+            try{
+                fis=new FileInputStream(j.getSelectedFile());
+                //necesitamos saber la cantidad de bytes
+                this.longitudBytes=(int)j.getSelectedFile().length();
+                try {
+                    Image icono=ImageIO.read(j.getSelectedFile()).getScaledInstance
+                            (foto_usuario.getWidth(),foto_usuario.getHeight(),Image.SCALE_DEFAULT);
+                    foto_usuario.setIcon(new ImageIcon(icono));
+                    foto_usuario.updateUI();
+
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "imagen: "+ex);
+                }
+            }catch(FileNotFoundException ex){
+                ex.printStackTrace();
+            }
+        }
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
+
+    }//GEN-LAST:event_jTextField4KeyTyped
+
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jComboBox1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MousePressed
+
+    }//GEN-LAST:event_jComboBox1MousePressed
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        jButton6.setEnabled(true);
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -393,16 +731,16 @@ public class Modificar_usuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Modificar_usuario().setVisible(true);
+                //new Modificar_usuario(this.).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JL_Fecha_Admin1;
-    private javax.swing.JLabel JL_Foto_usuario;
     private javax.swing.JLabel JL_Hora_Admin1;
     private javax.swing.JLabel JL_Usuario_admin1;
+    private javax.swing.JLabel foto_usuario;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -424,8 +762,8 @@ public class Modificar_usuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
