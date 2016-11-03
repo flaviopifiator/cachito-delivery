@@ -23,24 +23,32 @@ public class UsuarioDAO {
             ps.setBinaryStream(6, usuario.getFis(),usuario.getLongitud());
             ps.setBoolean(7, usuario.getActivo()); 
             ps.execute();
-            
+            ps.close();
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
         
     }
+    
+    
     
     public void actualizar (Usuario usuario) throws DataAccessException{
     
         try{
             Connection con = BaseDeDatos.getInstance();
-            PreparedStatement ps = con.prepareStatement("UPDATE usuarios SET nombre_usuario=?, apellido_usuario=?, contraseña_usuario=?, cargo_usuario=? ,foto_usuario=?,activo=? WHERE dni_usuario=?");
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getApellido());
-            ps.setString(3, usuario.getPass());
-            ps.setInt(4, usuario.getCargo());
-            ps.setString(5, usuario.getFoto());
-            ps.setBoolean(6, usuario.getActivo());
-            ps.setInt(7, usuario.getDni());            
+            PreparedStatement ps = con.prepareStatement("UPDATE usuarios SET dni_usuario=?, nombre_usuario=?"
+                    + ",apellido_usuario=?, contraseña_usuario=? ,cargo_usuario=?, foto_usuario=?, activo=? WHERE cod_usuario=?");
+            ps.setInt(1, usuario.getDni());
+            ps.setString(2, usuario.getNombre());
+            ps.setString(3, usuario.getApellido());
+            ps.setString(4, usuario.getPass());
+            ps.setInt(5, usuario.getCargo());
+
+              ps.setBinaryStream(6, usuario.getFis(),usuario.getLongitud());
+  
+
+            ps.setBoolean(7, usuario.getActivo());
+            ps.setInt(8, usuario.getCod());
             ps.execute();
+            ps.close();
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.actualizar() "+ex);}
         
     }

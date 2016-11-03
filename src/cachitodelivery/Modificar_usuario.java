@@ -6,6 +6,8 @@
 package cachitodelivery;
 
 
+import Excepciones.DataAccessException;
+import Excepciones.TelefonoUsuarioInexistenteException;
 import Ventana_clases.Fondo_modificar_usuario;
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -16,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -23,6 +27,7 @@ import javax.swing.JOptionPane;
 import modelos.Fecha;
 import modelos.Telefono_UsuarioDAO;
 import modelos.Usuario;
+import modelos.UsuarioDAO;
 
 /**
  *
@@ -57,6 +62,8 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jTextField6.setText("383");
         jTextField9.setText(""+cuentaOficial.getCod());
         jTextField3.setText(cuentaOficial.getPass());
+        this.fis=cuentaOficial.getFis();
+        this.longitudBytes=cuentaOficial.getLongitud();
         jComboBox1.setSelectedIndex(cuentaOficial.getCargo());
         jButton6.setEnabled(false);
         if(cuentaOficial.getCodFoto()==null)
@@ -82,6 +89,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         }
         iniciarTel(); 
     }
+
 
     
     private void iniciarTel() throws SQLException, ClassNotFoundException{
@@ -110,21 +118,21 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        foto_usuario = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jTextField8 = new javax.swing.JTextField();
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jTextField7 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox();
+        jButton6 = new javax.swing.JButton();
+        foto_usuario = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jTextField8 = new javax.swing.JTextField();
         jTextField9 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox();
-        jButton6 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         JL_Usuario_admin1 = new javax.swing.JLabel();
         JL_Fecha_Admin1 = new javax.swing.JLabel();
@@ -174,20 +182,17 @@ public class Modificar_usuario extends javax.swing.JFrame {
             }
         });
 
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField3.setToolTipText("");
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        jTextField8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                jTextField8ActionPerformed(evt);
             }
         });
-        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField3KeyTyped(evt);
+                jTextField8KeyTyped(evt);
             }
         });
-
-        foto_usuario.setToolTipText("");
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -216,6 +221,52 @@ public class Modificar_usuario extends javax.swing.JFrame {
                 jTextField7KeyTyped(evt);
             }
         });
+
+        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField3.setToolTipText("");
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
+
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador", "Cajero" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+        jComboBox1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jComboBox1MousePressed(evt);
+            }
+        });
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Guardar.png"))); // NOI18N
+        jButton6.setBorder(null);
+        jButton6.setBorderPainted(false);
+        jButton6.setContentAreaFilled(false);
+        jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton6.setEnabled(false);
+        jButton6.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Guardar_hover.png"))); // NOI18N
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        foto_usuario.setToolTipText("");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Telefono.png"))); // NOI18N
         jButton1.setBorder(null);
@@ -265,46 +316,8 @@ public class Modificar_usuario extends javax.swing.JFrame {
             }
         });
 
-        jTextField8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
-            }
-        });
-        jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField8KeyTyped(evt);
-            }
-        });
-
         jTextField9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField9.setEnabled(false);
-
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador", "Cajero" }));
-        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox1ItemStateChanged(evt);
-            }
-        });
-        jComboBox1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jComboBox1MousePressed(evt);
-            }
-        });
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Guardar.png"))); // NOI18N
-        jButton6.setBorder(null);
-        jButton6.setBorderPainted(false);
-        jButton6.setContentAreaFilled(false);
-        jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton6.setEnabled(false);
-        jButton6.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Guardar_hover.png"))); // NOI18N
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Atras.png"))); // NOI18N
         jButton5.setBorder(null);
@@ -536,13 +549,25 @@ public class Modificar_usuario extends javax.swing.JFrame {
            telefono[0][0]=jTextField4.getText();
         }
         else{
-                for(int i=0;i<telefono.length;i++){
-                    if(Objects.equals("+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText(),telefono[i][1])){
-                        JOptionPane.showMessageDialog(rootPane, "El telefono "+"+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText()+
-                                "\nYa ha sido ingresado.");
-                        return; 
-                    }
+                Telefono_UsuarioDAO prueba = new Telefono_UsuarioDAO();
+            try {
+                
+                if(prueba.existeTelefono_Usuario(Integer.parseInt(jTextField9.getText()), "+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText())){
+                    JOptionPane.showMessageDialog(rootPane, "El telefono "+"+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText()+
+                                    "\nYa ha sido ingresado.");
+                            return;
                 }
+                    
+                    for(int i=0;i<telefono.length;i++){
+                        if(Objects.equals("+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText(),telefono[i][1])){
+                            JOptionPane.showMessageDialog(rootPane, "El telefono "+"+"+jTextField5.getText()+jTextField6.getText()+jTextField7.getText()+
+                                    "\nYa ha sido ingresado.");
+                            return; 
+                        }
+                    }
+            } catch (DataAccessException ex) {
+                Logger.getLogger(Modificar_usuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
                 
                 Object[][] tel = telefono;
                 
@@ -700,6 +725,48 @@ public class Modificar_usuario extends javax.swing.JFrame {
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
         jButton6.setEnabled(true);
     }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if(jTextField1.getText().isEmpty() || jTextField8.getText().isEmpty() || jTextField3.getText().isEmpty() || jTextField2.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se permiten campos vacíos");
+            return;
+        }
+        
+        Usuario user = new Usuario();
+        int dni; 
+        try
+        {
+        dni = Integer.parseInt(jTextField8.getText().trim());
+        user.setDni(dni);
+        user.setNombre(jTextField2.getText().trim());
+        user.setApellido(jTextField1.getText().trim());
+        user.setPass(jTextField3.getText().trim());
+        user.setCargo(jComboBox1.getSelectedIndex());
+        user.setActivo(true); 
+        user.setFis(fis);
+        user.setLongitud(longitudBytes);
+        user.setCod(Integer.parseInt(jTextField9.getText()));
+        
+            UsuarioDAO gesus = new UsuarioDAO();
+            gesus.actualizar(user);
+            Telefono_UsuarioDAO tel = new Telefono_UsuarioDAO();
+            
+            Object[][] aux = new Object[telefono.length][3];
+            for(int i=0; i<telefono.length;i++){
+                aux[i][0]=user.getCod();
+                aux[i][2]=telefono[i][0];
+                aux[i][1]=telefono[i][1];
+            }
+            tel.actualizarGabe(aux);
+            
+        }
+        catch(NumberFormatException ex ){JOptionPane.showMessageDialog(null, "Solo debe ingresar numeros en el campo dni");return;}
+        catch(TelefonoUsuarioInexistenteException ex){JOptionPane.showMessageDialog(null, ex.getMessage());return;}
+        catch(DataAccessException ex){JOptionPane.showMessageDialog(null, "Error al Insertar"+ex);return;}
+        
+        JOptionPane.showMessageDialog(null, "El Cliente fue modificado con exito");
+         
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments

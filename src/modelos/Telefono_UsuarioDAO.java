@@ -42,15 +42,24 @@ public class Telefono_UsuarioDAO {
         
     }
     
-    public void eliminar (int cod_usuario) throws DataAccessException{
-        try{
-            Connection con = BaseDeDatos.getInstance();
-            Statement st = con.createStatement();
-            st.executeUpdate("DELETE FROM telefonos_usuarios WHERE dni_usuario='"+cod_usuario+"'");
-            st.close();
-        }catch (Exception ex){throw new DataAccessException("Error en Telefono_UsuarioDAO.eliminar() "+ex);}
-        
-    }
+        public void eliminar (int cod_usuario) throws DataAccessException{
+            try{
+                Connection con = BaseDeDatos.getInstance();
+                Statement st = con.createStatement();
+                st.executeUpdate("DELETE FROM telefonos_usuarios WHERE cod_usuario='"+cod_usuario+"'");
+                st.close();
+            }catch (Exception ex){throw new DataAccessException("Error en Telefono_UsuarioDAO.eliminar() "+ex);}
+
+        }
+                
+        public void actualizarGabe(Object[][] telefonos) throws DataAccessException, TelefonoUsuarioInexistenteException{
+            if(telefonos.length==0)
+                throw new TelefonoUsuarioInexistenteException("No hay ningun telefono agregado.");
+                
+            this.eliminar(Integer.parseInt(telefonos[0][0].toString()));
+                this.agregarGabe(telefonos);
+
+        }
     
     public ArrayList buscarTodo() throws DataAccessException{
         try{
@@ -93,6 +102,21 @@ public class Telefono_UsuarioDAO {
             st.close();
             return telefono;
         }catch (Exception ex){throw new DataAccessException("Error en Telefono_UsuarioDAO.buscarTelefono_Usuario() "+ex);}
+   
+    } 
+    
+    public boolean existeTelefono_Usuario(int cod_usuario, String numero) throws DataAccessException{
+        try{
+            Connection con = BaseDeDatos.getInstance();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM telefonos_usuarios where cod_usuario='"+cod_usuario+"' and telefono_usuario='"+numero+"'");
+             while(rs.next())
+            {
+                return true;
+            }   
+            
+            return false;
+        }catch (Exception ex){throw new DataAccessException("Error en Telefono_UsuarioDAO.existeTelefono_Usuario() "+ex);}
    
     } 
     
