@@ -80,6 +80,9 @@ public class Principal extends javax.swing.JFrame {
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Inicio_sesion fondo = new Inicio_sesion(399,600);
         this.add(fondo, BorderLayout.CENTER);
+        this.setSize(399,629); //DAR 39 PX MÁS DE ALTURA 
+        this.setTitle("Cachito Delivery");
+        this.setResizable(false);
         
         this.JL_Fecha.setText(fecha.getFecha());
         this.JL_Hora.setText(fecha.getHora());
@@ -110,7 +113,9 @@ public class Principal extends javax.swing.JFrame {
         
         
     }
-    public void  MenuAdminVisible(Boolean b){
+    public void  MenuAdminVisible(Boolean b, Usuario user){
+        cuentaOficial=user;
+        JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
         JF_Menu_admin.setVisible(b);
 
     }
@@ -198,6 +203,11 @@ public class Principal extends javax.swing.JFrame {
         JB_Caja.setContentAreaFilled(false);
         JB_Caja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         JB_Caja.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Sebas_hover.png"))); // NOI18N
+        JB_Caja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JB_CajaActionPerformed(evt);
+            }
+        });
 
         JB_Personal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Personal.png"))); // NOI18N
         JB_Personal.setBorder(null);
@@ -805,8 +815,10 @@ public class Principal extends javax.swing.JFrame {
                 }
                 else{
                     JF_Menu_admin.setVisible(true);
-                    JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
-                    JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
+                    JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                    JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                    limpiarLogin();
+                    this.setVisible(false);
                 }
 
                 limpiarLogin();
@@ -855,7 +867,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jBAtrasActionPerformed
 
     private void jBRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBRegistrarActionPerformed
-        if(jTDni.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()){
+        if(jTDni.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty() || jTContraseña.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "No se permiten campos vacíos");
             return;
         }
@@ -969,11 +981,9 @@ public class Principal extends javax.swing.JFrame {
             if(ban){
                 
                 cuentaOficial=  gesUs.buscarUsuario(user.getDni());
-                
-                JOptionPane.showMessageDialog(rootPane, "INGRESO AL SISTEMA");
                 JF_Menu_admin.setVisible(true);
-                JL_Usuario_admin.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
-                JL_Usuario_admin1.setText("USUARIO:"+cuentaOficial.getNombre()+" "+cuentaOficial.getApellido());
+                JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
                 limpiarLogin();
                 this.setVisible(false);
             }else{
@@ -1118,6 +1128,18 @@ public class Principal extends javax.swing.JFrame {
         if((evt.getKeyChar()>'9' || evt.getKeyChar()<'0') && (evt.getKeyChar() != evt.VK_BACK_SPACE))
             evt.consume();
     }//GEN-LAST:event_jTtelefonoKeyTyped
+
+    private void JB_CajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_CajaActionPerformed
+        Abrir_caja ventana;
+        try {
+            ventana = new Abrir_caja(cuentaOficial);
+        this.JF_Menu_admin.setVisible(false);
+        ventana.setVisible(true);
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_JB_CajaActionPerformed
 
     /**
      * @param args the command line arguments

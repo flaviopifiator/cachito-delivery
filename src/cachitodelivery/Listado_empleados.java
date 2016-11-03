@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelos.Fecha;
 import modelos.Telefono_UsuarioDAO;
 
 /**
@@ -30,6 +31,7 @@ public class Listado_empleados extends javax.swing.JFrame {
     
     Usuario cuentaOficial = new Usuario();
     Principal vent = null;
+    Fecha fecha = new Fecha();
     
     public Listado_empleados(Principal vt) throws SQLException {
         initComponents();
@@ -40,7 +42,9 @@ public class Listado_empleados extends javax.swing.JFrame {
         setVisible(true);
         vent = vt;
         cuentaOficial= vt.cuentaOficial;
-        JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getNombre()+" "+vent.cuentaOficial.getApellido());
+        JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getApellido()+" "+vent.cuentaOficial.getNombre());
+        JL_Fecha_Admin1.setText(fecha.getFecha());
+        JL_Hora_Admin1.setText(fecha.getHora());
 
     }
     private void iniciarListado() {
@@ -554,7 +558,7 @@ public class Listado_empleados extends javax.swing.JFrame {
 
     
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-       vent.MenuAdminVisible(true);
+       vent.MenuAdminVisible(true, cuentaOficial);
        this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 

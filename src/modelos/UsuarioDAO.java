@@ -1,14 +1,11 @@
 package modelos;
 
 import Excepciones.DataAccessException;
-import Excepciones.UsuarioExistenteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.io.FileInputStream;
-import java.util.Objects;
 
 public class UsuarioDAO {
     Telefono_UsuarioDAO telDAO = new Telefono_UsuarioDAO();

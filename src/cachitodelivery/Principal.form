@@ -110,6 +110,9 @@
               <Image iconType="3" name="/Botones/Sebas_hover.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="JB_CajaActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="JB_Personal">
           <Properties>
