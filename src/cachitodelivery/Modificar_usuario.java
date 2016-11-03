@@ -28,7 +28,6 @@ import modelos.Fecha;
 import modelos.Telefono_UsuarioDAO;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
-
 /**
  *
  * @author Cusipuma
@@ -62,8 +61,6 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jTextField6.setText("383");
         jTextField9.setText(""+cuentaOficial.getCod());
         jTextField3.setText(cuentaOficial.getPass());
-        this.fis=cuentaOficial.getFis();
-        this.longitudBytes=cuentaOficial.getLongitud();
         jComboBox1.setSelectedIndex(cuentaOficial.getCargo());
         jButton6.setEnabled(false);
         if(cuentaOficial.getCodFoto()==null)
@@ -106,6 +103,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
     public void setLabel(String user){
         this.user="USUARIO: "+user;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -676,8 +674,9 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         foto_usuario.setIcon(null);
+        cuentaOficial.setCodFoto(null);
         fis=null;
-        longitudBytes=0;
+        longitudBytes=-1;
         jButton6.setEnabled(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -742,7 +741,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         user.setApellido(jTextField1.getText().trim());
         user.setPass(jTextField3.getText().trim());
         user.setCargo(jComboBox1.getSelectedIndex());
-        user.setActivo(true); 
+        user.setActivo(true);
         user.setFis(fis);
         user.setLongitud(longitudBytes);
         user.setCod(Integer.parseInt(jTextField9.getText()));

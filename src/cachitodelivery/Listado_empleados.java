@@ -589,20 +589,16 @@ public class Listado_empleados extends javax.swing.JFrame {
                         tel, new String[] {"",""}));
                 jBModificarUsuario.setEnabled(false);
                 jBEliminarUsuario.setEnabled(false);
-                return; 
-            }
-                
-            UsuarioDAO users = new UsuarioDAO();
-            Usuario user = null;
-            if(jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
                 jLabel7.setText("USUARIO NO SELECCIONADO");
                 jLabel8.setText("");
                 jLabel9.setText("");
                 jLabel10.setText("");
                 JL_Foto_empleado.setIcon(null);
                 jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);
+                jBEliminarUsuario.setEnabled(false);                
             }else{
+                UsuarioDAO users = new UsuarioDAO();
+                Usuario user = null;
                 user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
                 jLabel7.setText("APELLIDOS: "+user.getApellido());
                 jLabel8.setText("NOMBRES: "+user.getNombre());
@@ -611,6 +607,7 @@ public class Listado_empleados extends javax.swing.JFrame {
                     jLabel10.setText("CARGO: Cajero");
                 else
                     jLabel10.setText("CARGO: Aministrador");
+                
                 if(user.getCodFoto()==null)
                     JL_Foto_empleado.setIcon(null);
                 else{
@@ -631,7 +628,6 @@ public class Listado_empleados extends javax.swing.JFrame {
 
 
                     JL_Foto_empleado.setIcon(newicon);
-                    
                 }
                 iniciarTel();
                 jBModificarUsuario.setEnabled(true);
@@ -666,19 +662,16 @@ public class Listado_empleados extends javax.swing.JFrame {
                         tel, new String[] {"",""}));
                 jBModificarUsuario.setEnabled(false);
                 jBEliminarUsuario.setEnabled(false);
-                return; 
-            }
-            UsuarioDAO users = new UsuarioDAO();
-            Usuario user = null;
-            if(jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
                 jLabel7.setText("USUARIO NO SELECCIONADO");
                 jLabel8.setText("");
                 jLabel9.setText("");
                 jLabel10.setText("");
                 JL_Foto_empleado.setIcon(null);
                 jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);
+                jBEliminarUsuario.setEnabled(false);                
             }else{
+                UsuarioDAO users = new UsuarioDAO();
+                Usuario user = null;
                 user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
                 jLabel7.setText("APELLIDOS: "+user.getApellido());
                 jLabel8.setText("NOMBRES: "+user.getNombre());
@@ -892,6 +885,7 @@ public class Listado_empleados extends javax.swing.JFrame {
             ventana = new Modificar_usuario(this,
                     usuario.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString())));
         ventana.setLocation(183, 31);
+        
         ventana.setVisible(true);
         this.setVisible(false);
         } catch (DataAccessException ex) {
