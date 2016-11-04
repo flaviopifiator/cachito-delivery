@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import modelos.Fecha;
 import modelos.Telefono_UsuarioDAO;
 import modelos.Usuario;
@@ -46,14 +47,13 @@ public class Modificar_usuario extends javax.swing.JFrame {
     
     public Modificar_usuario(Listado_empleados vt, Usuario user) throws IOException, SQLException, ClassNotFoundException {
         initComponents();
-        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Fondo_modificar_usuario fondo = new Fondo_modificar_usuario(1000,667);
         this.add(fondo, BorderLayout.CENTER);
         this.JL_Fecha_Admin1.setText(""+fecha.getFecha());
         this.JL_Hora_Admin1.setText(""+fecha.getHora());
         vent = vt;
         cuentaOficial = user;
-        JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getNombre()+" "+vent.cuentaOficial.getApellido());
+        JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getApellido()+" "+vent.cuentaOficial.getNombre());
         jTextField1.setText(cuentaOficial.getApellido());
         jTextField2.setText(cuentaOficial.getNombre());
         jTextField8.setText(""+cuentaOficial.getDni());
@@ -88,7 +88,17 @@ public class Modificar_usuario extends javax.swing.JFrame {
     }
 
 
-    
+    public void mostrar(boolean b){
+        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
+        setResizable(false);
+        setSize(1000,690);
+        setLocationRelativeTo(null);
+        setTitle("Modificar usuario");
+        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());    
+        setVisible(b);
+        
+        
+    }
     private void iniciarTel() throws SQLException, ClassNotFoundException{
         jTable2.setTableHeader(null);
         
@@ -156,6 +166,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField1.setToolTipText("");
+        jTextField1.setNextFocusableComponent(jTextField2);
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -169,6 +180,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField2.setToolTipText("");
+        jTextField2.setNextFocusableComponent(jTextField8);
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
@@ -181,6 +193,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         });
 
         jTextField8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField8.setNextFocusableComponent(jButton3);
         jTextField8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField8ActionPerformed(evt);
@@ -193,6 +206,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         });
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField4.setNextFocusableComponent(jTextField5);
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField4KeyTyped(evt);
@@ -200,6 +214,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         });
 
         jTextField5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField5.setNextFocusableComponent(jTextField6);
         jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField5KeyTyped(evt);
@@ -207,6 +222,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         });
 
         jTextField6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField6.setNextFocusableComponent(jTextField7);
         jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField6KeyTyped(evt);
@@ -214,6 +230,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         });
 
         jTextField7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField7.setNextFocusableComponent(jButton1);
         jTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField7KeyTyped(evt);
@@ -222,6 +239,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField3.setToolTipText("");
+        jTextField3.setNextFocusableComponent(jComboBox1);
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -235,6 +253,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador", "Cajero" }));
+        jComboBox1.setNextFocusableComponent(jButton6);
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
@@ -271,6 +290,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setNextFocusableComponent(jTextField3);
         jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Telefono_hover.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -295,6 +315,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
         jButton3.setBorderPainted(false);
         jButton3.setContentAreaFilled(false);
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.setNextFocusableComponent(jTextField4);
         jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Examinar_hover.png"))); // NOI18N
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -430,9 +451,9 @@ public class Modificar_usuario extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JL_Fecha_Admin1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 708, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(JL_Hora_Admin1)
-                        .addGap(57, 57, 57))))
+                        .addGap(78, 78, 78))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -532,6 +553,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+       vent.iniciarListado();
        vent.setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -682,24 +704,34 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         JFileChooser j=new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("JPG, PNG & GIF","jpg","png","gif");
+        j.setFileFilter(filtro);
         j.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int estado=j.showOpenDialog(null);
         if(estado== JFileChooser.APPROVE_OPTION){
-            try{
-                fis=new FileInputStream(j.getSelectedFile());
-                //necesitamos saber la cantidad de bytes
-                this.longitudBytes=(int)j.getSelectedFile().length();
-                try {
-                    Image icono=ImageIO.read(j.getSelectedFile()).getScaledInstance
-                            (foto_usuario.getWidth(),foto_usuario.getHeight(),Image.SCALE_DEFAULT);
-                    foto_usuario.setIcon(new ImageIcon(icono));
-                    foto_usuario.updateUI();
-
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(rootPane, "imagen: "+ex);
+            String exten="";
+            for (int i=j.getSelectedFile().getName().length()-1; i>=0; i--)
+                exten=exten+j.getSelectedFile().getName().charAt(i);
+            String extension ="";
+            for (int k=0; k<4; k++)
+                extension=extension+exten.charAt(k);
+            
+            if(extension.toLowerCase().equals("gnp.") || extension.toLowerCase().equals("gpj.") || extension.toLowerCase().equals("gepj") || extension.toLowerCase().equals("fig.")){
+                try{
+                    fis=new FileInputStream(j.getSelectedFile());
+                    this.longitudBytes=(int)j.getSelectedFile().length();
+                    try {
+                        Image icono=ImageIO.read(j.getSelectedFile()).getScaledInstance
+                                (foto_usuario.getWidth(),foto_usuario.getHeight(),Image.SCALE_DEFAULT);
+                        foto_usuario.setIcon(new ImageIcon(icono));
+                        foto_usuario.updateUI();
+                    }catch (IOException ex) {
+                        JOptionPane.showMessageDialog(rootPane, "imagen: "+ex);
+                    }
+                }catch(FileNotFoundException ex){
                 }
-            }catch(FileNotFoundException ex){
-                ex.printStackTrace();
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Solo se permiten archivos del tipo .png, .gif y .jpg","No se pudo agregar la imagen",JOptionPane.ERROR_MESSAGE);
             }
         }
         jButton6.setEnabled(true);

@@ -35,11 +35,8 @@ public class Listado_empleados extends javax.swing.JFrame {
     
     public Listado_empleados(Principal vt) throws SQLException {
         initComponents();
-        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Fondo_listado_empleados fondo = new Fondo_listado_empleados(1000,559);
-        setLocation(183, 104);
-        this.add(fondo, BorderLayout.CENTER);
-        setVisible(true);
+        add(fondo, BorderLayout.CENTER);
         vent = vt;
         cuentaOficial= vt.cuentaOficial;
         JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getApellido()+" "+vent.cuentaOficial.getNombre());
@@ -47,7 +44,16 @@ public class Listado_empleados extends javax.swing.JFrame {
         JL_Hora_Admin1.setText(fecha.getHora());
 
     }
-    private void iniciarListado() {
+    public void mostrar(boolean b){
+        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
+        setSize(1000,582);
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setTitle("Listado de empleados");
+        setVisible(b);
+    }
+    
+    public void iniciarListado() {
         jTable1.setTableHeader(null);
         jLabel7.setText("USUARIO NO SELECCIONADO");
                 jLabel8.setText("");
@@ -884,9 +890,8 @@ public class Listado_empleados extends javax.swing.JFrame {
         try {
             ventana = new Modificar_usuario(this,
                     usuario.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString())));
-        ventana.setLocation(183, 31);
-        
-        ventana.setVisible(true);
+
+            ventana.mostrar(true);
         this.setVisible(false);
         } catch (DataAccessException ex) {
             Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);

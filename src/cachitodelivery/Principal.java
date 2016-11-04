@@ -26,6 +26,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import modelos.Fecha;
 import modelos.GestorUsuario;
 import modelos.Telefono_UsuarioDAO;
@@ -43,9 +44,51 @@ public class Principal extends javax.swing.JFrame {
     Fecha fecha = new Fecha();
     FileInputStream fis;
     int longitudBytes;
-    
     Object[][] telefono = new Object[0][2];
     
+    
+    public Principal() throws DataAccessException {
+        initComponents();
+        this.setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
+        Inicio_sesion fondo = new Inicio_sesion(399,600);
+        this.add(fondo, BorderLayout.CENTER);
+        this.setSize(399,629); //DAR 39 PX MÁS DE ALTURA 
+        this.setTitle("Cachito Delivery");
+        this.setResizable(false);
+        
+        this.JL_Fecha.setText(fecha.getFecha());
+        this.JL_Hora.setText(fecha.getHora());
+        
+        this.JL_Fecha_Admin.setText(fecha.getFecha());
+        this.JL_Hora_Admin.setText(fecha.getHora());
+        
+        this.JL_Fecha_Admin1.setText(fecha.getFecha());
+        this.JL_Hora_Admin1.setText(fecha.getHora());
+        
+        
+        UsuarioDAO ultimo = new UsuarioDAO();
+        this.jTUsuario.setText(""+(ultimo.lastUser()+1));
+        
+        Menu_admin fondo_prueba1 = new Menu_admin(673,260);
+        JF_Menu_admin.add(fondo_prueba1, BorderLayout.CENTER);
+        JF_Menu_admin.setSize(673,285);
+        JF_Menu_admin.setResizable(false);
+        JF_Menu_admin.setVisible(false);
+        JF_Menu_admin.setLocationRelativeTo(null);
+        JF_Menu_admin.setTitle("Opciones de administrador");
+        JF_Menu_admin.setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
+        Principal.super.setVisible(false);
+        
+        Agregar_usuario fondo_prueba = new Agregar_usuario(1000,667);
+        JF_Agregar_Usuario.add(fondo_prueba, BorderLayout.CENTER);
+        JF_Agregar_Usuario.setResizable(false);
+        JF_Agregar_Usuario.setSize(1000,690);
+        JF_Agregar_Usuario.setLocationRelativeTo(null);
+        JF_Agregar_Usuario.setTitle("Agregar nuevo usuario");
+        JF_Agregar_Usuario.setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());    
+        JF_Agregar_Usuario.setVisible(false);
+        centrarPantalla(this); 
+    }
     
     public void clearAgregar() throws DataAccessException{
         jTApellido.setText("");
@@ -66,53 +109,14 @@ public class Principal extends javax.swing.JFrame {
         
         fis = null;
         longitudBytes=0;
-                
     }
     
 
-   private void limpiarLogin(){
+    private void limpiarLogin(){
         JPF_PassUser.setText("");
         JTF_IdUser.setText("");
     }
     
-    public Principal() throws DataAccessException {
-        initComponents();
-        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
-        Inicio_sesion fondo = new Inicio_sesion(399,600);
-        this.add(fondo, BorderLayout.CENTER);
-        this.setSize(399,629); //DAR 39 PX MÁS DE ALTURA 
-        this.setTitle("Cachito Delivery");
-        this.setResizable(false);
-        
-        this.JL_Fecha.setText(fecha.getFecha());
-        this.JL_Hora.setText(fecha.getHora());
-        
-        this.JL_Fecha_Admin.setText(fecha.getFecha());
-        this.JL_Hora_Admin.setText(fecha.getHora());
-        
-        this.JL_Fecha_Admin1.setText(fecha.getFecha());
-        this.JL_Hora_Admin1.setText(fecha.getHora());
-        
-        
-        UsuarioDAO ultimo = new UsuarioDAO();
-        this.jTUsuario.setText(""+(ultimo.lastUser()+1));
-        
-        //TESTEANDO OTRAS VENTANAS
-        
-        Menu_admin fondo_prueba1 = new Menu_admin(673,260);
-        JF_Menu_admin.add(fondo_prueba1, BorderLayout.CENTER);
-        JF_Menu_admin.setSize(673,299);
-        JF_Menu_admin.setVisible(false);
-        JF_Menu_admin.setLocation(346, 234);        
-        Principal.super.setVisible(false);
-        Agregar_usuario fondo_prueba = new Agregar_usuario(1000,667);
-        JF_Agregar_Usuario.add(fondo_prueba, BorderLayout.CENTER);               
-        JF_Agregar_Usuario.setSize(1000,706);        
-        JF_Agregar_Usuario.setVisible(false);
-        centrarPantalla(this);
-        
-        
-    }
     public void  MenuAdminVisible(Boolean b, Usuario user){
         cuentaOficial=user;
         JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
@@ -121,7 +125,6 @@ public class Principal extends javax.swing.JFrame {
     }
     public void  AgregarUsVisible(Boolean b){
         JF_Agregar_Usuario.setVisible(b);
-        JF_Agregar_Usuario.setLocation(183, 31);
 
     }
         
@@ -357,6 +360,7 @@ public class Principal extends javax.swing.JFrame {
 
         jTApellido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTApellido.setToolTipText("");
+        jTApellido.setNextFocusableComponent(jTNombre);
         jTApellido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTApellidoActionPerformed(evt);
@@ -365,6 +369,7 @@ public class Principal extends javax.swing.JFrame {
 
         jTNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTNombre.setToolTipText("");
+        jTNombre.setNextFocusableComponent(jTDni);
         jTNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTNombreActionPerformed(evt);
@@ -373,6 +378,7 @@ public class Principal extends javax.swing.JFrame {
 
         jTContraseña.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTContraseña.setToolTipText("");
+        jTContraseña.setNextFocusableComponent(jCCargo);
         jTContraseña.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTContraseñaActionPerformed(evt);
@@ -382,9 +388,11 @@ public class Principal extends javax.swing.JFrame {
         foto_usuario.setToolTipText("");
 
         jTDescripcion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTDescripcion.setNextFocusableComponent(jTPais);
 
         jTPais.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTPais.setText("54");
+        jTPais.setNextFocusableComponent(jTArea);
         jTPais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTPaisActionPerformed(evt);
@@ -398,6 +406,7 @@ public class Principal extends javax.swing.JFrame {
 
         jTArea.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTArea.setText("383");
+        jTArea.setNextFocusableComponent(jTtelefono);
         jTArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTAreaKeyTyped(evt);
@@ -405,6 +414,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jTtelefono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTtelefono.setNextFocusableComponent(jBAgregarTel);
         jTtelefono.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTtelefonoKeyTyped(evt);
@@ -416,10 +426,16 @@ public class Principal extends javax.swing.JFrame {
         jBAgregarTel.setBorderPainted(false);
         jBAgregarTel.setContentAreaFilled(false);
         jBAgregarTel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBAgregarTel.setNextFocusableComponent(jTContraseña);
         jBAgregarTel.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Telefono_hover.png"))); // NOI18N
         jBAgregarTel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBAgregarTelActionPerformed(evt);
+            }
+        });
+        jBAgregarTel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBAgregarTelKeyPressed(evt);
             }
         });
 
@@ -440,10 +456,16 @@ public class Principal extends javax.swing.JFrame {
         jBExaminarFoto.setBorderPainted(false);
         jBExaminarFoto.setContentAreaFilled(false);
         jBExaminarFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBExaminarFoto.setNextFocusableComponent(jTDescripcion);
         jBExaminarFoto.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Examinar_hover.png"))); // NOI18N
         jBExaminarFoto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBExaminarFotoActionPerformed(evt);
+            }
+        });
+        jBExaminarFoto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBExaminarFotoKeyPressed(evt);
             }
         });
 
@@ -461,6 +483,7 @@ public class Principal extends javax.swing.JFrame {
 
         jTDni.setColumns(8);
         jTDni.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTDni.setNextFocusableComponent(jBExaminarFoto);
         jTDni.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTDniFocusLost(evt);
@@ -480,6 +503,7 @@ public class Principal extends javax.swing.JFrame {
 
         jCCargo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jCCargo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador", "Cajero" }));
+        jCCargo.setNextFocusableComponent(jBRegistrar);
 
         jBRegistrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Agregar.png"))); // NOI18N
         jBRegistrar.setBorder(null);
@@ -490,6 +514,11 @@ public class Principal extends javax.swing.JFrame {
         jBRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBRegistrarActionPerformed(evt);
+            }
+        });
+        jBRegistrar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBRegistrarKeyPressed(evt);
             }
         });
 
@@ -792,28 +821,27 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JB_IngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_IngresarActionPerformed
-        try {
+        try{
             Usuario user = new Usuario();
-            
+
             String pass;
-            
+
             boolean ban;
-            
+
             user.setDni(Integer.parseInt(JTF_IdUser.getText()));
             pass= JPF_PassUser.getText().trim();
             user.setPass(pass);
             GestorUsuario gesUs =new GestorUsuario();
             ban=gesUs.Acceso(user);
             if(ban){
-                
+
                 cuentaOficial=  gesUs.buscarUsuario(user.getDni());
                 if(cuentaOficial.getCargo()==1){
                     Menu_cajero menu = new Menu_cajero();
                     menu.setUser(cuentaOficial);
                     menu.setLabel();
                     menu.setVisible(true);
-                }
-                else{
+                }else{
                     JF_Menu_admin.setVisible(true);
                     JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
                     JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
@@ -824,11 +852,10 @@ public class Principal extends javax.swing.JFrame {
                 limpiarLogin();
                 this.setVisible(false);
             }else{
-                JOptionPane.showMessageDialog(rootPane, "Usuario o Clave Incorrectos");
+                JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
             }
-        } catch (DataAccessException ex) {JOptionPane.showMessageDialog(rootPane, ex);}        
-          catch (UsuarioInexistenteException ex) { }           
-        
+        }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
+        }
     }//GEN-LAST:event_JB_IngresarActionPerformed
 
     private void jTContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTContraseñaActionPerformed
@@ -849,10 +876,10 @@ public class Principal extends javax.swing.JFrame {
       
         try {        
             vtListaEmpleados= new Listado_empleados(this);
+            vtListaEmpleados.mostrar(true);
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-         vtListaEmpleados.setSize(1000, 559);
     }//GEN-LAST:event_JB_PersonalActionPerformed
 
     private void jBAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAtrasActionPerformed
@@ -862,35 +889,40 @@ public class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         JF_Agregar_Usuario.dispose();
+        vtListaEmpleados.iniciarListado();
         vtListaEmpleados.setVisible(true);
         
     }//GEN-LAST:event_jBAtrasActionPerformed
 
     private void jBRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBRegistrarActionPerformed
-        if(jTDni.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty() || jTContraseña.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "No se permiten campos vacíos");
+        if(jTApellido.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se ingresó un APELLIDO de usuario.");
             return;
-        }
-        
+        }if(jTNombre.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se ingresó un NOMBRE de usuario.");
+            return;
+        }if(jTDni.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se ingresó número de DOCUMENTO de usuario.");
+            return;
+        }if(jTContraseña.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se ingresó una CONTRASEÑA de usuario.");
+            return;
+        }        
         Usuario user = new Usuario();
         int dni; 
-        try
-        {
-        dni = Integer.parseInt(jTDni.getText().trim());
-        user.setDni(dni);
-        user.setNombre(jTNombre.getText().trim());
-        user.setApellido(jTApellido.getText().trim());
-        user.setPass(jTContraseña.getText().trim());
-        user.setCargo(jCCargo.getSelectedIndex());
-        user.setActivo(true); 
-        user.setFis(fis);
-        user.setLongitud(longitudBytes);
         
-            
-            
+        try{
+            dni = Integer.parseInt(jTDni.getText().trim());
+            user.setDni(dni);
+            user.setNombre(jTNombre.getText().trim());
+            user.setApellido(jTApellido.getText().trim());
+            user.setPass(jTContraseña.getText().trim());
+            user.setCargo(jCCargo.getSelectedIndex());
+            user.setActivo(true); 
+            user.setFis(fis);
+            user.setLongitud(longitudBytes);        
             GestorUsuario gesus = new GestorUsuario();
-            gesus.agregarNuevoUsuario(user);
-            
+            gesus.agregarNuevoUsuario(user);            
             Telefono_UsuarioDAO tel = new Telefono_UsuarioDAO();
             UsuarioDAO usuario = new UsuarioDAO();
             int codigo = usuario.lastUser();
@@ -901,20 +933,17 @@ public class Principal extends javax.swing.JFrame {
                 aux[i][2]=telefono[i][1]; 
             }
             tel.agregarGabe(aux);
-            
-        }
-        catch(NumberFormatException ex ){JOptionPane.showMessageDialog(null, "Solo debe ingresar numeros en el campo dni");return;}
-        catch(TelefonoUsuarioInexistenteException ex){JOptionPane.showMessageDialog(null, ex.getMessage());return;}
-        catch(DataAccessException ex){JOptionPane.showMessageDialog(null, "Error al Insertar"+ex);return;}
-        catch(UsuarioExistenteException ex){JOptionPane.showMessageDialog(null, "Error el Usuario ya existe");return;}
+            JOptionPane.showMessageDialog(null, "El usuario fue agregado con éxito.");
         
-        JOptionPane.showMessageDialog(null, "El Cliente fue agregado con exito");
-        try {
-            clearAgregar();
-        } catch (DataAccessException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
+            try {
+                clearAgregar();
+            }catch (DataAccessException ex) {Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+        }catch(NumberFormatException ex ){JOptionPane.showMessageDialog(null, "Solo debe ingresar numeros en el DOCUMENTO.");
+        }catch(TelefonoUsuarioInexistenteException ex){JOptionPane.showMessageDialog(null, ex.getMessage());
+        }catch(DataAccessException ex){JOptionPane.showMessageDialog(null, "Error al Insertar "+ex);
+        }catch(UsuarioExistenteException ex){JOptionPane.showMessageDialog(null, "EL DOCUMENTO de usuario ya fue registrado.");
+        }         
     }//GEN-LAST:event_jBRegistrarActionPerformed
 
     private void jTDniFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTDniFocusLost
@@ -928,24 +957,34 @@ public class Principal extends javax.swing.JFrame {
 
     private void jBExaminarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExaminarFotoActionPerformed
         JFileChooser j=new JFileChooser();
-        j.setFileSelectionMode(JFileChooser.FILES_ONLY);//solo archivos y no carpetas
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("JPG, PNG & GIF","jpg","png","gif");
+        j.setFileFilter(filtro);
+        j.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int estado=j.showOpenDialog(null);
         if(estado== JFileChooser.APPROVE_OPTION){
-            try{
-                fis=new FileInputStream(j.getSelectedFile());
-                //necesitamos saber la cantidad de bytes
-                this.longitudBytes=(int)j.getSelectedFile().length();
-                try {
-                    Image icono=ImageIO.read(j.getSelectedFile()).getScaledInstance
-                            (foto_usuario.getWidth(),foto_usuario.getHeight(),Image.SCALE_DEFAULT);
-                    foto_usuario.setIcon(new ImageIcon(icono));
-                    foto_usuario.updateUI();
-
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(rootPane, "imagen: "+ex);
+            String exten="";
+            for (int i=j.getSelectedFile().getName().length()-1; i>=0; i--)
+                exten=exten+j.getSelectedFile().getName().charAt(i);
+            String extension ="";
+            for (int k=0; k<4; k++)
+                extension=extension+exten.charAt(k);
+            
+            if(extension.toLowerCase().equals("gnp.") || extension.toLowerCase().equals("gpj.") || extension.toLowerCase().equals("gepj") || extension.toLowerCase().equals("fig.")){
+                try{
+                    fis=new FileInputStream(j.getSelectedFile());
+                    this.longitudBytes=(int)j.getSelectedFile().length();
+                    try {
+                        Image icono=ImageIO.read(j.getSelectedFile()).getScaledInstance
+                                (foto_usuario.getWidth(),foto_usuario.getHeight(),Image.SCALE_DEFAULT);
+                        foto_usuario.setIcon(new ImageIcon(icono));
+                        foto_usuario.updateUI();
+                    }catch (IOException ex) {
+                        JOptionPane.showMessageDialog(rootPane, "imagen: "+ex);
+                    }
+                }catch(FileNotFoundException ex){
                 }
-            }catch(FileNotFoundException ex){
-                ex.printStackTrace();
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Solo se permiten archivos del tipo .png, .gif y .jpg","No se pudo agregar la imagen",JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jBExaminarFotoActionPerformed
@@ -961,42 +1000,122 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyPressed
 
     private void JB_IngresarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JB_IngresarKeyPressed
-        // TODO add your handling code here:
+        if(evt.getKeyCode() == evt.VK_ENTER){
+            try{
+                Usuario user = new Usuario();
+
+                String pass;
+
+                boolean ban;
+
+                user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+                pass= JPF_PassUser.getText().trim();
+                user.setPass(pass);
+                GestorUsuario gesUs =new GestorUsuario();
+                ban=gesUs.Acceso(user);
+                if(ban){
+
+                    cuentaOficial=  gesUs.buscarUsuario(user.getDni());
+                    if(cuentaOficial.getCargo()==1){
+                        Menu_cajero menu = new Menu_cajero();
+                        menu.setUser(cuentaOficial);
+                        menu.setLabel();
+                        menu.setVisible(true);
+                    }else{
+                        JF_Menu_admin.setVisible(true);
+                        JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                        limpiarLogin();
+                        this.setVisible(false);
+                    }
+
+                    limpiarLogin();
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
+                }
+            }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
+            }  
+        }
     }//GEN-LAST:event_JB_IngresarKeyPressed
 
     private void JPF_PassUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JPF_PassUserKeyPressed
-                if(evt.getKeyCode() == evt.VK_ENTER){
-                    try {
-            Usuario user = new Usuario();
-            
-            String pass;
-            
-            boolean ban;
-            
-            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
-            pass= JPF_PassUser.getText().trim();
-            user.setPass(pass);
-            GestorUsuario gesUs =new GestorUsuario();
-            ban=gesUs.Acceso(user);
-            if(ban){
-                
-                cuentaOficial=  gesUs.buscarUsuario(user.getDni());
-                JF_Menu_admin.setVisible(true);
-                JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                limpiarLogin();
-                this.setVisible(false);
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "Usuario o Clave Incorrectos");
-            }
-        } catch (DataAccessException ex) {JOptionPane.showMessageDialog(rootPane, ex);}        
-          catch (UsuarioInexistenteException ex) { }    
+        if(evt.getKeyCode() == evt.VK_ENTER){
+            try{
+                Usuario user = new Usuario();
+
+                String pass;
+
+                boolean ban;
+
+                user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+                pass= JPF_PassUser.getText().trim();
+                user.setPass(pass);
+                GestorUsuario gesUs =new GestorUsuario();
+                ban=gesUs.Acceso(user);
+                if(ban){
+
+                    cuentaOficial=  gesUs.buscarUsuario(user.getDni());
+                    if(cuentaOficial.getCargo()==1){
+                        Menu_cajero menu = new Menu_cajero();
+                        menu.setUser(cuentaOficial);
+                        menu.setLabel();
+                        menu.setVisible(true);
+                    }else{
+                        JF_Menu_admin.setVisible(true);
+                        JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                        limpiarLogin();
+                        this.setVisible(false);
+                    }
+
+                    limpiarLogin();
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
+                }
+            }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
+            }  
         }
     }//GEN-LAST:event_JPF_PassUserKeyPressed
 
     private void JTF_IdUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTF_IdUserKeyPressed
-                if(evt.getKeyCode() == evt.VK_ENTER){
-                   
+        if(evt.getKeyCode() == evt.VK_ENTER){
+            try{
+                Usuario user = new Usuario();
+
+                String pass;
+
+                boolean ban;
+
+                user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+                pass= JPF_PassUser.getText().trim();
+                user.setPass(pass);
+                GestorUsuario gesUs =new GestorUsuario();
+                ban=gesUs.Acceso(user);
+                if(ban){
+
+                    cuentaOficial=  gesUs.buscarUsuario(user.getDni());
+                    if(cuentaOficial.getCargo()==1){
+                        Menu_cajero menu = new Menu_cajero();
+                        menu.setUser(cuentaOficial);
+                        menu.setLabel();
+                        menu.setVisible(true);
+                    }else{
+                        JF_Menu_admin.setVisible(true);
+                        JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                        limpiarLogin();
+                        this.setVisible(false);
+                    }
+
+                    limpiarLogin();
+                    this.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
+                }
+            }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
+            }  
         }
     }//GEN-LAST:event_JTF_IdUserKeyPressed
 
@@ -1009,35 +1128,32 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "No se ingreso un numero de telefono válido.");
             return;
         }
-
         if(telefono.length==0){
            telefono = new Object[telefono.length+1][2];
            telefono[0][0]="+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText();
            telefono[0][1]=jTDescripcion.getText();
-        }
-        else{
-                for(int i=0;i<telefono.length;i++){
-                    if(Objects.equals("+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText(),telefono[i][0])){
-                        JOptionPane.showMessageDialog(rootPane, "El telefono "+"+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText()+
-                                "\nYa ha sido ingresado.");
-                        return; 
-                    }
+        }else{
+            for(int i=0;i<telefono.length;i++){
+                if(Objects.equals("+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText(),telefono[i][0])){
+                    JOptionPane.showMessageDialog(rootPane, "El telefono "+"+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText()+
+                            ".\nYa ha sido ingresado.");
+                    return; 
                 }
-                
-                Object[][] tel = telefono;
-                
-                telefono = new Object[telefono.length+1][2];
-                for(int i=0; i<telefono.length;i++){
+            }
 
-                    if(i==telefono.length-1){
-                        telefono[i][0]="+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText();
-                        telefono[i][1]=jTDescripcion.getText();
-                    }
-                    else{
-                        telefono[i][1]=tel[i][1];
-                        telefono[i][0]=tel[i][0];
-                    }    
-                }
+            Object[][] tel = telefono;
+
+            telefono = new Object[telefono.length+1][2];
+            for(int i=0; i<telefono.length;i++){
+
+                if(i==telefono.length-1){
+                    telefono[i][0]="+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText();
+                    telefono[i][1]=jTDescripcion.getText();
+                }else{
+                    telefono[i][1]=tel[i][1];
+                    telefono[i][0]=tel[i][0];
+                }    
+            }
         }
         
         Object[][] aux = new Object[telefono.length][2];
@@ -1047,7 +1163,7 @@ public class Principal extends javax.swing.JFrame {
         }
         
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-                    aux,new String[] {"",""}));
+                        aux,new String[] {"",""}));
         jTDescripcion.setText("");
         jTPais.setText("54");
         jTArea.setText("383");
@@ -1066,15 +1182,11 @@ public class Principal extends javax.swing.JFrame {
              if(Objects.equals(numero,tel[i][0])){
                 telefono[i][0]=null;
                 telefono[i][1]=null;
-             }
-             else{
+             }else{
                  telefono[i][0]=tel[i][0];
                  telefono[i][1]=tel[i][1];
              }
-
          }
-         
-
         tel = telefono;
         telefono = new Object[telefono.length-1][2];
 
@@ -1082,8 +1194,7 @@ public class Principal extends javax.swing.JFrame {
         while(i<tel.length){
             if(tel[i][1]==null){
                 i++;
-            }
-            else{
+            }else{
                 telefono[j][0]=tel[i][0];
                 telefono[j][1]=tel[i][1];
                 i++;j++;
@@ -1096,8 +1207,6 @@ public class Principal extends javax.swing.JFrame {
             aux[k][1]=telefono[k][0];
         }  
         
-             
-
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
                     aux,new String[] {"",""}));
     }//GEN-LAST:event_jBQuitarTelActionPerformed
@@ -1133,13 +1242,152 @@ public class Principal extends javax.swing.JFrame {
         Abrir_caja ventana;
         try {
             ventana = new Abrir_caja(cuentaOficial);
-        this.JF_Menu_admin.setVisible(false);
+        JF_Menu_admin.setVisible(false);
         ventana.setVisible(true);
         } catch (DataAccessException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_JB_CajaActionPerformed
+
+    private void jBExaminarFotoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBExaminarFotoKeyPressed
+        if(evt.getKeyCode() == evt.VK_ENTER){
+            JFileChooser j=new JFileChooser();
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("JPG, PNG & GIF","jpg","png","gif");
+            j.setFileFilter(filtro);
+            j.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int estado=j.showOpenDialog(null);
+            if(estado== JFileChooser.APPROVE_OPTION){
+                String exten="";
+                for (int i=j.getSelectedFile().getName().length()-1; i>=0; i--)
+                    exten=exten+j.getSelectedFile().getName().charAt(i);
+                String extension ="";
+                for (int k=0; k<4; k++)
+                    extension=extension+exten.charAt(k);
+
+                if(extension.toLowerCase().equals("gnp.") || extension.toLowerCase().equals("gpj.") || extension.toLowerCase().equals("gepj") || extension.toLowerCase().equals("fig.")){
+                    try{
+                        fis=new FileInputStream(j.getSelectedFile());
+                        this.longitudBytes=(int)j.getSelectedFile().length();
+                        try {
+                            Image icono=ImageIO.read(j.getSelectedFile()).getScaledInstance
+                                    (foto_usuario.getWidth(),foto_usuario.getHeight(),Image.SCALE_DEFAULT);
+                            foto_usuario.setIcon(new ImageIcon(icono));
+                            foto_usuario.updateUI();
+                        }catch (IOException ex) {
+                            JOptionPane.showMessageDialog(rootPane, "imagen: "+ex);
+                        }
+                    }catch(FileNotFoundException ex){
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "Solo se permiten archivos del tipo .png, .gif y .jpg","No se pudo agregar la imagen",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_jBExaminarFotoKeyPressed
+
+    private void jBAgregarTelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBAgregarTelKeyPressed
+        if(evt.getKeyCode() == evt.VK_ENTER){        
+            if(jTtelefono.getText().isEmpty() || jTPais.getText().isEmpty() || jTArea.getText().isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "No se ingreso un numero de telefono válido.");
+                return;
+            }
+            if(telefono.length==0){
+               telefono = new Object[telefono.length+1][2];
+               telefono[0][0]="+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText();
+               telefono[0][1]=jTDescripcion.getText();
+            }else{
+                for(int i=0;i<telefono.length;i++){
+                    if(Objects.equals("+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText(),telefono[i][0])){
+                        JOptionPane.showMessageDialog(rootPane, "El telefono "+"+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText()+
+                                ".\nYa ha sido ingresado.");
+                        return; 
+                    }
+                }
+
+                Object[][] tel = telefono;
+
+                telefono = new Object[telefono.length+1][2];
+                for(int i=0; i<telefono.length;i++){
+
+                    if(i==telefono.length-1){
+                        telefono[i][0]="+"+jTPais.getText()+jTArea.getText()+jTtelefono.getText();
+                        telefono[i][1]=jTDescripcion.getText();
+                    }else{
+                        telefono[i][1]=tel[i][1];
+                        telefono[i][0]=tel[i][0];
+                    }    
+                }
+            }
+
+            Object[][] aux = new Object[telefono.length][2];
+            for(int i=0;i<telefono.length;i++){
+                aux[i][0]=telefono[i][1];
+                aux[i][1]=telefono[i][0];
+            }
+
+            jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                            aux,new String[] {"",""}));
+            jTDescripcion.setText("");
+            jTPais.setText("54");
+            jTArea.setText("383");
+            jTtelefono.setText("");
+        }
+    }//GEN-LAST:event_jBAgregarTelKeyPressed
+
+    private void jBRegistrarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBRegistrarKeyPressed
+        if(evt.getKeyCode() == evt.VK_ENTER){
+            if(jTApellido.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "No se ingresó un APELLIDO de usuario.");
+                return;
+            }if(jTNombre.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "No se ingresó un NOMBRE de usuario.");
+                return;
+            }if(jTDni.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "No se ingresó número de DOCUMENTO de usuario.");
+                return;
+            }if(jTContraseña.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "No se ingresó una CONTRASEÑA de usuario.");
+                return;
+            }        
+            Usuario user = new Usuario();
+            int dni; 
+
+            try{
+                dni = Integer.parseInt(jTDni.getText().trim());
+                user.setDni(dni);
+                user.setNombre(jTNombre.getText().trim());
+                user.setApellido(jTApellido.getText().trim());
+                user.setPass(jTContraseña.getText().trim());
+                user.setCargo(jCCargo.getSelectedIndex());
+                user.setActivo(true); 
+                user.setFis(fis);
+                user.setLongitud(longitudBytes);        
+                GestorUsuario gesus = new GestorUsuario();
+                gesus.agregarNuevoUsuario(user);            
+                Telefono_UsuarioDAO tel = new Telefono_UsuarioDAO();
+                UsuarioDAO usuario = new UsuarioDAO();
+                int codigo = usuario.lastUser();
+                Object[][] aux = new Object[telefono.length][3];
+                for(int i=0; i<telefono.length;i++){
+                    aux[i][0]=codigo;
+                    aux[i][1]=telefono[i][0];
+                    aux[i][2]=telefono[i][1]; 
+                }
+                tel.agregarGabe(aux);
+                JOptionPane.showMessageDialog(null, "El usuario fue agregado con éxito.");
+
+                try {
+                    clearAgregar();
+                }catch (DataAccessException ex) {Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }            
+            }catch(NumberFormatException ex ){JOptionPane.showMessageDialog(null, "Solo debe ingresar numeros en el DOCUMENTO.");
+            }catch(TelefonoUsuarioInexistenteException ex){JOptionPane.showMessageDialog(null, ex.getMessage());
+            }catch(DataAccessException ex){JOptionPane.showMessageDialog(null, "Error al Insertar "+ex);
+            }catch(UsuarioExistenteException ex){JOptionPane.showMessageDialog(null, "EL DOCUMENTO de usuario ya fue registrado.");
+            }
+        }
+    }//GEN-LAST:event_jBRegistrarKeyPressed
 
     /**
      * @param args the command line arguments
