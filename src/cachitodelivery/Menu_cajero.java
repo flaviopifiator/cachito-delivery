@@ -6,12 +6,13 @@
 package cachitodelivery;
 
 import Excepciones.DataAccessException;
-import Ventana_clases.Fondo_listado_empleados;
 import Ventana_clases.Fondo_menu_cajero;
 import java.awt.BorderLayout;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import modelos.CajaDAO;
+import modelos.Fecha;
 import modelos.Usuario;
 
 
@@ -27,20 +28,42 @@ public class Menu_cajero extends javax.swing.JFrame {
      */
     
     protected Usuario user = new Usuario();
+    Fecha fecha = new Fecha();
     
-    public Menu_cajero() {
+    public Menu_cajero(Usuario user) throws DataAccessException {
         initComponents();
+        
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Fondo_menu_cajero fondo = new Fondo_menu_cajero(673,260);
-        this.add(fondo, BorderLayout.CENTER);
-    }
-
-    public void setLabel(){
+        setSize(673,285);
+        setResizable(false);
+        setVisible(false);
+        setLocationRelativeTo(null);
+        setTitle("Opciones de cajero");
+        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
+        
+        
+        this.user=user;
+        
         JL_Usuario_admin.setText("USUARIO:"+" "+user.getApellido()+" "+user.getNombre());
+        JL_Fecha_Admin.setText(fecha.getFecha());
+        JL_Hora_Admin.setText(fecha.getHora());
+        
+        this.add(fondo, BorderLayout.CENTER);
+        
+        comprobarCaja();
     }
     
-    public void setUser(Usuario user){
-        this.user=user;
+    public void comprobarCaja() throws DataAccessException{
+        CajaDAO caja = new CajaDAO();
+        
+        if(caja.seba()){
+            JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Sebas.png")));
+            JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Sebas_hover.png")));
+        }else{
+            JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado.png")));
+            JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado_hover.png")));
+        }                  
     }
     
     /**
@@ -255,7 +278,7 @@ public class Menu_cajero extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu_cajero().setVisible(true);
+                //new Menu_cajero().setVisible(true);
             }
         });
     }

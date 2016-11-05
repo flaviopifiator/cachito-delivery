@@ -27,6 +27,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import modelos.CajaDAO;
 import modelos.Fecha;
 import modelos.GestorUsuario;
 import modelos.Telefono_UsuarioDAO;
@@ -68,6 +69,8 @@ public class Principal extends javax.swing.JFrame {
         
         UsuarioDAO ultimo = new UsuarioDAO();
         this.jTUsuario.setText(""+(ultimo.lastUser()+1));
+        
+        comprobarCaja();
         
         Menu_admin fondo_prueba1 = new Menu_admin(673,260);
         JF_Menu_admin.add(fondo_prueba1, BorderLayout.CENTER);
@@ -126,6 +129,22 @@ public class Principal extends javax.swing.JFrame {
     public void  AgregarUsVisible(Boolean b){
         JF_Agregar_Usuario.setVisible(b);
 
+    }
+    
+    public void comprobarCaja() throws DataAccessException{
+        CajaDAO caja = new CajaDAO();
+        
+        if(caja.seba()){
+            JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Sebas.png")));
+            JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Sebas_hover.png")));
+        }else{
+            JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado.png")));
+            JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado_hover.png")));
+        }                  
+    }
+    
+    public void setCuenta(Usuario user){
+        this.cuentaOficial=user;
     }
         
     private void centrarPantalla(JFrame vt){
@@ -837,9 +856,7 @@ public class Principal extends javax.swing.JFrame {
 
                 cuentaOficial=  gesUs.buscarUsuario(user.getDni());
                 if(cuentaOficial.getCargo()==1){
-                    Menu_cajero menu = new Menu_cajero();
-                    menu.setUser(cuentaOficial);
-                    menu.setLabel();
+                    Menu_cajero menu = new Menu_cajero(cuentaOficial);
                     menu.setVisible(true);
                 }else{
                     JF_Menu_admin.setVisible(true);
@@ -1017,9 +1034,7 @@ public class Principal extends javax.swing.JFrame {
 
                     cuentaOficial=  gesUs.buscarUsuario(user.getDni());
                     if(cuentaOficial.getCargo()==1){
-                        Menu_cajero menu = new Menu_cajero();
-                        menu.setUser(cuentaOficial);
-                        menu.setLabel();
+                        Menu_cajero menu = new Menu_cajero(cuentaOficial);
                         menu.setVisible(true);
                     }else{
                         JF_Menu_admin.setVisible(true);
@@ -1057,9 +1072,7 @@ public class Principal extends javax.swing.JFrame {
 
                     cuentaOficial=  gesUs.buscarUsuario(user.getDni());
                     if(cuentaOficial.getCargo()==1){
-                        Menu_cajero menu = new Menu_cajero();
-                        menu.setUser(cuentaOficial);
-                        menu.setLabel();
+                        Menu_cajero menu = new Menu_cajero(cuentaOficial);
                         menu.setVisible(true);
                     }else{
                         JF_Menu_admin.setVisible(true);
@@ -1097,9 +1110,7 @@ public class Principal extends javax.swing.JFrame {
 
                     cuentaOficial=  gesUs.buscarUsuario(user.getDni());
                     if(cuentaOficial.getCargo()==1){
-                        Menu_cajero menu = new Menu_cajero();
-                        menu.setUser(cuentaOficial);
-                        menu.setLabel();
+                        Menu_cajero menu = new Menu_cajero(cuentaOficial);
                         menu.setVisible(true);
                     }else{
                         JF_Menu_admin.setVisible(true);
@@ -1242,8 +1253,8 @@ public class Principal extends javax.swing.JFrame {
         Abrir_caja ventana;
         try {
             ventana = new Abrir_caja(cuentaOficial);
-        JF_Menu_admin.setVisible(false);
-        ventana.setVisible(true);
+            JF_Menu_admin.setVisible(false);
+            ventana.setVisible(true);
         } catch (DataAccessException ex) {
           Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
