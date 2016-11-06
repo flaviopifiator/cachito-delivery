@@ -56,14 +56,14 @@ public class Menu_cajero extends javax.swing.JFrame {
     
     public void comprobarCaja() throws DataAccessException{
         CajaDAO caja = new CajaDAO();
-        
-        if(caja.seba()){
-            JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Sebas.png")));
-            JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Sebas_hover.png")));
-        }else{
-            JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado.png")));
-            JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado_hover.png")));
-        }                  
+        if(caja.primera())
+            if(caja.seba()){
+                JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Sebas.png")));
+                JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Sebas_hover.png")));
+            }else{
+                JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado.png")));
+                JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado_hover.png")));
+            }                  
     }
     
     /**
@@ -89,12 +89,17 @@ public class Menu_cajero extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        JB_Caja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Sebas.png"))); // NOI18N
+        JB_Caja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cerrado.png"))); // NOI18N
         JB_Caja.setBorder(null);
         JB_Caja.setBorderPainted(false);
         JB_Caja.setContentAreaFilled(false);
         JB_Caja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        JB_Caja.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Sebas_hover.png"))); // NOI18N
+        JB_Caja.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cerrado_hover.png"))); // NOI18N
+        JB_Caja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JB_CajaActionPerformed(evt);
+            }
+        });
 
         JB_Personal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Clientes_M.png"))); // NOI18N
         JB_Personal.setBorder(null);
@@ -247,6 +252,34 @@ public class Menu_cajero extends javax.swing.JFrame {
             Logger.getLogger(Menu_cajero.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JB_Cerrar_sesionActionPerformed
+
+    private void JB_CajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_CajaActionPerformed
+        try {
+            CajaDAO caja = new CajaDAO();
+            if(!caja.primera()){
+                Abrir_caja ventana;
+                ventana = new Abrir_caja(user);
+                setVisible(false);
+                ventana.setVisible(true);
+            }else{
+                if(!caja.seba()){
+                    Abrir_caja ventana;
+                    ventana = new Abrir_caja(user);
+                    setVisible(false);
+                    ventana.setVisible(true);
+                }else{
+                    Cierre_liquidacion ventana;
+                    ventana = new Cierre_liquidacion(user);
+                    setVisible(false);
+                    ventana.setVisible(true);
+                }
+            }
+            
+        
+        } catch (DataAccessException ex) {
+          Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JB_CajaActionPerformed
 
     /**
      * @param args the command line arguments

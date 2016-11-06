@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class UsuarioDAO {
     Telefono_UsuarioDAO telDAO = new Telefono_UsuarioDAO();
+    
     public void agregar (Usuario usuario) throws DataAccessException{
          try{
             Connection con = BaseDeDatos.getInstance();
@@ -166,6 +167,39 @@ public class UsuarioDAO {
                 lista[i][0] = rs.getInt(8);
                 lista[i][1] = rs.getString(3);
                 lista[i][2] = rs.getString(2);
+                if(rs.getBoolean(7)==true){
+                    if (rs.getInt(5)==0)
+                        lista[i][3]="Administrador";
+                    else
+                        lista[i][3]="Cajero";
+                }else
+                    lista[i][3]="Eliminado";
+                i++;
+            }
+            rs.close();
+            st.close();
+            return lista;
+            
+        }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
+    }
+    
+    public Object[][] listadoUsuariosActivo() throws DataAccessException{
+        try{
+            Connection con = BaseDeDatos.getInstance();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM usuarios where activo=true order by cod_usuario asc");
+            int tam=0;
+            while(rs.next())
+                tam++;
+            Object[][] lista = new Object[tam][4];
+            int i=0;
+            rs.close();
+            rs = st.executeQuery("SELECT * FROM usuarios where activo=true order by cod_usuario asc");
+            while(rs.next())
+            {
+                lista[i][0] = rs.getInt(8);
+                lista[i][1] = rs.getString(3);
+                lista[i][2] = rs.getString(2);
                 if (rs.getInt(5)==0)
                     lista[i][3]="Administrador";
                 else
@@ -175,6 +209,8 @@ public class UsuarioDAO {
             rs.close();
             st.close();
             return lista;
+            
+            
             
         }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
     }
@@ -203,113 +239,222 @@ public class UsuarioDAO {
         }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
    
     }
-    public Object[][] buscarUsuarioText(String cod, String ape, String nom, String car) throws DataAccessException{
+    public Object[][] buscarUsuarioText(String cod, String ape, String nom, String car, boolean b) throws DataAccessException{
         try{
-            if(cod==null && ape==null && nom==null && car==null)
-                return this.listadoUsuariosCusi();
-            else{
-                Object [][] real = null;
-                real=this.listadoUsuariosCusi();
-                int tam=real.length;
-                int tam2=real.length;
-                int tam3=real.length;
-                int tam4=real.length;
-                if(real==null)
+            if(b==true){
+                if(cod==null && ape==null && nom==null && car==null)
+                    return this.listadoUsuariosCusi();
+                else{
+                    Object [][] real = null;
+                    real=this.listadoUsuariosCusi();
+                    int tam=real.length;
+                    int tam2=real.length;
+                    int tam3=real.length;
+                    int tam4=real.length;
+                    if(real==null)
+                        return real;
+                    if (!cod.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam; i++){
+                            if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+                            }                            
+                        }
+                        for(int k=j; k<tam; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam2--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!ape.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam2; i++){
+                            if (real[i][1].toString().toLowerCase().indexOf(ape.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam2; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!nom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam3; i++){
+                            if (real[i][2].toString().toLowerCase().indexOf(nom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam3; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!car.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam4; i++){
+                            if (real[i][3].toString().toLowerCase().indexOf(car.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam4; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam3--;
+                        }
+
+                    }
+
                     return real;
-                if (!cod.isEmpty()){
-                    int j=0;
-                    for (int i=0; i<tam; i++){
-                        if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
-                            real[j][0]=real[i][0];
-                            real[j][1]=real[i][1];
-                            real[j][2]=real[i][2];
-                            real[j][3]=real[i][3];
-                            j++;
-                        }                            
-                    }
-                    for(int k=j; k<tam; k++){
-                        real[k][0]=null;
-                        real[k][1]=null;
-                        real[k][2]=null;
-                        real[k][3]=null;
-                        tam2--;
-                        tam3--;
-                        tam4--;
-                    }
-                    
                 }
-                if (!ape.isEmpty()){
-                    int j=0;
-                    for (int i=0; i<tam2; i++){
-                        if (real[i][1].toString().toLowerCase().indexOf(ape.toLowerCase())==0){
-                            real[j][0]=real[i][0];
-                            real[j][1]=real[i][1];
-                            real[j][2]=real[i][2];
-                            real[j][3]=real[i][3];
-                            j++;
-                            
+            }else{
+                    if(cod==null && ape==null && nom==null && car==null)
+                        return this.listadoUsuariosActivo();
+                    else{
+                        Object [][] real = null;
+                        real=this.listadoUsuariosActivo();
+                        int tam=real.length;
+                        int tam2=real.length;
+                        int tam3=real.length;
+                        int tam4=real.length;
+                        if(real==null)
+                            return real;
+                        if (!cod.isEmpty()){
+                            int j=0;
+                            for (int i=0; i<tam; i++){
+                                if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
+                                    real[j][0]=real[i][0];
+                                    real[j][1]=real[i][1];
+                                    real[j][2]=real[i][2];
+                                    real[j][3]=real[i][3];
+                                    j++;
+                                }                            
+                            }
+                            for(int k=j; k<tam; k++){
+                                real[k][0]=null;
+                                real[k][1]=null;
+                                real[k][2]=null;
+                                real[k][3]=null;
+                                tam2--;
+                                tam3--;
+                                tam4--;
+                            }
+
                         }
-                    }
-                    for(int k=j; k<tam2; k++){
-                        real[k][0]=null;
-                        real[k][1]=null;
-                        real[k][2]=null;
-                        real[k][3]=null;
-                        tam--;
-                        tam3--;
-                        tam4--;
-                    }
-                    
-                }
-                if (!nom.isEmpty()){
-                    int j=0;
-                    for (int i=0; i<tam3; i++){
-                        if (real[i][2].toString().toLowerCase().indexOf(nom.toLowerCase())==0){
-                            real[j][0]=real[i][0];
-                            real[j][1]=real[i][1];
-                            real[j][2]=real[i][2];
-                            real[j][3]=real[i][3];
-                            j++;
-                            
+                        if (!ape.isEmpty()){
+                            int j=0;
+                            for (int i=0; i<tam2; i++){
+                                if (real[i][1].toString().toLowerCase().indexOf(ape.toLowerCase())==0){
+                                    real[j][0]=real[i][0];
+                                    real[j][1]=real[i][1];
+                                    real[j][2]=real[i][2];
+                                    real[j][3]=real[i][3];
+                                    j++;
+
+                                }
+                            }
+                            for(int k=j; k<tam2; k++){
+                                real[k][0]=null;
+                                real[k][1]=null;
+                                real[k][2]=null;
+                                real[k][3]=null;
+                                tam--;
+                                tam3--;
+                                tam4--;
+                            }
+
                         }
-                    }
-                    for(int k=j; k<tam3; k++){
-                        real[k][0]=null;
-                        real[k][1]=null;
-                        real[k][2]=null;
-                        real[k][3]=null;
-                        tam--;
-                        tam2--;
-                        tam4--;
-                    }
-                    
-                }
-                if (!car.isEmpty()){
-                    int j=0;
-                    for (int i=0; i<tam4; i++){
-                        if (real[i][3].toString().toLowerCase().indexOf(car.toLowerCase())==0){
-                            real[j][0]=real[i][0];
-                            real[j][1]=real[i][1];
-                            real[j][2]=real[i][2];
-                            real[j][3]=real[i][3];
-                            j++;
-                            
+                        if (!nom.isEmpty()){
+                            int j=0;
+                            for (int i=0; i<tam3; i++){
+                                if (real[i][2].toString().toLowerCase().indexOf(nom.toLowerCase())==0){
+                                    real[j][0]=real[i][0];
+                                    real[j][1]=real[i][1];
+                                    real[j][2]=real[i][2];
+                                    real[j][3]=real[i][3];
+                                    j++;
+
+                                }
+                            }
+                            for(int k=j; k<tam3; k++){
+                                real[k][0]=null;
+                                real[k][1]=null;
+                                real[k][2]=null;
+                                real[k][3]=null;
+                                tam--;
+                                tam2--;
+                                tam4--;
+                            }
+
                         }
+                        if (!car.isEmpty()){
+                            int j=0;
+                            for (int i=0; i<tam4; i++){
+                                if (real[i][3].toString().toLowerCase().indexOf(car.toLowerCase())==0){
+                                    real[j][0]=real[i][0];
+                                    real[j][1]=real[i][1];
+                                    real[j][2]=real[i][2];
+                                    real[j][3]=real[i][3];
+                                    j++;
+
+                                }
+                            }
+                            for(int k=j; k<tam4; k++){
+                                real[k][0]=null;
+                                real[k][1]=null;
+                                real[k][2]=null;
+                                real[k][3]=null;
+                                tam--;
+                                tam2--;
+                                tam3--;
+                            }
+
+                        }
+
+                        return real;
                     }
-                    for(int k=j; k<tam4; k++){
-                        real[k][0]=null;
-                        real[k][1]=null;
-                        real[k][2]=null;
-                        real[k][3]=null;
-                        tam--;
-                        tam2--;
-                        tam3--;
-                    }
-                    
                 }
-                
-                return real;
-            }
+            
             
         }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarUsuarioText() "+ex);}
    
@@ -328,6 +473,16 @@ public class UsuarioDAO {
         }
         return codigo;
     }
+    public void eliminar(boolean b, int cod) throws DataAccessException{
+         try{
+            Connection con = BaseDeDatos.getInstance();
+            PreparedStatement ps = con.prepareStatement("UPDATE usuarios SET activo="+b+" WHERE cod_usuario="+cod);
+            ps.execute();
+            ps.close();
+        }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
+        
+    }
+    
     
 }
 

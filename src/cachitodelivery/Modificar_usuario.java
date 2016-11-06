@@ -554,6 +554,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
        vent.iniciarListado();
+       vent.clearBusqueda();
        vent.setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed

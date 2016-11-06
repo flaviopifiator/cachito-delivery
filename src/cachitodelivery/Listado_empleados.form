@@ -468,6 +468,9 @@
           <Image iconType="3" name="/Botones/Eliminar_hover.png"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBEliminarUsuarioActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jBModificarUsuario">
       <Properties>
@@ -542,7 +545,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="7a" green="5e" red="35" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="APELLDOS: Chayle"/>
+        <Property name="text" type="java.lang.String" value="USUARIO NO SELECCIONADO"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
@@ -553,7 +556,6 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="7a" green="5e" red="35" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="NOMBRES: Facfac"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel9">
@@ -564,7 +566,6 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="7a" green="5e" red="35" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="D.N.I.: 12345678"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel10">
@@ -575,7 +576,6 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="7a" green="5e" red="35" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="CARGO: Profezor"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel11">
@@ -610,6 +610,9 @@
         </Property>
         <Property name="contentAreaFilled" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jRadioButton1ActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel13">
     </Component>

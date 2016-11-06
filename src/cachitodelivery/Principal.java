@@ -133,14 +133,14 @@ public class Principal extends javax.swing.JFrame {
     
     public void comprobarCaja() throws DataAccessException{
         CajaDAO caja = new CajaDAO();
-        
-        if(caja.seba()){
-            JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Sebas.png")));
-            JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Sebas_hover.png")));
-        }else{
-            JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado.png")));
-            JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado_hover.png")));
-        }                  
+        if(caja.primera())
+            if(caja.seba()){
+                JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Sebas.png")));
+                JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Sebas_hover.png")));
+            }else{
+                JB_Caja.setIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado.png")));
+                JB_Caja.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Cerrado_hover.png")));
+            }                  
     }
     
     public void setCuenta(Usuario user){
@@ -153,6 +153,44 @@ public class Principal extends javax.swing.JFrame {
         vt.setLocation((screenSize.width-dialogSize.width)/2,(screenSize.height-dialogSize.height)/2);
         
     }
+    
+    private void ingresoSistema(){
+        try{
+            Usuario user = new Usuario();
+
+            String pass;
+
+            boolean ban;
+
+            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+            pass= JPF_PassUser.getText().trim();
+            user.setPass(pass);
+            GestorUsuario gesUs =new GestorUsuario();
+            ban=gesUs.Acceso(user);
+            cuentaOficial=  gesUs.buscarUsuario(user.getDni());
+            if(ban && cuentaOficial.getActivo()==true){
+                if(cuentaOficial.getCargo()==1){
+                    Menu_cajero menu = new Menu_cajero(cuentaOficial);
+                    menu.setVisible(true);
+                }else{
+                    JF_Menu_admin.setVisible(true);
+                    JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                    JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
+                    limpiarLogin();
+                    this.setVisible(false);
+                }
+
+                limpiarLogin();
+                this.setVisible(false);
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
+            }
+        }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
+        }  
+    }
+    
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -219,12 +257,12 @@ public class Principal extends javax.swing.JFrame {
         JF_Menu_admin.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         JF_Menu_admin.setResizable(false);
 
-        JB_Caja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Sebas.png"))); // NOI18N
+        JB_Caja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cerrado.png"))); // NOI18N
         JB_Caja.setBorder(null);
         JB_Caja.setBorderPainted(false);
         JB_Caja.setContentAreaFilled(false);
         JB_Caja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        JB_Caja.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Sebas_hover.png"))); // NOI18N
+        JB_Caja.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cerrado_hover.png"))); // NOI18N
         JB_Caja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JB_CajaActionPerformed(evt);
@@ -840,39 +878,7 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JB_IngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_IngresarActionPerformed
-        try{
-            Usuario user = new Usuario();
-
-            String pass;
-
-            boolean ban;
-
-            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
-            pass= JPF_PassUser.getText().trim();
-            user.setPass(pass);
-            GestorUsuario gesUs =new GestorUsuario();
-            ban=gesUs.Acceso(user);
-            if(ban){
-
-                cuentaOficial=  gesUs.buscarUsuario(user.getDni());
-                if(cuentaOficial.getCargo()==1){
-                    Menu_cajero menu = new Menu_cajero(cuentaOficial);
-                    menu.setVisible(true);
-                }else{
-                    JF_Menu_admin.setVisible(true);
-                    JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                    JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                    limpiarLogin();
-                    this.setVisible(false);
-                }
-
-                limpiarLogin();
-                this.setVisible(false);
-            }else{
-                JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
-            }
-        }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
-        }
+        ingresoSistema();
     }//GEN-LAST:event_JB_IngresarActionPerformed
 
     private void jTContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTContraseñaActionPerformed
@@ -906,6 +912,7 @@ public class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         JF_Agregar_Usuario.dispose();
+        vtListaEmpleados.clearBusqueda();
         vtListaEmpleados.iniciarListado();
         vtListaEmpleados.setVisible(true);
         
@@ -1017,117 +1024,19 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_formKeyPressed
 
     private void JB_IngresarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JB_IngresarKeyPressed
-        if(evt.getKeyCode() == evt.VK_ENTER){
-            try{
-                Usuario user = new Usuario();
-
-                String pass;
-
-                boolean ban;
-
-                user.setDni(Integer.parseInt(JTF_IdUser.getText()));
-                pass= JPF_PassUser.getText().trim();
-                user.setPass(pass);
-                GestorUsuario gesUs =new GestorUsuario();
-                ban=gesUs.Acceso(user);
-                if(ban){
-
-                    cuentaOficial=  gesUs.buscarUsuario(user.getDni());
-                    if(cuentaOficial.getCargo()==1){
-                        Menu_cajero menu = new Menu_cajero(cuentaOficial);
-                        menu.setVisible(true);
-                    }else{
-                        JF_Menu_admin.setVisible(true);
-                        JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                        limpiarLogin();
-                        this.setVisible(false);
-                    }
-
-                    limpiarLogin();
-                    this.setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
-                }
-            }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
-            }  
-        }
+        if(evt.getKeyCode() == evt.VK_ENTER)
+            ingresoSistema();
     }//GEN-LAST:event_JB_IngresarKeyPressed
 
     private void JPF_PassUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JPF_PassUserKeyPressed
-        if(evt.getKeyCode() == evt.VK_ENTER){
-            try{
-                Usuario user = new Usuario();
-
-                String pass;
-
-                boolean ban;
-
-                user.setDni(Integer.parseInt(JTF_IdUser.getText()));
-                pass= JPF_PassUser.getText().trim();
-                user.setPass(pass);
-                GestorUsuario gesUs =new GestorUsuario();
-                ban=gesUs.Acceso(user);
-                if(ban){
-
-                    cuentaOficial=  gesUs.buscarUsuario(user.getDni());
-                    if(cuentaOficial.getCargo()==1){
-                        Menu_cajero menu = new Menu_cajero(cuentaOficial);
-                        menu.setVisible(true);
-                    }else{
-                        JF_Menu_admin.setVisible(true);
-                        JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                        limpiarLogin();
-                        this.setVisible(false);
-                    }
-
-                    limpiarLogin();
-                    this.setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
-                }
-            }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
-            }  
-        }
+        if(evt.getKeyCode() == evt.VK_ENTER)
+            ingresoSistema();
     }//GEN-LAST:event_JPF_PassUserKeyPressed
 
     private void JTF_IdUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTF_IdUserKeyPressed
-        if(evt.getKeyCode() == evt.VK_ENTER){
-            try{
-                Usuario user = new Usuario();
+        if(evt.getKeyCode() == evt.VK_ENTER)
+            ingresoSistema();  
 
-                String pass;
-
-                boolean ban;
-
-                user.setDni(Integer.parseInt(JTF_IdUser.getText()));
-                pass= JPF_PassUser.getText().trim();
-                user.setPass(pass);
-                GestorUsuario gesUs =new GestorUsuario();
-                ban=gesUs.Acceso(user);
-                if(ban){
-
-                    cuentaOficial=  gesUs.buscarUsuario(user.getDni());
-                    if(cuentaOficial.getCargo()==1){
-                        Menu_cajero menu = new Menu_cajero(cuentaOficial);
-                        menu.setVisible(true);
-                    }else{
-                        JF_Menu_admin.setVisible(true);
-                        JL_Usuario_admin.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-                        limpiarLogin();
-                        this.setVisible(false);
-                    }
-
-                    limpiarLogin();
-                    this.setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
-                }
-            }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
-            }  
-        }
     }//GEN-LAST:event_JTF_IdUserKeyPressed
 
     private void jTPaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTPaisActionPerformed
@@ -1250,11 +1159,28 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTtelefonoKeyTyped
 
     private void JB_CajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_CajaActionPerformed
-        Abrir_caja ventana;
         try {
-            ventana = new Abrir_caja(cuentaOficial);
-            JF_Menu_admin.setVisible(false);
-            ventana.setVisible(true);
+            CajaDAO caja = new CajaDAO();
+            if(!caja.primera()){
+                Abrir_caja ventana;
+                ventana = new Abrir_caja(cuentaOficial);
+                JF_Menu_admin.setVisible(false);
+                ventana.setVisible(true);
+            }else{
+                if(!caja.seba()){
+                    Abrir_caja ventana;
+                    ventana = new Abrir_caja(cuentaOficial);
+                    JF_Menu_admin.setVisible(false);
+                    ventana.setVisible(true);
+                }else{
+                    Cierre_liquidacion ventana;
+                    ventana = new Cierre_liquidacion(cuentaOficial);
+                    JF_Menu_admin.setVisible(false);
+                    ventana.setVisible(true);
+                }
+            }
+            
+        
         } catch (DataAccessException ex) {
           Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }

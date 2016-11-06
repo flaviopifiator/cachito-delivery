@@ -321,7 +321,7 @@ public class Abrir_caja extends javax.swing.JFrame {
         CajaDAO caja= new CajaDAO();
         try {
             caja.nuevaCaja(ca);
-            JOptionPane.showMessageDialog(null, "CAJA ABIERTA");
+            JOptionPane.showMessageDialog(null, "Caja abierta","Apertura de caja",JOptionPane.INFORMATION_MESSAGE);
             this.setVisible(false);
             if(cuentaOficial.getCargo()==0){
                 Principal ven = new Principal();
@@ -339,7 +339,7 @@ public class Abrir_caja extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(jTextField1.getText().isEmpty() && jTextField2.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "No ingresó un monto");
+            JOptionPane.showMessageDialog(null, "No ingresó un monto.");
             return;
         }
         if(jTextField1.getText().isEmpty())
@@ -354,7 +354,7 @@ public class Abrir_caja extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-        if(cuentaOficial.getCargo()==0){
+            if(cuentaOficial.getCargo()==0){
                 Principal ven  = new Principal();           
                 ven.MenuAdminVisible(true, cuentaOficial);
             }else{
@@ -363,9 +363,9 @@ public class Abrir_caja extends javax.swing.JFrame {
             }
         
         this.dispose();
-         } catch (DataAccessException ex) {
+        } catch (DataAccessException ex) {
                 Logger.getLogger(Abrir_caja.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

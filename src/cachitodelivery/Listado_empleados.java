@@ -10,6 +10,7 @@ import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_listado_empleados;
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import modelos.Fecha;
 import modelos.Telefono_UsuarioDAO;
 
@@ -32,6 +34,7 @@ public class Listado_empleados extends javax.swing.JFrame {
     Usuario cuentaOficial = new Usuario();
     Principal vent = null;
     Fecha fecha = new Fecha();
+    Render r = new Render();
     
     public Listado_empleados(Principal vt) throws SQLException {
         initComponents();
@@ -42,6 +45,8 @@ public class Listado_empleados extends javax.swing.JFrame {
         JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getApellido()+" "+vent.cuentaOficial.getNombre());
         JL_Fecha_Admin1.setText(fecha.getFecha());
         JL_Hora_Admin1.setText(fecha.getHora());
+        
+        
 
     }
     public void mostrar(boolean b){
@@ -50,10 +55,31 @@ public class Listado_empleados extends javax.swing.JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setTitle("Listado de empleados");
+               
         setVisible(b);
     }
     
+    public void clearBusqueda(){
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        clearTel();
+    }
+    
+    public void clearTel(){
+        Object[][] tel=null;
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+                        tel, new String[] {"",""}));
+    }
+    
     public void iniciarListado() {
+        jBModificarUsuario.setEnabled(false);
+        jBEliminarUsuario.setEnabled(false);
+
+        
+        jRadioButton1.setSelected(false);
+        
         jTable1.setTableHeader(null);
         jLabel7.setText("USUARIO NO SELECCIONADO");
                 jLabel8.setText("");
@@ -63,7 +89,59 @@ public class Listado_empleados extends javax.swing.JFrame {
         try{
             UsuarioDAO user =new UsuarioDAO();
             Object [][] real = new Object[13][4];
-            Object [][] n = user.listadoUsuariosCusi();
+            
+            Object [][] n = user.listadoUsuariosActivo();
+            if (n.length<13){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<13; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jTable1.setDefaultRenderer(Object.class, r);
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void checkListado(boolean b) throws DataAccessException {
+        jTable1.setTableHeader(null);
+        jLabel7.setText("USUARIO NO SELECCIONADO");
+                jLabel8.setText("");
+                jLabel9.setText("");
+                jLabel10.setText("");
+                JL_Foto_empleado.setIcon(null);
+        try{
+            UsuarioDAO user =new UsuarioDAO();
+            Object [][] real = new Object[13][4];
+            Object [][] n;
+            
+            
+            if(b==true)
+                n = user.listadoUsuariosCusi();
+            else
+                n = user.listadoUsuariosActivo();
+            
+                
             if (n.length<13){
                 int i=0;
                 for (i=0; i<n.length; i++){
@@ -93,6 +171,7 @@ public class Listado_empleados extends javax.swing.JFrame {
             System.out.println(ex.getMessage());
         }
     }
+    
     private void headerTel(){
         jTable3.setTableHeader(null);
     }
@@ -107,7 +186,130 @@ public class Listado_empleados extends javax.swing.JFrame {
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
                         tel, new String[] {"",""}));
     }
-   
+    
+    private void seleccionarTabla(){
+        try{
+            if (jTable1.getSelectedRow()==-1){
+                Object[][] tel =null;
+                jTable3.setModel(new javax.swing.table.DefaultTableModel(
+                        tel, new String[] {"",""}));
+                jBModificarUsuario.setEnabled(false);
+                jBEliminarUsuario.setEnabled(false);
+                return; 
+            }
+            if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
+                Object[][] tel =null;
+                jTable3.setModel(new javax.swing.table.DefaultTableModel(
+                        tel, new String[] {"",""}));
+                jBModificarUsuario.setEnabled(false);
+                jBEliminarUsuario.setEnabled(false);
+                jLabel7.setText("USUARIO NO SELECCIONADO");
+                jLabel8.setText("");
+                jLabel9.setText("");
+                jLabel10.setText("");
+                JL_Foto_empleado.setIcon(null);
+                jBModificarUsuario.setEnabled(false);
+                jBEliminarUsuario.setEnabled(false);                
+            }else{
+                UsuarioDAO users = new UsuarioDAO();
+                Usuario user = null;
+                user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
+                jLabel7.setText("APELLIDOS: "+user.getApellido());
+                jLabel8.setText("NOMBRES: "+user.getNombre());
+                jLabel9.setText("D.N.I.: "+user.getDni());
+                if (user.getCargo()==1)
+                    jLabel10.setText("CARGO: Cajero");
+                else
+                    jLabel10.setText("CARGO: Aministrador");
+                
+                if(user.getCodFoto()==null)
+                    JL_Foto_empleado.setIcon(null);
+                else{
+                    InputStream binario;
+                    ImageIcon foto;
+                
+                    binario=user.getCodFoto();
+
+
+                    BufferedImage bi = ImageIO.read(binario);
+                    foto = new ImageIcon(bi);
+
+
+                    Image img = foto.getImage();
+                    Image newimg = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+
+                    ImageIcon newicon = new ImageIcon(newimg);
+
+
+                    JL_Foto_empleado.setIcon(newicon);
+                }
+                iniciarTel();
+                
+                if(jTable1.getValueAt(jTable1.getSelectedRow(),3)=="Eliminado"){
+                    jBModificarUsuario.setEnabled(false);
+                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/reac.png")));
+                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/reac_hover.png")));
+                    jBEliminarUsuario.setEnabled(true);
+                }else{
+                    jBModificarUsuario.setEnabled(true);
+                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar.png")));
+                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar_hover.png")));
+                    jBEliminarUsuario.setEnabled(true);
+                }
+                
+                
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    private void buscar(){
+        jTable1.setTableHeader(null);
+        try{
+            UsuarioDAO user =new UsuarioDAO();
+            Object [][] real = new Object[13][4];
+            boolean bo = jRadioButton1.isSelected();
+            
+            Object [][] n = user.buscarUsuarioText(jTextField1.getText(), jTextField2.getText(), jTextField3.getText(), jTextField4.getText(),bo);
+            if (n.length<13){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<13; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+                
+                
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jBModificarUsuario.setEnabled(false);
+            jBEliminarUsuario.setEnabled(false);
+            
+            jTable1.changeSelection(0, 0, false, false);
+            seleccionarTabla();
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -311,6 +513,11 @@ public class Listado_empleados extends javax.swing.JFrame {
         jBEliminarUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBEliminarUsuario.setEnabled(false);
         jBEliminarUsuario.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Eliminar_hover.png"))); // NOI18N
+        jBEliminarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBEliminarUsuarioActionPerformed(evt);
+            }
+        });
 
         jBModificarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Modificar.png"))); // NOI18N
         jBModificarUsuario.setBorder(null);
@@ -346,19 +553,16 @@ public class Listado_empleados extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel7.setText("APELLDOS: Chayle");
+        jLabel7.setText("USUARIO NO SELECCIONADO");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel8.setText("NOMBRES: Facfac");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel9.setText("D.N.I.: 12345678");
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel10.setText("CARGO: Profezor");
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Estado.png"))); // NOI18N
         jButton6.setBorder(null);
@@ -370,6 +574,11 @@ public class Listado_empleados extends javax.swing.JFrame {
 
         jRadioButton1.setBorder(null);
         jRadioButton1.setContentAreaFilled(false);
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
 
         JL_Fecha_Admin1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Fecha_Admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -580,68 +789,7 @@ public class Listado_empleados extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
-        try{
-            if (jTable1.getSelectedRow()==-1){
-                Object[][] tel =null;
-                jTable3.setModel(new javax.swing.table.DefaultTableModel(
-                        tel, new String[] {"",""}));
-                jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);
-                return; 
-            }
-            if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
-                Object[][] tel =null;
-                jTable3.setModel(new javax.swing.table.DefaultTableModel(
-                        tel, new String[] {"",""}));
-                jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);
-                jLabel7.setText("USUARIO NO SELECCIONADO");
-                jLabel8.setText("");
-                jLabel9.setText("");
-                jLabel10.setText("");
-                JL_Foto_empleado.setIcon(null);
-                jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);                
-            }else{
-                UsuarioDAO users = new UsuarioDAO();
-                Usuario user = null;
-                user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
-                jLabel7.setText("APELLIDOS: "+user.getApellido());
-                jLabel8.setText("NOMBRES: "+user.getNombre());
-                jLabel9.setText("D.N.I.: "+user.getDni());
-                if (user.getCargo()==1)
-                    jLabel10.setText("CARGO: Cajero");
-                else
-                    jLabel10.setText("CARGO: Aministrador");
-                
-                if(user.getCodFoto()==null)
-                    JL_Foto_empleado.setIcon(null);
-                else{
-                    InputStream binario;
-                    ImageIcon foto;
-                
-                    binario=user.getCodFoto();
-
-
-                    BufferedImage bi = ImageIO.read(binario);
-                    foto = new ImageIcon(bi);
-
-
-                    Image img = foto.getImage();
-                    Image newimg = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
-
-                    ImageIcon newicon = new ImageIcon(newimg);
-
-
-                    JL_Foto_empleado.setIcon(newicon);
-                }
-                iniciarTel();
-                jBModificarUsuario.setEnabled(true);
-                jBEliminarUsuario.setEnabled(true);
-            }
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
+        seleccionarTabla();
     }//GEN-LAST:event_jTable1MousePressed
     
     private void jTable1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyPressed
@@ -653,68 +801,7 @@ public class Listado_empleados extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1KeyTyped
 
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
-        try{
-            if (jTable1.getSelectedRow()==-1){
-                Object[][] tel =null;
-                jTable3.setModel(new javax.swing.table.DefaultTableModel(
-                        tel, new String[] {"",""}));
-                jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);
-                return; 
-            }
-            if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
-                Object[][] tel =null;
-                jTable3.setModel(new javax.swing.table.DefaultTableModel(
-                        tel, new String[] {"",""}));
-                jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);
-                jLabel7.setText("USUARIO NO SELECCIONADO");
-                jLabel8.setText("");
-                jLabel9.setText("");
-                jLabel10.setText("");
-                JL_Foto_empleado.setIcon(null);
-                jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);                
-            }else{
-                UsuarioDAO users = new UsuarioDAO();
-                Usuario user = null;
-                user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
-                jLabel7.setText("APELLIDOS: "+user.getApellido());
-                jLabel8.setText("NOMBRES: "+user.getNombre());
-                jLabel9.setText("D.N.I.: "+user.getDni());
-                if (user.getCargo()==1)
-                    jLabel10.setText("CARGO: Cajero");
-                else
-                    jLabel10.setText("CARGO: Aministrador");
-                
-                if(user.getCodFoto()==null)
-                    JL_Foto_empleado.setIcon(null);
-                else{
-                    InputStream binario;
-                    ImageIcon foto;
-                
-                    binario=user.getCodFoto();
-
-
-                    BufferedImage bi = ImageIO.read(binario);
-                    foto = new ImageIcon(bi);
-
-
-                    Image img = foto.getImage();
-                    Image newimg = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
-
-                    ImageIcon newicon = new ImageIcon(newimg);
-
-
-                    JL_Foto_empleado.setIcon(newicon);
-                }
-                iniciarTel();
-                jBModificarUsuario.setEnabled(true);
-                jBEliminarUsuario.setEnabled(true);
-            }
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
+        seleccionarTabla();
     }//GEN-LAST:event_jTable1KeyReleased
 
     private void jTable1AncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTable1AncestorMoved
@@ -722,41 +809,7 @@ public class Listado_empleados extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1AncestorMoved
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        jTable1.setTableHeader(null);
-        try{
-            UsuarioDAO user =new UsuarioDAO();
-            Object [][] real = new Object[13][4];
-            Object [][] n = user.buscarUsuarioText(jTextField1.getText(), jTextField2.getText(), jTextField3.getText(), jTextField4.getText());
-            if (n.length<13){
-                int i=0;
-                for (i=0; i<n.length; i++){
-                    real[i][0]=n[i][0];
-                    real[i][1]=n[i][1];
-                    real[i][2]=n[i][2];
-                    real[i][3]=n[i][3];
-                    
-                }
-                for (i=n.length; i<13; i++){
-                    real[i][0]=null;
-                    real[i][1]=null;
-                    real[i][2]=null;
-                    real[i][3]=null;
-                }      
-            }else
-                real=n;
-                
-                
-            
-            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                    real,new String[] {"","","",""}));
-
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
+        buscar();
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -764,119 +817,15 @@ public class Listado_empleados extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
-        jTable1.setTableHeader(null);
-        try{
-            UsuarioDAO user =new UsuarioDAO();
-            Object [][] real = new Object[13][4];
-            Object [][] n = user.buscarUsuarioText(jTextField1.getText(), jTextField2.getText(), jTextField3.getText(), jTextField4.getText());
-            if (n.length<13){
-                int i=0;
-                for (i=0; i<n.length; i++){
-                    real[i][0]=n[i][0];
-                    real[i][1]=n[i][1];
-                    real[i][2]=n[i][2];
-                    real[i][3]=n[i][3];
-                    
-                }
-                for (i=n.length; i<13; i++){
-                    real[i][0]=null;
-                    real[i][1]=null;
-                    real[i][2]=null;
-                    real[i][3]=null;
-                }      
-            }else
-                real=n;
-                
-                
-            
-            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                    real,new String[] {"","","",""}));
-
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
+        buscar();
     }//GEN-LAST:event_jTextField2KeyReleased
 
     private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
-        jTable1.setTableHeader(null);
-        try{
-            UsuarioDAO user =new UsuarioDAO();
-            Object [][] real = new Object[13][4];
-            Object [][] n = user.buscarUsuarioText(jTextField1.getText(), jTextField2.getText(), jTextField3.getText(), jTextField4.getText());
-            if (n.length<13){
-                int i=0;
-                for (i=0; i<n.length; i++){
-                    real[i][0]=n[i][0];
-                    real[i][1]=n[i][1];
-                    real[i][2]=n[i][2];
-                    real[i][3]=n[i][3];
-                    
-                }
-                for (i=n.length; i<13; i++){
-                    real[i][0]=null;
-                    real[i][1]=null;
-                    real[i][2]=null;
-                    real[i][3]=null;
-                }      
-            }else
-                real=n;
-                
-                
-            
-            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                    real,new String[] {"","","",""}));
-
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
+        buscar();
     }//GEN-LAST:event_jTextField3KeyReleased
 
     private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
-        jTable1.setTableHeader(null);
-        try{
-            UsuarioDAO user =new UsuarioDAO();
-            Object [][] real = new Object[13][4];
-            Object [][] n = user.buscarUsuarioText(jTextField1.getText(), jTextField2.getText(), jTextField3.getText(), jTextField4.getText());
-            if (n.length<13){
-                int i=0;
-                for (i=0; i<n.length; i++){
-                    real[i][0]=n[i][0];
-                    real[i][1]=n[i][1];
-                    real[i][2]=n[i][2];
-                    real[i][3]=n[i][3];
-                    
-                }
-                for (i=n.length; i<13; i++){
-                    real[i][0]=null;
-                    real[i][1]=null;
-                    real[i][2]=null;
-                    real[i][3]=null;
-                }      
-            }else
-                real=n;
-                
-                
-            
-            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                    real,new String[] {"","","",""}));
-
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-            
-            
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
+        buscar();
     }//GEN-LAST:event_jTextField4KeyReleased
 
     private void jButton1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyReleased
@@ -903,6 +852,43 @@ public class Listado_empleados extends javax.swing.JFrame {
             Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jBModificarUsuarioActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        try {
+            clearBusqueda();
+            checkListado(jRadioButton1.isSelected());
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jBEliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarUsuarioActionPerformed
+        try {
+            UsuarioDAO u = new UsuarioDAO();
+            
+            if(jTable1.getValueAt(jTable1.getSelectedRow(),3)=="Eliminado"){
+                u.eliminar(true,Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
+                JOptionPane.showMessageDialog(rootPane, "Usuario reactivado.","Alta usuario",JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                UsuarioDAO users = new UsuarioDAO();
+                Usuario user = null;
+                user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
+                
+                int confirmado = JOptionPane.showConfirmDialog(rootPane,"El usuario "+user.getApellido()+" "+user.getNombre()
+                        + " será eliminado\n\n¿Confirmar ésta acción?");
+
+                if (JOptionPane.OK_OPTION == confirmado){
+                    u.eliminar(false,Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
+                    JOptionPane.showMessageDialog(rootPane, "El usuario fue eliminado con éxito..","Usuario eliminado",JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            iniciarListado();
+            clearBusqueda();
+        } catch (DataAccessException ex) {
+                Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+    }//GEN-LAST:event_jBEliminarUsuarioActionPerformed
 
     /**
      * @param args the command line arguments

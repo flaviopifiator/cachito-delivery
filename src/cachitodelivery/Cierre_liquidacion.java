@@ -6,9 +6,19 @@
 
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_abrir_caja;
 import Ventana_clases.Fondo_caja_liquidacion;
 import java.awt.BorderLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import modelos.Caja;
+import modelos.CajaDAO;
+import modelos.Fecha;
+import modelos.Usuario;
+import modelos.UsuarioDAO;
 
 /**
  *
@@ -16,15 +26,46 @@ import java.awt.BorderLayout;
  */
 public class Cierre_liquidacion extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Cierre_liquidacion
-     */
-    public Cierre_liquidacion() {
+    Usuario cuentaOficial=new Usuario();
+    Fecha fecha = new Fecha();
+    float num=0;
+    
+    public Cierre_liquidacion(Usuario user) throws DataAccessException {
         initComponents();
         Fondo_caja_liquidacion fondo = new Fondo_caja_liquidacion(700,368);
         this.add(fondo, BorderLayout.CENTER);
+        setSize(700,395);
+        setResizable(false);
+        setVisible(false);
+        setLocationRelativeTo(null);
+        setTitle("Cerrar caja");
+        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
+        
+        cuentaOficial=user;
+        JL_Usuario_admin1.setText("USUARIO: "+user.getApellido()+" "+user.getNombre());
+        JL_Fecha_Admin1.setText(fecha.getFecha());
+        JL_Hora_Admin1.setText(fecha.getHora());
+        
+        setCaja();
     }
 
+    public void setCaja() throws DataAccessException{
+            CajaDAO cajaDAO = new CajaDAO();
+            if (!cajaDAO.primera())
+                return;
+            Caja caja = new Caja();
+            caja = cajaDAO.lastChest();
+            UsuarioDAO user = new UsuarioDAO();
+            Usuario u = new Usuario();
+            u=user.buscarUsuarioCod(caja.getCod_usuario());
+            jLabel3.setText(u.getApellido());
+            jLabel5.setText(u.getNombre());
+            jLabel6.setText("RECAUDACION: "+caja.getMonto());
+            jLabel7.setText("FECHA: "+caja.getFecha());
+            jLabel8.setText("Hola: "+caja.getHora());
+        
+        }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -68,45 +109,63 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel3.setText("CHAYLE");
+        jLabel3.setText("EASTER EGG FIND :D");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel5.setText("FACFAC");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel6.setText("RECAUDACION: 1000,50");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel7.setText("FECHA: 24/09/2046");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel8.setText("HORA: 23:00");
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Comprobar.png"))); // NOI18N
         jButton1.setBorder(null);
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setEnabled(false);
         jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Comprobar_hover.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel12.setText("ERROR: -32%");
+        jLabel12.setText("INGRESE LA RECAUDACION");
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Liquidacion.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar.png"))); // NOI18N
         jButton2.setBorder(null);
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Liquidacion_hover.png"))); // NOI18N
+        jButton2.setEnabled(false);
+        jButton2.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar_hover.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         JL_Fecha_Admin1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Fecha_Admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -122,6 +181,11 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
         jButton3.setContentAreaFilled(false);
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Atras2_hover.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -161,13 +225,12 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
                                         .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                                         .addComponent(jButton2)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jButton3))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(JL_Fecha_Admin1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -201,22 +264,23 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jButton3)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton1))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jButton1)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton2))))))
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jButton2)
+                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -225,11 +289,80 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JL_Hora_Admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JL_Fecha_Admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(104, 104, 104))
+                .addGap(60, 60, 60))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        if((evt.getKeyChar()>'9' || evt.getKeyChar()<'0') && (evt.getKeyChar() != evt.VK_BACK_SPACE))
+            evt.consume();
+        jButton1.setEnabled(true);
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+        if((evt.getKeyChar()>'9' || evt.getKeyChar()<'0') && (evt.getKeyChar() != evt.VK_BACK_SPACE))
+            evt.consume();
+        jButton1.setEnabled(true);
+    }//GEN-LAST:event_jTextField2KeyTyped
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(jTextField1.getText().isEmpty() && jTextField2.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No ingresó un monto.");
+            return;
+        }
+        if(jTextField1.getText().isEmpty())
+            num=Float.parseFloat("0."+jTextField2.getText());
+        if(jTextField2.getText().isEmpty())
+            num=Float.parseFloat(jTextField1.getText()+".0");
+        if(!jTextField1.getText().isEmpty() && !jTextField2.getText().isEmpty())
+            num=Float.parseFloat(jTextField1.getText()+"."+jTextField2.getText());
+        jLabel12.setText("RECAUDACION: "+num);
+        jButton2.setEnabled(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Caja ca = new Caja();
+        ca.setTipo(false);
+        ca.setFecha(fecha.getFecha());
+        ca.setHora(fecha.getHora());
+        ca.setCod_usuario(cuentaOficial.getCod());
+        ca.setMonto(num);
+        CajaDAO caja= new CajaDAO();
+        try {
+            caja.nuevaCaja(ca);
+            JOptionPane.showMessageDialog(null, "CAJA CERRADA\n\nRECAUDACION: "+num+" pesos\n");
+            this.setVisible(false);
+            if(cuentaOficial.getCargo()==0){
+                Principal ven = new Principal();
+                ven.MenuAdminVisible(true, cuentaOficial);
+            }else{
+                Menu_cajero menu = new Menu_cajero(cuentaOficial);
+                menu.setVisible(true);
+            }
+           
+                
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Abrir_caja.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            if(cuentaOficial.getCargo()==0){
+                Principal ven  = new Principal();           
+                ven.MenuAdminVisible(true, cuentaOficial);
+            }else{
+                Menu_cajero menu = new Menu_cajero(cuentaOficial);
+                menu.setVisible(true);
+            }
+        
+        this.dispose();
+        } catch (DataAccessException ex) {
+                Logger.getLogger(Abrir_caja.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,7 +395,7 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Cierre_liquidacion().setVisible(true);
+                //new Cierre_liquidacion().setVisible(true);
             }
         });
     }
