@@ -301,6 +301,11 @@ public class Principal extends javax.swing.JFrame {
         JB_Estadisticas.setContentAreaFilled(false);
         JB_Estadisticas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         JB_Estadisticas.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Estadisticas_hover.png"))); // NOI18N
+        JB_Estadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JB_EstadisticasActionPerformed(evt);
+            }
+        });
 
         JB_Zonas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Zonas.png"))); // NOI18N
         JB_Zonas.setBorder(null);
@@ -1325,6 +1330,17 @@ public class Principal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jBRegistrarKeyPressed
+
+    private void JB_EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_EstadisticasActionPerformed
+        JF_Menu_admin.setVisible(false);
+      
+        try {        
+            Estadisticas est= new Estadisticas(cuentaOficial);
+            est.mostrar(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_JB_EstadisticasActionPerformed
 
     /**
      * @param args the command line arguments

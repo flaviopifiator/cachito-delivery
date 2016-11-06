@@ -5,8 +5,14 @@
  */
 package modelos;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,5 +53,31 @@ public class Fecha {
 
             return hora+":"+min;
     }
+        
+        public boolean rango(String min, String fecha, String max) throws ParseException{
+            String f="";
+            for(int i=0;i<fecha.length();i++)
+                if(fecha.charAt(i)=='/')
+                    f=f+" ";
+                else
+                    f=f+fecha.charAt(i);
+                
+            SimpleDateFormat minSDF = new SimpleDateFormat("dd MM yyyy", Locale.ROOT);
+            SimpleDateFormat fSDF = new SimpleDateFormat("dd MM yyyy", Locale.ROOT);
+            SimpleDateFormat maxSDF = new SimpleDateFormat("dd MM yyyy", Locale.ROOT);
+                    
+            Date minDate = minSDF.parse(min);
+            Date fDate = fSDF.parse(f);
+            Date maxDate = maxSDF.parse(max);
+
+            Calendar minCal = minSDF.getCalendar();
+            Calendar fCal = fSDF.getCalendar();
+            Calendar maxCal = maxSDF.getCalendar();
+
+            if(minCal.compareTo(fCal)<=0 && maxCal.compareTo(fCal)>=0)
+                return true;
+            
+            return false;
+        }
         
 }
