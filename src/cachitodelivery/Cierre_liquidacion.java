@@ -103,13 +103,13 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
 
         JL_Usuario_admin1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin1.setForeground(new java.awt.Color(255, 255, 255));
-        JL_Usuario_admin1.setText("USUARIO: FACFAC");
+        JL_Usuario_admin1.setText("USUARIO: ");
 
         jLabel2.setToolTipText("");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel3.setText("EASTER EGG FIND :D");
+        jLabel3.setText("EASTER EGG FOUND");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(53, 94, 122));

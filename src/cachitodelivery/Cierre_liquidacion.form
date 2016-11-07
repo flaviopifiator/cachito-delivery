@@ -159,7 +159,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="USUARIO: FACFAC"/>
+        <Property name="text" type="java.lang.String" value="USUARIO: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
@@ -175,7 +175,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="7a" green="5e" red="35" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="EASTER EGG FIND :D"/>
+        <Property name="text" type="java.lang.String" value="EASTER EGG FOUND"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">

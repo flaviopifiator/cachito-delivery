@@ -352,7 +352,7 @@ public class Modificar_usuario extends javax.swing.JFrame {
 
         JL_Usuario_admin1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin1.setForeground(new java.awt.Color(255, 255, 255));
-        JL_Usuario_admin1.setText("USUARIO: FACFAC");
+        JL_Usuario_admin1.setText("USUARIO: ");
 
         JL_Fecha_Admin1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Fecha_Admin1.setForeground(new java.awt.Color(255, 255, 255));

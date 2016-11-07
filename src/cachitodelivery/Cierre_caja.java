@@ -58,7 +58,7 @@ public class Cierre_caja extends javax.swing.JFrame {
 
         JL_Usuario_admin1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin1.setForeground(new java.awt.Color(255, 255, 255));
-        JL_Usuario_admin1.setText("USUARIO: FACFAC");
+        JL_Usuario_admin1.setText("USUARIO: ");
 
         jLabel2.setToolTipText("");
 
@@ -92,7 +92,7 @@ public class Cierre_caja extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel5.setText("CHAYLE");
+        jLabel5.setText("APELIIDOS");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(53, 94, 122));
@@ -104,7 +104,7 @@ public class Cierre_caja extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel10.setText("FACFAC");
+        jLabel10.setText("NOMBRES");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar.png"))); // NOI18N
         jButton1.setBorder(null);

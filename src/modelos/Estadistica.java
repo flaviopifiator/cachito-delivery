@@ -26,7 +26,7 @@ public class Estadistica {
         int tam=0;
         while(rs.next())
             tam++;
-        Object[][] lista = new Object[tam][4];
+        Object[][] lista = new Object[tam][5];
 
         for(int i=0; i<lista.length; i++){
             lista[i][1]=0;
@@ -38,7 +38,13 @@ public class Estadistica {
 
         while(rs.next()){
             lista[i][0]=rs.getInt("cod_cadete");
-            lista[i][3]=rs.getString("apellido_cadete")+" "+rs.getString("nombre_cadete");
+            
+            String nombre = rs.getString("nombre_cadete");
+            String apellido = rs.getString("apellido_cadete");
+            
+            lista[i][4]=nombre;
+            
+            lista[i][3]=apellido;
             i++;
         }
         int[] ped; 
@@ -60,7 +66,7 @@ public class Estadistica {
         }
         
         lista=burbuja(lista);
-        Object[][] nueva = new Object[cant][4];
+        Object[][] nueva = new Object[cant][5];
         
         if(lista.length>cant){
             for(int j=0; j<cant; j++){
@@ -68,6 +74,7 @@ public class Estadistica {
                 nueva[j][1]=lista[j][1];
                 nueva[j][2]=lista[j][2];
                 nueva[j][3]=lista[j][3];
+                nueva[j][4]=lista[j][4];
             }
         }else
             nueva=lista;

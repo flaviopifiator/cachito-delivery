@@ -162,12 +162,21 @@ public class Principal extends javax.swing.JFrame {
 
             boolean ban;
 
-            user.setDni(Integer.parseInt(JTF_IdUser.getText()));
+            user.setCod(Integer.parseInt(JTF_IdUser.getText()));
             pass= JPF_PassUser.getText().trim();
+            
             user.setPass(pass);
+            
             GestorUsuario gesUs =new GestorUsuario();
             ban=gesUs.Acceso(user);
-            cuentaOficial=  gesUs.buscarUsuario(user.getDni());
+            
+            cuentaOficial=  gesUs.buscarUsuario(user.getCod());
+            
+            if(cuentaOficial==null){
+                JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
             if(ban && cuentaOficial.getActivo()==true){
                 if(cuentaOficial.getCargo()==1){
                     Menu_cajero menu = new Menu_cajero(cuentaOficial);
@@ -342,7 +351,7 @@ public class Principal extends javax.swing.JFrame {
 
         JL_Usuario_admin.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin.setForeground(new java.awt.Color(255, 255, 255));
-        JL_Usuario_admin.setText("USUARIO: FACFAC");
+        JL_Usuario_admin.setText("USUARIO:");
 
         JL_Fecha_Admin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Fecha_Admin.setForeground(new java.awt.Color(255, 255, 255));

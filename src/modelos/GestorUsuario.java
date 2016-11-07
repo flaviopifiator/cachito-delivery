@@ -29,17 +29,17 @@ public class GestorUsuario {
         listaUsuarios.add(nuevo);
     }
     
-    public Usuario buscarUsuario (int dni) throws UsuarioInexistenteException, DataAccessException{   
+    public Usuario buscarUsuario (int cod) throws UsuarioInexistenteException, DataAccessException{   
         buscarTodo(); // Aqui debería llamar a cliDAO.buscarTodo(); para tener la ultima actualizacion de la BD
         for(Object obj:listaUsuarios)
             {
             Usuario usuario =(Usuario)obj;
-            if (usuario.getDni() == dni)
+            if (usuario.getCod() == cod)
                 {                                           
                     return usuario;    
                 }            
             }
-        throw new UsuarioInexistenteException("El usuario no existe");
+        return null;
     }
 
     
@@ -74,13 +74,13 @@ public class GestorUsuario {
             indice++;
             }
     }
-public boolean Acceso(Usuario user) throws DataAccessException{        
+    public boolean Acceso(Usuario user) throws DataAccessException{        
        buscarTodo();
        for (Object obj : listaUsuarios) {
     
            Usuario us = (Usuario) obj;
              
-            if (Objects.equals(user.getDni(), us.getDni()) && user.getPass().trim().equals(us.getPass().trim())  ) {
+            if (user.getCod()== us.getCod() && user.getPass().trim().equals(us.getPass().trim())  ) {
                
                  return(true);
             }

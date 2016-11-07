@@ -13,7 +13,7 @@ public class Fondo_estadisticas extends JPanel{
     
     public void paintComponent(Graphics g){
         Dimension tam = getSize();
-        ImageIcon img = new ImageIcon(new ImageIcon(getClass().getResource("/Ventanas/Listado_empleados.png")).getImage());
+        ImageIcon img = new ImageIcon(new ImageIcon(getClass().getResource("/Ventanas/Estadisticas.png")).getImage());
         g.drawImage(img.getImage(), 0, 0, tam.width, tam.height, null);
         setOpaque(false);
         super.paintComponent(g);
