@@ -83,11 +83,11 @@ public class CadeteDAO {
     }
     
     
-    public Cadete buscarCadete(int dni) throws DataAccessException{
+    public Cadete buscarCadete(int cod) throws DataAccessException{
         try{
             Connection con = BaseDeDatos.getInstance();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM cadetes where dni_cadete='"+dni+"'");
+            ResultSet rs = st.executeQuery("SELECT * FROM cadetes where cod_cadete='"+cod+"'");
             Cadete cadete = null;
              while(rs.next())
             {

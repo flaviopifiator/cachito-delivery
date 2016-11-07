@@ -8,23 +8,22 @@ package cachitodelivery;
 
 import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_estadisticas;
-import Ventana_clases.Fondo_listado_empleados;
 import java.awt.BorderLayout;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import modelos.Usuario;
-import modelos.UsuarioDAO;
-import java.io.InputStream;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import modelos.Estadistica;
 import modelos.Fecha;
-import modelos.Telefono_UsuarioDAO;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
 
 /**
  *
@@ -144,6 +143,11 @@ public class Estadisticas extends javax.swing.JFrame {
         jButton2.setContentAreaFilled(false);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Cadetes_E_hover.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Comidas_E.png"))); // NOI18N
         jButton3.setBorder(null);
@@ -170,11 +174,11 @@ public class Estadisticas extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 322, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 296, Short.MAX_VALUE)
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -216,7 +220,7 @@ public class Estadisticas extends javax.swing.JFrame {
         jDateChooser2.setForeground(new java.awt.Color(53, 95, 123));
 
         jComboBox1.setForeground(new java.awt.Color(53, 95, 123));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10", "20", "30" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "5", "10", "15" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -230,16 +234,16 @@ public class Estadisticas extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(jButton2)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jButton3)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jButton4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton5)))
+                                        .addComponent(jButton5))
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -315,21 +319,21 @@ public class Estadisticas extends javax.swing.JFrame {
                                                     .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addGroup(layout.createSequentialGroup()
                                                     .addGap(11, 11, 11)
                                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addGroup(layout.createSequentialGroup()
                                                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                             .addGap(159, 159, 159)
                                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addComponent(JL_Foto_empleado, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addComponent(jButton7))
-                                                            .addGap(0, 0, Short.MAX_VALUE))))
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                                .addComponent(jButton7))))
+                                                    .addGap(0, 0, Short.MAX_VALUE))))
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -352,6 +356,65 @@ public class Estadisticas extends javax.swing.JFrame {
        vent.MenuAdminVisible(true, cuentaOficial);
        this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            jPanel2.removeAll();
+            jPanel2.repaint();
+            ChartPanel panel;
+            JFreeChart chart = null;
+
+            DefaultCategoryDataset barra = new DefaultCategoryDataset();
+
+            Estadistica est = new Estadistica();
+
+            String min = jDateChooser1.getCalendar().get(Calendar.DAY_OF_MONTH)+" "
+                         +jDateChooser1.getCalendar().get(Calendar.MONTH)+" "
+                         +jDateChooser1.getCalendar().get(Calendar.YEAR);
+
+            String max = jDateChooser2.getCalendar().get(Calendar.DAY_OF_MONTH)+" "
+                         +jDateChooser2.getCalendar().get(Calendar.MONTH)+" "
+                         +jDateChooser2.getCalendar().get(Calendar.YEAR);
+
+            Object[][] cosas;
+
+            cosas = est.cadete(min, (jComboBox1.getSelectedIndex()+1)*5, max);
+            
+            for(int i=0; i<cosas.length; i++){
+                barra.addValue(Integer.parseInt(cosas[i][2].toString()), "Pedidos no entregados", cosas[i][0].toString());
+                barra.addValue(Integer.parseInt(cosas[i][1].toString()), "Pedidos realizados", cosas[i][0].toString());
+            }
+            
+            chart = ChartFactory.createBarChart("CADETES CON MAS PEDIDOS", "Cadetes", 
+                    "Pedidos", 
+                    barra, 
+                    PlotOrientation.HORIZONTAL, 
+                    true, 
+                    true, 
+                    true);
+            
+            Object[][] tabla = new Object[cosas.length][3];
+            float[] porce = est.porcentaje(cosas);
+            
+            for(int i=0; i<tabla.length; i++){
+                tabla[i][0]=porce[i];
+                tabla[i][1]=cosas[i][0];
+                tabla[i][2]=cosas[i][3];
+            }
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    tabla,new String[] {"PORC.","COD.","INFORMACION PERTINENTE"}));
+            
+            CategoryPlot plot = (CategoryPlot) chart.getPlot();
+            panel = new ChartPanel(chart);
+            panel.setBounds(0, 0, 322, 296);
+            jPanel2.add(panel);
+            jPanel2.repaint();
+        
+        } catch (ClassNotFoundException | SQLException | DataAccessException | ParseException ex) {
+            Logger.getLogger(Estadisticas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
     
     /**
      * @param args the command line arguments
