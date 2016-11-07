@@ -282,6 +282,11 @@ public class Modificar_usuario extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
+        jButton6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton6KeyPressed(evt);
+            }
+        });
 
         foto_usuario.setToolTipText("");
 
@@ -759,10 +764,19 @@ public class Modificar_usuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        if(jTextField1.getText().isEmpty() || jTextField8.getText().isEmpty() || jTextField3.getText().isEmpty() || jTextField2.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "No se permiten campos vacíos");
+        if(jTextField1.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se ingresó un APELLIDO de usuario.");
             return;
-        }
+        }if(jTextField2.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se ingresó un NOMBRE de usuario.");
+            return;
+        }if(jTextField8.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se ingresó número de DOCUMENTO de usuario.");
+            return;
+        }if(jTextField3.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No se ingresó una CONTRASEÑA de usuario.");
+            return;
+        }        
         
         Usuario user = new Usuario();
         int dni; 
@@ -799,6 +813,61 @@ public class Modificar_usuario extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "El Cliente fue modificado con exito");
          
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton6KeyPressed
+        if(evt.getKeyCode() == evt.VK_ENTER){
+            if(jTextField1.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "No se ingresó un APELLIDO de usuario.");
+                return;
+            }if(jTextField2.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "No se ingresó un NOMBRE de usuario.");
+                return;
+            }if(jTextField8.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "No se ingresó número de DOCUMENTO de usuario.");
+                return;
+            }if(jTextField3.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "No se ingresó una CONTRASEÑA de usuario.");
+                return;
+            }        
+
+            Usuario user = new Usuario();
+            int dni; 
+            try
+            {
+            dni = Integer.parseInt(jTextField8.getText().trim());
+            user.setDni(dni);
+            user.setNombre(jTextField2.getText().trim());
+            user.setApellido(jTextField1.getText().trim());
+            user.setPass(jTextField3.getText().trim());
+            user.setCargo(jComboBox1.getSelectedIndex());
+            user.setActivo(true);
+            user.setFis(fis);
+            user.setLongitud(longitudBytes);
+            user.setCod(Integer.parseInt(jTextField9.getText()));
+
+                UsuarioDAO gesus = new UsuarioDAO();
+                gesus.actualizar(user);
+                Telefono_UsuarioDAO tel = new Telefono_UsuarioDAO();
+
+                Object[][] aux = new Object[telefono.length][3];
+                for(int i=0; i<telefono.length;i++){
+                    aux[i][0]=user.getCod();
+                    aux[i][2]=telefono[i][0];
+                    aux[i][1]=telefono[i][1];
+                }
+                tel.actualizarGabe(aux);
+
+            }
+            catch(NumberFormatException ex ){JOptionPane.showMessageDialog(null, "Solo debe ingresar numeros en el campo dni");return;}
+            catch(TelefonoUsuarioInexistenteException ex){JOptionPane.showMessageDialog(null, ex.getMessage());return;}
+            catch(DataAccessException ex){JOptionPane.showMessageDialog(null, "Error al Insertar"+ex);return;}
+
+            JOptionPane.showMessageDialog(null, "El Cliente fue modificado con exito");
+
+        }
+        
+        
+    }//GEN-LAST:event_jButton6KeyPressed
 
     /**
      * @param args the command line arguments
