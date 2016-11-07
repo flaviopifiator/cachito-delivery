@@ -33,7 +33,7 @@ import modelos.UsuarioDAO;
  *
  * @author Cusipuma
  */
-public class Modificar_usuario extends javax.swing.JFrame {
+public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
 
     Fecha fecha= new Fecha();
     String user;
@@ -43,14 +43,15 @@ public class Modificar_usuario extends javax.swing.JFrame {
     Object[][] telefono = new Object[0][2];
     FileInputStream fis;
     int longitudBytes=0;
+    Thread h1;
     
     
     public Modificar_usuario(Listado_empleados vt, Usuario user) throws IOException, SQLException, ClassNotFoundException {
         initComponents();
+        h1= new Thread(this);
+        h1.start();
         Fondo_modificar_usuario fondo = new Fondo_modificar_usuario(1000,667);
         this.add(fondo, BorderLayout.CENTER);
-        this.JL_Fecha_Admin1.setText(""+fecha.getFecha());
-        this.JL_Hora_Admin1.setText(""+fecha.getHora());
         vent = vt;
         cuentaOficial = user;
         JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getApellido()+" "+vent.cuentaOficial.getNombre());
@@ -942,4 +943,14 @@ public class Modificar_usuario extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
+ @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            this.JL_Fecha_Admin1.setText(""+fecha.getFecha());
+            this.JL_Hora_Admin1.setText(""+fecha.getHora());
+        }
+    }
 }

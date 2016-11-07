@@ -24,14 +24,17 @@ import modelos.UsuarioDAO;
  *
  * @author santiago
  */
-public class Cierre_liquidacion extends javax.swing.JFrame {
+public class Cierre_liquidacion extends javax.swing.JFrame implements Runnable  {
 
     Usuario cuentaOficial=new Usuario();
     Fecha fecha = new Fecha();
+    Thread h1;
     float num=0;
     
     public Cierre_liquidacion(Usuario user) throws DataAccessException {
         initComponents();
+        h1= new Thread(this);
+        h1.start();
         Fondo_caja_liquidacion fondo = new Fondo_caja_liquidacion(700,368);
         this.add(fondo, BorderLayout.CENTER);
         setSize(700,395);
@@ -43,8 +46,7 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
         
         cuentaOficial=user;
         JL_Usuario_admin1.setText("USUARIO: "+user.getApellido()+" "+user.getNombre());
-        JL_Fecha_Admin1.setText(fecha.getFecha());
-        JL_Hora_Admin1.setText(fecha.getHora());
+        
         
         setCaja();
     }
@@ -425,4 +427,14 @@ public class Cierre_liquidacion extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+ @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            JL_Fecha_Admin1.setText(fecha.getFecha());
+            JL_Hora_Admin1.setText(fecha.getHora());
+        }
+    }
 }

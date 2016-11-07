@@ -37,7 +37,7 @@ import modelos.UsuarioDAO;
  *
  * @author Cusipuma
  */
-public class Principal extends javax.swing.JFrame {
+public class Principal extends javax.swing.JFrame implements Runnable{
 
     Usuario cuentaOficial = new Usuario();
     
@@ -46,10 +46,14 @@ public class Principal extends javax.swing.JFrame {
     FileInputStream fis;
     int longitudBytes;
     Object[][] telefono = new Object[0][2];
+    Thread h1;
+
     
     
     public Principal() throws DataAccessException {
         initComponents();
+        h1= new Thread(this);
+        h1.start();
         this.setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Inicio_sesion fondo = new Inicio_sesion(399,600);
         this.add(fondo, BorderLayout.CENTER);
@@ -1449,4 +1453,21 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTtelefono;
     // End of variables declaration//GEN-END:variables
+
+ @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            this.JL_Fecha.setText(fecha.getFecha());
+            this.JL_Hora.setText(fecha.getHora());
+
+            this.JL_Fecha_Admin.setText(fecha.getFecha());
+            this.JL_Hora_Admin.setText(fecha.getHora());
+
+            this.JL_Fecha_Admin1.setText(fecha.getFecha());
+            this.JL_Hora_Admin1.setText(fecha.getHora());
+        }
+    }
 }

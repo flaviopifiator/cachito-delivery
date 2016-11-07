@@ -23,14 +23,17 @@ import modelos.UsuarioDAO;
  *
  * @author santiago
  */
-public class Abrir_caja extends javax.swing.JFrame {
-
+public class Abrir_caja extends javax.swing.JFrame implements Runnable {
+    
+    Thread h1;
     Usuario cuentaOficial;
     Fecha fecha=new Fecha();
     float num=0;
     
     public Abrir_caja(Usuario user) throws DataAccessException {
         initComponents();
+        h1= new Thread(this);
+        h1.start();
         Fondo_abrir_caja fondo = new Fondo_abrir_caja(700,368);
         add(fondo, BorderLayout.CENTER);
         setSize(700,395);
@@ -42,8 +45,7 @@ public class Abrir_caja extends javax.swing.JFrame {
         
         cuentaOficial=user;
         JL_Usuario_admin1.setText("USUARIO: "+user.getApellido()+" "+user.getNombre());
-        JL_Fecha_Admin1.setText(fecha.getFecha());
-        JL_Hora_Admin1.setText(fecha.getHora());
+
         
         setCaja();
     }
@@ -56,11 +58,11 @@ public class Abrir_caja extends javax.swing.JFrame {
             UsuarioDAO user = new UsuarioDAO();
             Usuario u = new Usuario();
             u=user.buscarUsuarioCod(caja.getCod_usuario());
-            jLabel3.setText(u.getApellido());
-            jLabel5.setText(u.getNombre());
+            jLabel3.setText("APELLIDO: "+u.getApellido());
+            jLabel5.setText("NOMBRE: "+u.getNombre());
             jLabel6.setText("RECAUDACION: "+caja.getMonto());
             jLabel7.setText("FECHA: "+caja.getFecha());
-            jLabel8.setText("Hola: "+caja.getHora());
+            jLabel8.setText("HORA: "+caja.getHora());
         
         }
 
@@ -429,4 +431,15 @@ public class Abrir_caja extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+ @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            JL_Fecha_Admin1.setText(fecha.getFecha());
+            JL_Hora_Admin1.setText(fecha.getHora());
+        }
+    }
+
 }

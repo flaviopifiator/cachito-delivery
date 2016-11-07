@@ -30,21 +30,24 @@ import org.jfree.chart.plot.PlotOrientation;
  *
  * @author Cusipuma
  */
-public class Estadisticas extends javax.swing.JFrame {
+public class Estadisticas extends javax.swing.JFrame implements Runnable  {
     
     Usuario cuentaOficial = new Usuario();
     Principal vent = null;
     Fecha fecha = new Fecha();
     Render r = new Render();
+    Thread h1;
+    
     
     public Estadisticas(Usuario user) throws SQLException {
         initComponents();
+        h1= new Thread(this);
+        h1.start();
         Fondo_estadisticas fondo = new Fondo_estadisticas(1000,559);
         add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
         JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
-        JL_Fecha_Admin1.setText(fecha.getFecha());
-        JL_Hora_Admin1.setText(fecha.getHora());
+        
         
         
 
@@ -505,5 +508,15 @@ public class Estadisticas extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
+ @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            JL_Fecha_Admin1.setText(fecha.getFecha());
+            JL_Hora_Admin1.setText(fecha.getHora());
+        }
+    }
 
 }

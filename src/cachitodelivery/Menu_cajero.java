@@ -21,7 +21,7 @@ import modelos.Usuario;
  *
  * @author Cusipuma
  */
-public class Menu_cajero extends javax.swing.JFrame {
+public class Menu_cajero extends javax.swing.JFrame implements Runnable{
 
     /**
      * Creates new form Menu_cajero
@@ -29,10 +29,12 @@ public class Menu_cajero extends javax.swing.JFrame {
     
     protected Usuario user = new Usuario();
     Fecha fecha = new Fecha();
+    Thread h1;
     
     public Menu_cajero(Usuario user) throws DataAccessException {
         initComponents();
-        
+        h1= new Thread(this);
+        h1.start();
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Fondo_menu_cajero fondo = new Fondo_menu_cajero(673,260);
         setSize(673,285);
@@ -46,8 +48,7 @@ public class Menu_cajero extends javax.swing.JFrame {
         this.user=user;
         
         JL_Usuario_admin.setText("USUARIO:"+" "+user.getApellido()+" "+user.getNombre());
-        JL_Fecha_Admin.setText(fecha.getFecha());
-        JL_Hora_Admin.setText(fecha.getHora());
+        
         
         this.add(fondo, BorderLayout.CENTER);
         
@@ -329,4 +330,14 @@ public class Menu_cajero extends javax.swing.JFrame {
     private javax.swing.JLabel JL_Hora_Admin;
     private javax.swing.JLabel JL_Usuario_admin;
     // End of variables declaration//GEN-END:variables
+ @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            JL_Fecha_Admin.setText(fecha.getFecha());
+            JL_Hora_Admin.setText(fecha.getHora());
+        }
+    }
 }

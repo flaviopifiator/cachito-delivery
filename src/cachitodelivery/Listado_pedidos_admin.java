@@ -8,18 +8,25 @@ package cachitodelivery;
 import Ventana_clases.Fondo_caja_liquidacion;
 import Ventana_clases.Fondo_listado_pedidos_admin;
 import java.awt.BorderLayout;
+import modelos.Fecha;
 
 /**
  *
  * @author Cusipuma
  */
-public class Listado_pedidos_admin extends javax.swing.JFrame {
+public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnable{
 
     /**
      * Creates new form Listado_pedidos_admin
      */
+    
+    Thread h1;
+    Fecha fecha = new Fecha();
+    
     public Listado_pedidos_admin() {
         initComponents();
+        h1= new Thread(this);
+        h1.start();
         Fondo_listado_pedidos_admin fondo = new Fondo_listado_pedidos_admin(1248,600);
         this.add(fondo, BorderLayout.CENTER);
     }
@@ -581,4 +588,15 @@ public class Listado_pedidos_admin extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
+ @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            JL_Fecha_Admin1.setText(fecha.getFecha());
+            JL_Hora_Admin1.setText(fecha.getHora());
+        }
+    }
+
 }
