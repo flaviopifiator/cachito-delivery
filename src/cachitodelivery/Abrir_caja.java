@@ -34,7 +34,7 @@ public class Abrir_caja extends javax.swing.JFrame implements Runnable {
     public Abrir_caja(Usuario user) throws DataAccessException {
         initComponents();
         h1= new Thread(this);
-        h1.start();
+//        h1.start();
         Fondo_abrir_caja fondo = new Fondo_abrir_caja(700,368);
         add(fondo, BorderLayout.CENTER);
         setSize(700,395);

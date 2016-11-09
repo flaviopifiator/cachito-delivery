@@ -42,7 +42,7 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
     public Estadisticas(Usuario user) throws SQLException {
         initComponents();
         h1= new Thread(this);
-        h1.start();
+//        h1.start();
         Fondo_estadisticas fondo = new Fondo_estadisticas(1000,559);
         add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;

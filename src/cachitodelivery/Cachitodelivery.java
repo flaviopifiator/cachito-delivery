@@ -24,6 +24,7 @@ public class Cachitodelivery {
         p.setTitle("Cachito Delivery");
       // p.setLocationRelativeTo(null);
         p.setResizable(false);
+        
         p.setVisible(true);
         
 //        Menu_cajero q = new Menu_cajero();

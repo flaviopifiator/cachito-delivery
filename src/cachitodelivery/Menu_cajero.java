@@ -34,7 +34,7 @@ public class Menu_cajero extends javax.swing.JFrame implements Runnable{
     public Menu_cajero(Usuario user) throws DataAccessException {
         initComponents();
         h1= new Thread(this);
-        h1.start();
+//        h1.start();
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Fondo_menu_cajero fondo = new Fondo_menu_cajero(673,260);
         setSize(673,285);

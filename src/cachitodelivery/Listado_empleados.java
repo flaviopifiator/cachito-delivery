@@ -39,7 +39,7 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
     public Listado_empleados(Usuario user) throws SQLException {
         initComponents();
         h1= new Thread(this);
-        h1.start();
+//        h1.start();
         Fondo_listado_empleados fondo = new Fondo_listado_empleados(1000,559);
         add(fondo, BorderLayout.CENTER);
         cuentaOficial= user;

@@ -53,7 +53,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     public Principal() throws DataAccessException {
         initComponents();
         h1= new Thread(this);
-        h1.start();
+//        h1.start();
         this.setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Inicio_sesion fondo = new Inicio_sesion(399,600);
         this.add(fondo, BorderLayout.CENTER);

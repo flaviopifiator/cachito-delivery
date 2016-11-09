@@ -24,11 +24,11 @@ public class Estadistica {
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM cadetes");
         int tam=0;
-//        while(rs.next())
-//            tam++;
+        while(rs.next())
+            tam++;
         System.out.println(tam);
-        rs.last();
-        System.out.println(rs.getRow());
+//        rs.last();
+//        System.out.println(rs.getRow());
         
         Object[][] lista = new Object[tam][5];
 

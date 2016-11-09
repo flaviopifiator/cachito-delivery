@@ -26,7 +26,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     public Listado_pedidos_admin() {
         initComponents();
         h1= new Thread(this);
-        h1.start();
+//        h1.start();
         Fondo_listado_pedidos_admin fondo = new Fondo_listado_pedidos_admin(1248,600);
         this.add(fondo, BorderLayout.CENTER);
     }

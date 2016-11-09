@@ -35,7 +35,7 @@ public class Cierre_liquidacion extends javax.swing.JFrame implements Runnable  
     public Cierre_liquidacion(Usuario user) throws DataAccessException {
         initComponents();
         h1= new Thread(this);
-        h1.start();
+//        h1.start();
         Fondo_caja_liquidacion fondo = new Fondo_caja_liquidacion(700,368);
         this.add(fondo, BorderLayout.CENTER);
         setSize(700,395);
