@@ -24,8 +24,12 @@ public class Estadistica {
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM cadetes");
         int tam=0;
-        while(rs.next())
-            tam++;
+//        while(rs.next())
+//            tam++;
+        System.out.println(tam);
+        rs.last();
+        System.out.println(rs.getRow());
+        
         Object[][] lista = new Object[tam][5];
 
         for(int i=0; i<lista.length; i++){
@@ -133,5 +137,47 @@ public class Estadistica {
             }
         }
         return aux;
+    }
+    
+    public String porFecha(String tabla, String min, String max, String campo, String fecha) throws ClassNotFoundException, SQLException, ParseException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM "+tabla);
+        
+        String consulta ="";
+        int i=0;
+        Fecha f = new Fecha();
+        
+        while(rs.next()){
+            if(f.rango(min, rs.getString(fecha), max)){
+                if(i==0)
+                    consulta=tabla+"."+campo+" = "+rs.getString(campo)+" ";
+                else
+                    consulta=consulta+" OR "+tabla+"."+campo+"="+rs.getString(campo);
+                i++;
+            }
+        }
+        st.cancel();
+        rs.close();
+        return consulta;        
+    }
+    
+    
+    public Object[][] meses(String min, String max, int cant) throws ClassNotFoundException, SQLException, ParseException{
+        String consulta = this.porFecha("facturas", min, max, "cod_factura", "fecha_factura");
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery
+        ("SELECT detalle_pedido.cod_comida, comidas.descripcion_comida, sum(detalle_pedido.cantidad_comida) AS cant"+
+         "FROM pedidos, comidas, detalle_pedido, facturas"+
+         "WHERE pedidos.cod_detalle_pedido = detalle_pedido.cod_detalle_pedido AND detalle_pedido.cod_comida = comidas.cod_comida AND"+
+         "facturas.cod_pedido=pedidos.cod_pedido AND pedidos.estado_pedido=4 AND ("+consulta+")"+ 
+         "GROUP BY  detalle_pedido.cod_comida, comidas.descripcion_comida"+
+         "ORDER BY cant DESC");
+        
+        
+        
+        
+        return null;
     }
 }

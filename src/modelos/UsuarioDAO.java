@@ -482,7 +482,14 @@ public class UsuarioDAO {
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
         
     }
-    
+    public boolean isOP(Usuario u){
+        int op = 104;
+        
+        if(u.getCod()==op)
+            return false;
+        else 
+            return true;
+    }
     
 }
 

@@ -114,7 +114,9 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
     public void setLabel(String user){
         this.user="USUARIO: "+user;
     }
-    
+    public void deshabilitarCombobox(){
+        jComboBox1.setEnabled(true);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -254,6 +256,7 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Administrador", "Cajero" }));
+        jComboBox1.setEnabled(false);
         jComboBox1.setNextFocusableComponent(jButton6);
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {

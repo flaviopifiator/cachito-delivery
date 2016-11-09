@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import modelos.Cadena;
 import modelos.Caja;
 import modelos.CajaDAO;
 import modelos.Fecha;
@@ -44,7 +45,10 @@ public class Abrir_caja extends javax.swing.JFrame implements Runnable {
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         
         cuentaOficial=user;
-        JL_Usuario_admin1.setText("USUARIO: "+user.getApellido()+" "+user.getNombre());
+        
+        String ape = user.getApellido()+" "+user.getNombre();
+        Cadena usuario = new Cadena();
+        JL_Usuario_admin1.setText("USUARIO: "+usuario.limitar(ape, 28));
 
         
         setCaja();
@@ -109,21 +113,19 @@ public class Abrir_caja extends javax.swing.JFrame implements Runnable {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(53, 94, 122));
+        jLabel3.setText("PRIMERA APERTURA");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(53, 94, 122));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel6.setText("RECAUDACION: ");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel7.setText("FECHA:");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel8.setText("HORA: ");
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {

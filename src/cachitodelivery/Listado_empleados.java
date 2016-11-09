@@ -10,7 +10,6 @@ import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_listado_empleados;
 import java.awt.BorderLayout;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -22,6 +21,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import modelos.Cadena;
 import modelos.Fecha;
 import modelos.Telefono_UsuarioDAO;
 
@@ -32,20 +32,21 @@ import modelos.Telefono_UsuarioDAO;
 public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
     
     Usuario cuentaOficial = new Usuario();
-    Principal vent = null;
     Fecha fecha = new Fecha();
     Render r = new Render();
     Thread h1;
     
-    public Listado_empleados(Principal vt) throws SQLException {
+    public Listado_empleados(Usuario user) throws SQLException {
         initComponents();
         h1= new Thread(this);
         h1.start();
         Fondo_listado_empleados fondo = new Fondo_listado_empleados(1000,559);
         add(fondo, BorderLayout.CENTER);
-        vent = vt;
-        cuentaOficial= vt.cuentaOficial;
-        JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getApellido()+" "+vent.cuentaOficial.getNombre());
+        cuentaOficial= user;
+        
+        String ape =user.getApellido()+" "+user.getNombre();
+        Cadena usuario = new Cadena();
+        JL_Usuario_admin1.setText("USUARIO: "+usuario.limitar(ape, 40));
         
         
         
@@ -84,10 +85,10 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
         
         jTable1.setTableHeader(null);
         jLabel7.setText("USUARIO NO SELECCIONADO");
-                jLabel8.setText("");
-                jLabel9.setText("");
-                jLabel10.setText("");
-                JL_Foto_empleado.setIcon(null);
+        jLabel8.setText("");
+        jLabel9.setText("");
+        jLabel10.setText("");
+        JL_Foto_empleado.setIcon(null);
         try{
             UsuarioDAO user =new UsuarioDAO();
             Object [][] real = new Object[13][4];
@@ -128,10 +129,11 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
     public void checkListado(boolean b) throws DataAccessException {
         jTable1.setTableHeader(null);
         jLabel7.setText("USUARIO NO SELECCIONADO");
-                jLabel8.setText("");
-                jLabel9.setText("");
-                jLabel10.setText("");
-                JL_Foto_empleado.setIcon(null);
+        jLabel8.setText("");
+        jLabel9.setText("");
+        jLabel10.setText("");
+        JL_Foto_empleado.setIcon(null);
+        
         try{
             UsuarioDAO user =new UsuarioDAO();
             Object [][] real = new Object[13][4];
@@ -216,9 +218,14 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
                 UsuarioDAO users = new UsuarioDAO();
                 Usuario user = null;
                 user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
-                jLabel7.setText("APELLIDOS: "+user.getApellido());
-                jLabel7.setSize(256,25);
-                jLabel8.setText("NOMBRES: "+user.getNombre());
+                
+                String apellido = user.getApellido().trim();
+                String nombre = user.getNombre().trim();
+                        
+                Cadena cad = new Cadena();
+                
+                jLabel7.setText("APELLIDOS: "+cad.limitar(apellido, 21));
+                jLabel8.setText("NOMBRES: "+cad.limitar(nombre, 23));
                 jLabel9.setText("D.N.I.: "+user.getDni());
                 if (user.getCargo()==1)
                     jLabel10.setText("CARGO: Cajero");
@@ -777,15 +784,28 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
 
     
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-       vent.MenuAdminVisible(true, cuentaOficial);
-       this.dispose();
+        try {
+            Principal vent;
+        
+            vent = new Principal();
+        
+        vent.MenuAdminVisible(true, cuentaOficial);
+        this.dispose();
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jBAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarUsuarioActionPerformed
-         
-        vent.AgregarUsVisible(true);
-        this.setVisible(false);
-       
+        try {
+            Principal vent;
+        
+            vent = new Principal();
+            vent.AgregarUsVisible(true);
+            this.setVisible(false);
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
+        }       
     }//GEN-LAST:event_jBAgregarUsuarioActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -841,10 +861,16 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
         
         Modificar_usuario ventana;
         try {
-            ventana = new Modificar_usuario(this,
-                    usuario.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString())));
-
+            Usuario u = usuario.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
+            ventana = new Modificar_usuario(this,u);
+            
             ventana.mostrar(true);
+            
+            if(usuario.isOP(u) && cuentaOficial.getCod()!=u.getCod()){
+                System.out.println("Entre");
+                ventana.deshabilitarCombobox();
+            }
+                
         this.setVisible(false);
         } catch (DataAccessException ex) {
             Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
@@ -861,6 +887,8 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
         try {
             clearBusqueda();
             checkListado(jRadioButton1.isSelected());
+            jBModificarUsuario.setEnabled(false);
+            jBEliminarUsuario.setEnabled(false);
         } catch (DataAccessException ex) {
             Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -882,8 +910,18 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
                         + " será eliminado\n\n¿Confirmar ésta acción?");
 
                 if (JOptionPane.OK_OPTION == confirmado){
-                    u.eliminar(false,Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
-                    JOptionPane.showMessageDialog(rootPane, "El usuario fue eliminado con éxito..","Usuario eliminado",JOptionPane.INFORMATION_MESSAGE);
+                    if(u.isOP(user)){
+                        u.eliminar(false,Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
+                        JOptionPane.showMessageDialog(rootPane, "El usuario fue eliminado con éxito..","Usuario eliminado",JOptionPane.INFORMATION_MESSAGE);
+                        if(user.getCod()==cuentaOficial.getCod()){
+                            Principal p = new Principal();
+                            setVisible(false);
+                            p.setVisible(true);
+                            
+                        }
+                        
+                    }else
+                        JOptionPane.showMessageDialog(rootPane, "No se podrá eliminar este usuario.\n\n Es el usuario princiapl del sistema.","Usuario principal",JOptionPane.ERROR_MESSAGE);
                 }
             }
             iniciarListado();

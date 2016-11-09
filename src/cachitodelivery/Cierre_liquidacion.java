@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import modelos.Cadena;
 import modelos.Caja;
 import modelos.CajaDAO;
 import modelos.Fecha;
@@ -45,7 +46,10 @@ public class Cierre_liquidacion extends javax.swing.JFrame implements Runnable  
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         
         cuentaOficial=user;
-        JL_Usuario_admin1.setText("USUARIO: "+user.getApellido()+" "+user.getNombre());
+        
+        String ape =user.getApellido()+" "+user.getNombre();
+        Cadena usuario = new Cadena();
+        JL_Usuario_admin1.setText("USUARIO: "+usuario.limitar(ape, 28));
         
         
         setCaja();

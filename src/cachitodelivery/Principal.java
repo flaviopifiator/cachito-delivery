@@ -916,7 +916,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         JF_Menu_admin.setVisible(false);
       
         try {        
-            vtListaEmpleados= new Listado_empleados(this);
+            vtListaEmpleados= new Listado_empleados(cuentaOficial);
             vtListaEmpleados.mostrar(true);
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
