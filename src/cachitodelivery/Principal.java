@@ -131,6 +131,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
 
     }
     public void  AgregarUsVisible(Boolean b){
+        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
         JF_Agregar_Usuario.setVisible(b);
 
     }
@@ -926,14 +927,17 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private void jBAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAtrasActionPerformed
         try {
             clearAgregar();
+        
+            JF_Agregar_Usuario.dispose();
+            vtListaEmpleados = new Listado_empleados(cuentaOficial);
+            vtListaEmpleados.clearBusqueda();
+            vtListaEmpleados.iniciarListado();
+            vtListaEmpleados.mostrar(true);
         } catch (DataAccessException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        JF_Agregar_Usuario.dispose();
-        vtListaEmpleados.clearBusqueda();
-        vtListaEmpleados.iniciarListado();
-        vtListaEmpleados.setVisible(true);
-        
     }//GEN-LAST:event_jBAtrasActionPerformed
 
     private void jBRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBRegistrarActionPerformed

@@ -6,6 +6,7 @@
 package cachitodelivery;
 
 
+import modelos.Render;
 import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_listado_empleados;
 import java.awt.BorderLayout;
@@ -799,8 +800,8 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
     private void jBAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarUsuarioActionPerformed
         try {
             Principal vent;
-        
             vent = new Principal();
+            vent.setCuenta(cuentaOficial);
             vent.AgregarUsVisible(true);
             this.setVisible(false);
         } catch (DataAccessException ex) {
@@ -862,14 +863,12 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
         Modificar_usuario ventana;
         try {
             Usuario u = usuario.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
-            ventana = new Modificar_usuario(this,u);
+            ventana = new Modificar_usuario(cuentaOficial,u);
             
             ventana.mostrar(true);
             
-            if(usuario.isOP(u) && cuentaOficial.getCod()!=u.getCod()){
-                System.out.println("Entre");
+            if(usuario.isOP(u) && cuentaOficial.getCod()!=u.getCod())
                 ventana.deshabilitarCombobox();
-            }
                 
         this.setVisible(false);
         } catch (DataAccessException ex) {

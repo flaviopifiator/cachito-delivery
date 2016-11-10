@@ -6,9 +6,11 @@
 package cachitodelivery;
 
 
+import modelos.Render;
 import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_estadisticas;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import javax.swing.ImageIcon;
 import modelos.Usuario;
 import java.sql.SQLException;
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelos.Estadistica;
 import modelos.Fecha;
+import modelos.Header;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -43,6 +46,13 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
         initComponents();
         h1= new Thread(this);
 //        h1.start();
+
+        colorHeader(3);
+        
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(15);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(200);
+
         Fondo_estadisticas fondo = new Fondo_estadisticas(1000,559);
         add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
@@ -62,6 +72,12 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
         setVisible(b);
     }
     
+    public void colorHeader(int j){
+        Header h = new Header(new Color(53,95,123), new Color(255,255,255));
+        for (int i = 0; i < j; i++) {
+            jTable1.getColumnModel().getColumn(i).setHeaderRenderer(h);
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -159,6 +175,11 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
         jButton3.setContentAreaFilled(false);
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Comidas_E_hover.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Meses_E.png"))); // NOI18N
         jButton4.setBorder(null);
@@ -166,6 +187,11 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
         jButton4.setContentAreaFilled(false);
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Meses_E_hover.png"))); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Zonas_E.png"))); // NOI18N
         jButton5.setBorder(null);
@@ -173,6 +199,11 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
         jButton5.setContentAreaFilled(false);
         jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton5.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Zonas_E_hover.png"))); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -185,17 +216,28 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
             .addGap(0, 296, Short.MAX_VALUE)
         );
 
+        jTable1 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "PORC.", "COD.", "APELLIDOS", "NOMBRES"
+                "PORC.", "COD.", "INFORMACION PERTINENTE"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setRowHeight(20);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
@@ -203,7 +245,6 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jDateChooser1.setForeground(new java.awt.Color(53, 95, 123));
@@ -398,6 +439,18 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
             Object[][] cosas;
 
             cosas = est.cadete(min, (jComboBox1.getSelectedIndex()+1)*5, max);
+            if(cosas[0][0].toString().equals("CHINITO")){
+                JOptionPane.showMessageDialog(rootPane, "No se encontraron pedidos realizados\nen ese rango de fecha","Sin pedidos",JOptionPane.ERROR_MESSAGE);
+                jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    new Object[][] {},new String[] {"PORC.","COD.","APELLIDOS", "NOMBRES"}));
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(125);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(125);
+                colorHeader(4);
+                return;
+            }
             
             for(int i=0; i<cosas.length; i++){
                 barra.addValue(Integer.parseInt(cosas[i][2].toString()), "Pedidos no entregados", cosas[i][0].toString());
@@ -413,7 +466,7 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
                     true);
             
             Object[][] tabla = new Object[cosas.length][4];
-            float[] porce = est.porcentaje(cosas);
+            float[] porce = est.porcentaje(cosas, 1);
             
             for(int i=0; i<tabla.length; i++){
                 tabla[i][0]=porce[i];
@@ -435,11 +488,279 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
             panel.setBounds(0, 0, 311, 296);
             jPanel2.add(panel);
             jPanel2.repaint();
+            
+            colorHeader(4);
         
         } catch (ClassNotFoundException | SQLException | DataAccessException | ParseException ex) {
             Logger.getLogger(Estadisticas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            if(jDateChooser1.getCalendar()==null){
+                JOptionPane.showMessageDialog(rootPane, "No se ingresó una fecha de inicio.","Sin parámetro",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if(jDateChooser2.getCalendar()==null){
+                JOptionPane.showMessageDialog(rootPane, "No se ingresó una fecha de fin.","Sin parámetro",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            jPanel2.removeAll();
+            jPanel2.repaint();
+            ChartPanel panel;
+            JFreeChart chart = null;
+
+            DefaultCategoryDataset barra = new DefaultCategoryDataset();
+
+            Estadistica est = new Estadistica();
+
+            String min = jDateChooser1.getCalendar().get(Calendar.DAY_OF_MONTH)+" "
+                         +jDateChooser1.getCalendar().get(Calendar.MONTH)+" "
+                         +jDateChooser1.getCalendar().get(Calendar.YEAR);
+
+            String max = jDateChooser2.getCalendar().get(Calendar.DAY_OF_MONTH)+" "
+                         +jDateChooser2.getCalendar().get(Calendar.MONTH)+" "
+                         +jDateChooser2.getCalendar().get(Calendar.YEAR);
+
+            Object[][] cosas;
+
+            cosas = est.comidas(min, (jComboBox1.getSelectedIndex()+1)*5, max);
+            if(cosas[0][0].toString().equals("CHINITO")){
+                JOptionPane.showMessageDialog(rootPane, "No se encontraron comidas vendidas\nen ese rango de fecha","Sin comidas",JOptionPane.ERROR_MESSAGE);
+                jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    new Object[][] {},new String[] {"PORC.","COD.","DESCRIPCION", "CANTIDAD"}));
+            
+                jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
+                jTable1.getColumnModel().getColumn(1).setPreferredWidth(15);
+                jTable1.getColumnModel().getColumn(2).setPreferredWidth(200);
+                jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
+                colorHeader(4);
+                return;
+            }
+
+            for(int i=0; i<cosas.length; i++)
+                barra.addValue(Integer.parseInt(cosas[i][2].toString()), "Cantidad vendida", cosas[i][0].toString());
+            
+            chart = ChartFactory.createBarChart("COMIDA MAS VENDIDA", "Comidas", 
+                    "Ventas", 
+                    barra, 
+                    PlotOrientation.HORIZONTAL, 
+                    true, 
+                    true, 
+                    true);
+            
+            Object[][] tabla = new Object[cosas.length][4];
+            float[] porce = est.porcentaje(cosas, 2);
+            
+            for(int i=0; i<tabla.length; i++){
+                tabla[i][0]=porce[i];
+                tabla[i][1]=cosas[i][0];
+                tabla[i][2]=cosas[i][1].toString().trim();
+                tabla[i][3]=cosas[i][2];
+            }
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    tabla,new String[] {"PORC.","COD.","DESCRIPCION", "CANTIDAD"}));
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
+            
+            CategoryPlot plot = (CategoryPlot) chart.getPlot();
+            panel = new ChartPanel(chart);
+            panel.setBounds(0, 0, 311, 296);
+            jPanel2.add(panel);
+            jPanel2.repaint();
+            
+            colorHeader(4);
+        
+        } catch (ClassNotFoundException | SQLException | ParseException ex) {
+            Logger.getLogger(Estadisticas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            if(jDateChooser1.getCalendar()==null){
+                JOptionPane.showMessageDialog(rootPane, "No se ingresó una fecha de inicio.","Sin parámetro",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if(jDateChooser2.getCalendar()==null){
+                JOptionPane.showMessageDialog(rootPane, "No se ingresó una fecha de fin.","Sin parámetro",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            jPanel2.removeAll();
+            jPanel2.repaint();
+            ChartPanel panel;
+            JFreeChart chart = null;
+
+            DefaultCategoryDataset barra = new DefaultCategoryDataset();
+
+            Estadistica est = new Estadistica();
+
+            String min = jDateChooser1.getCalendar().get(Calendar.DAY_OF_MONTH)+" "
+                         +jDateChooser1.getCalendar().get(Calendar.MONTH)+" "
+                         +jDateChooser1.getCalendar().get(Calendar.YEAR);
+
+            String max = jDateChooser2.getCalendar().get(Calendar.DAY_OF_MONTH)+" "
+                         +jDateChooser2.getCalendar().get(Calendar.MONTH)+" "
+                         +jDateChooser2.getCalendar().get(Calendar.YEAR);
+
+            Object[][] cosas;
+
+            cosas = est.meses(min, (jComboBox1.getSelectedIndex()+1)*5, max);
+            if(cosas[0][0].toString().equals("CHINITO")){
+                JOptionPane.showMessageDialog(rootPane, "No se encontraron facturas\nen ese rango de fecha","Sin facturas",JOptionPane.ERROR_MESSAGE);
+                jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    new Object[][] {},new String[] {"PORC.","PED.","MES / AÑO", "IMPORTE TOTAL"}));
+            
+                jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
+                jTable1.getColumnModel().getColumn(1).setPreferredWidth(15);
+                jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
+                jTable1.getColumnModel().getColumn(3).setPreferredWidth(100);
+                colorHeader(4);
+                return;
+            }
+            
+            
+            for(int i=0; i<cosas.length; i++)
+                barra.addValue(Float.parseFloat(cosas[i][2].toString()), "Pesos", cosas[i][0].toString());
+
+            chart = ChartFactory.createBarChart("FACTURACION MENSUAL", "Mes / año", 
+                    "Importe total", 
+                    barra, 
+                    PlotOrientation.HORIZONTAL, 
+                    true, 
+                    true, 
+                    true);
+            CategoryPlot plot = (CategoryPlot) chart.getPlot();
+            panel = new ChartPanel(chart);
+            panel.setBounds(0, 0, 311, 296);
+            jPanel2.add(panel);
+            jPanel2.repaint();
+
+            
+            Object[][] tabla = new Object[cosas.length][4];
+            
+            
+            float[] porce= new float[cosas.length];
+            porce = est.porcentajeF(cosas, 2);
+            
+            for(int i=0; i<tabla.length; i++){
+                tabla[i][0]=porce[i];
+                tabla[i][1]=cosas[i][1];
+                tabla[i][2]=cosas[i][0];
+                tabla[i][3]=cosas[i][2];
+            }
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    tabla,new String[] {"PORC.","PED.","MES / AÑO", "IMPORTE TOTAL"}));
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(100);
+            
+            
+            colorHeader(4);
+        
+        } catch (ClassNotFoundException | SQLException | ParseException ex) {
+            Logger.getLogger(Estadisticas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            if(jDateChooser1.getCalendar()==null){
+                JOptionPane.showMessageDialog(rootPane, "No se ingresó una fecha de inicio.","Sin parámetro",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if(jDateChooser2.getCalendar()==null){
+                JOptionPane.showMessageDialog(rootPane, "No se ingresó una fecha de fin.","Sin parámetro",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            jPanel2.removeAll();
+            jPanel2.repaint();
+            ChartPanel panel;
+            JFreeChart chart = null;
+
+            DefaultCategoryDataset barra = new DefaultCategoryDataset();
+
+            Estadistica est = new Estadistica();
+
+            String min = jDateChooser1.getCalendar().get(Calendar.DAY_OF_MONTH)+" "
+                         +jDateChooser1.getCalendar().get(Calendar.MONTH)+" "
+                         +jDateChooser1.getCalendar().get(Calendar.YEAR);
+
+            String max = jDateChooser2.getCalendar().get(Calendar.DAY_OF_MONTH)+" "
+                         +jDateChooser2.getCalendar().get(Calendar.MONTH)+" "
+                         +jDateChooser2.getCalendar().get(Calendar.YEAR);
+
+            Object[][] cosas;
+
+            cosas = est.zonas(min, (jComboBox1.getSelectedIndex()+1)*5, max);
+            if(cosas[0][0].toString().equals("CHINITO")){
+                JOptionPane.showMessageDialog(rootPane, "No se encontraron pedidos realizados\nen ese rango de fecha","Sin pedidos",JOptionPane.ERROR_MESSAGE);
+                jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    new Object[][] {},new String[] {"PORC.","COD.","DESCRIPCION", "PEDIDOS"}));
+            
+                jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
+                jTable1.getColumnModel().getColumn(1).setPreferredWidth(15);
+                jTable1.getColumnModel().getColumn(2).setPreferredWidth(200);
+                jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
+                colorHeader(4);
+                return;
+            }
+
+            for(int i=0; i<cosas.length; i++)
+                barra.addValue(Integer.parseInt(cosas[i][1].toString()), "Cantidad pedidos", cosas[i][0].toString());
+            
+            chart = ChartFactory.createBarChart("PEDIDOS POR ZONAS", "Zona", 
+                    "Pedidos", 
+                    barra, 
+                    PlotOrientation.HORIZONTAL, 
+                    true, 
+                    true, 
+                    true);
+            
+            Object[][] tabla = new Object[cosas.length][4];
+            float[] porce = est.porcentaje(cosas, 1);
+            
+            for(int i=0; i<tabla.length; i++){
+                tabla[i][0]=porce[i];
+                tabla[i][1]=cosas[i][0];
+                tabla[i][2]=cosas[i][2].toString().trim();
+                tabla[i][3]=cosas[i][1];
+            }
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    tabla,new String[] {"PORC.","COD.","DESCRIPCION", "PEDIDOS"}));
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(15);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
+            
+            CategoryPlot plot = (CategoryPlot) chart.getPlot();
+            panel = new ChartPanel(chart);
+            panel.setBounds(0, 0, 311, 296);
+            jPanel2.add(panel);
+            jPanel2.repaint();
+            
+            colorHeader(4);
+        
+        } catch (ClassNotFoundException | SQLException | ParseException ex) {
+            Logger.getLogger(Estadisticas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
     
     /**
      * @param args the command line arguments

@@ -39,6 +39,7 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
     String user;
     Listado_empleados vent = null;
     Usuario cuentaOficial = new Usuario();
+    Usuario cuenta = new Usuario();
     Telefono_UsuarioDAO telefonos = new Telefono_UsuarioDAO();
     Object[][] telefono = new Object[0][2];
     FileInputStream fis;
@@ -46,15 +47,15 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
     Thread h1;
     
     
-    public Modificar_usuario(Listado_empleados vt, Usuario user) throws IOException, SQLException, ClassNotFoundException {
+    public Modificar_usuario(Usuario vt, Usuario user) throws IOException, SQLException, ClassNotFoundException {
         initComponents();
         h1= new Thread(this);
 //        h1.start();
         Fondo_modificar_usuario fondo = new Fondo_modificar_usuario(1000,667);
         this.add(fondo, BorderLayout.CENTER);
-        vent = vt;
+        cuenta = vt;
         cuentaOficial = user;
-        JL_Usuario_admin1.setText("USUARIO: "+vent.cuentaOficial.getApellido()+" "+vent.cuentaOficial.getNombre());
+        JL_Usuario_admin1.setText("USUARIO: "+cuenta.getApellido()+" "+cuenta.getNombre());
         jTextField1.setText(cuentaOficial.getApellido());
         jTextField2.setText(cuentaOficial.getNombre());
         jTextField8.setText(""+cuentaOficial.getDni());
@@ -562,10 +563,15 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       vent.iniciarListado();
-       vent.clearBusqueda();
-       vent.setVisible(true);
-       this.dispose();
+        setVisible(false);
+        
+        try {        
+            
+            Listado_empleados vtListaEmpleados= new Listado_empleados(cuentaOficial);
+            vtListaEmpleados.mostrar(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
