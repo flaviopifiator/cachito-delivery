@@ -105,6 +105,64 @@ public class CadeteDAO {
             return cadete;
         }catch (Exception ex){throw new DataAccessException("Error en CadeteDAO.buscarCadete() "+ex);}
    
-    } 
+    }
+    public Object[][] listadoCadetesCusi() throws DataAccessException{
+        try{
+            Connection con = BaseDeDatos.getInstance();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM cadetes order by cod_cadete asc");
+            int tam=0;
+            while(rs.next())
+                tam++;
+            Object[][] lista = new Object[tam][4];
+            int i=0;
+            rs.close();
+            rs = st.executeQuery("SELECT * FROM cadetes order by cod_cadete asc");
+            while(rs.next())
+            {
+                lista[i][0] = rs.getInt("cod_cadete");
+                lista[i][1] = rs.getString("apellido_cadete");
+                lista[i][2] = rs.getString("nombre_cadete");
+                if(rs.getBoolean("activo")==true){
+                    lista[i][3]="Cadete";
+                }else
+                    lista[i][3]="Eliminado";
+                i++;
+            }
+            rs.close();
+            st.close();
+            return lista;
+            
+        }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
+    }
+    public Object[][] listadoCadeteActivo() throws DataAccessException{
+        try{
+            Connection con = BaseDeDatos.getInstance();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM cadetes where activo=true");
+            int tam=0;
+            while(rs.next())
+                tam++;
+            Object[][] lista = new Object[tam][4];
+            int i=0;
+            rs.close();
+            rs = st.executeQuery("SELECT * FROM cadetes where activo=true");
+            while(rs.next())
+            {
+                lista[i][0] = rs.getInt("cod_cadete");
+                lista[i][1] = rs.getString("apellido_cadete");
+                lista[i][2] = rs.getString("nombre_cadete");
+                    lista[i][3]="Cajero";
+                i++;
+            }
+            rs.close();
+            st.close();
+            return lista;
+            
+            
+            
+        }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
+    }
+    
 }
     

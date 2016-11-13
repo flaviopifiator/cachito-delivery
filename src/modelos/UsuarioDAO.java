@@ -8,7 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class UsuarioDAO {
+    
     Telefono_UsuarioDAO telDAO = new Telefono_UsuarioDAO();
+    
     
     public void agregar (Usuario usuario) throws DataAccessException{
          try{
@@ -178,7 +180,32 @@ public class UsuarioDAO {
             }
             rs.close();
             st.close();
-            return lista;
+            CadeteDAO cadete = new CadeteDAO();
+            Object[][] cad = cadete.listadoCadetesCusi();
+            
+            Object[][] nueva = new Object[cad.length+lista.length][4];
+            
+            int k=0;
+            
+            for (int j = 0; j < cad.length; j++) {
+                nueva[j][0]=cad[j][0];
+                nueva[j][1]=cad[j][1];
+                nueva[j][2]=cad[j][2];
+                nueva[j][3]=cad[j][3];
+                k++;
+            }
+            
+            for (int j = 0; j < lista.length; j++) {
+                nueva[k][0]=lista[j][0];
+                nueva[k][1]=lista[j][1];
+                nueva[k][2]=lista[j][2];
+                nueva[k][3]=lista[j][3];
+                k++;
+            }
+            
+            nueva=burbuja(nueva, 4);
+            
+            return nueva;
             
         }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
     }
@@ -208,7 +235,33 @@ public class UsuarioDAO {
             }
             rs.close();
             st.close();
-            return lista;
+            
+            CadeteDAO cadete = new CadeteDAO();
+            Object[][] cad = cadete.listadoCadeteActivo();
+            
+            Object[][] nueva = new Object[cad.length+lista.length][4];
+            
+            int k=0;
+            
+            for (int j = 0; j < cad.length; j++) {
+                nueva[j][0]=cad[j][0];
+                nueva[j][1]=cad[j][1];
+                nueva[j][2]=cad[j][2];
+                nueva[j][3]=cad[j][3];
+                k++;
+            }
+            
+            for (int j = 0; j < lista.length; j++) {
+                nueva[k][0]=lista[j][0];
+                nueva[k][1]=lista[j][1];
+                nueva[k][2]=lista[j][2];
+                nueva[k][3]=lista[j][3];
+                k++;
+            }
+            
+            nueva=burbuja(nueva, 4);
+            
+            return nueva;
             
             
             
@@ -490,6 +543,19 @@ public class UsuarioDAO {
         else 
             return true;
     }
-    
+    public Object[][] burbuja(Object[][] lista, int cant){
+        int i, j;
+        Object[][] aux = new Object[1][cant];
+        for(i=0;i<lista.length-1;i++)
+            for(j=0;j<lista.length-i-1;j++)
+                if(Integer.parseInt(lista[j+1][0].toString())<Integer.parseInt(lista[j][0].toString())){
+                    for (int k=0; k<cant; k++) {
+                        aux[0][k]=lista[j+1][k];
+                        lista[j+1][k]=lista[j][k];
+                        lista[j][k]=aux[0][k];
+                    }
+                }
+        return lista;
+    }
 }
 
