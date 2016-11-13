@@ -11,7 +11,6 @@ public class UsuarioDAO {
     
     Telefono_UsuarioDAO telDAO = new Telefono_UsuarioDAO();
     
-    
     public void agregar (Usuario usuario) throws DataAccessException{
          try{
             Connection con = BaseDeDatos.getInstance();

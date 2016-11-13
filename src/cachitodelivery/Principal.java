@@ -308,6 +308,11 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         JB_Pedidos.setContentAreaFilled(false);
         JB_Pedidos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         JB_Pedidos.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Pedidos_hover.png"))); // NOI18N
+        JB_Pedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JB_PedidosActionPerformed(evt);
+            }
+        });
 
         JB_Estadisticas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Estadisticas.png"))); // NOI18N
         JB_Estadisticas.setBorder(null);
@@ -1358,6 +1363,13 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JB_EstadisticasActionPerformed
+
+    private void JB_PedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_PedidosActionPerformed
+        JF_Menu_admin.setVisible(false);
+        Listado_pedidos_admin vent = new Listado_pedidos_admin(cuentaOficial);
+        vent.mostrar(true);
+        
+    }//GEN-LAST:event_JB_PedidosActionPerformed
 
     /**
      * @param args the command line arguments

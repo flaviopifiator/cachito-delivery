@@ -120,6 +120,11 @@ public class Menu_cajero extends javax.swing.JFrame implements Runnable{
         JB_Clientes.setContentAreaFilled(false);
         JB_Clientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         JB_Clientes.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Pedidos_M_hover.png"))); // NOI18N
+        JB_Clientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JB_ClientesActionPerformed(evt);
+            }
+        });
 
         JB_Pedidos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Comidas_M.png"))); // NOI18N
         JB_Pedidos.setBorder(null);
@@ -281,6 +286,12 @@ public class Menu_cajero extends javax.swing.JFrame implements Runnable{
           Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_JB_CajaActionPerformed
+
+    private void JB_ClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_ClientesActionPerformed
+        setVisible(false);
+        Listado_pedidos_cajero vent = new Listado_pedidos_cajero(user);
+        vent.mostrar(true);
+    }//GEN-LAST:event_JB_ClientesActionPerformed
 
     /**
      * @param args the command line arguments

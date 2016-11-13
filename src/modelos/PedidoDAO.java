@@ -30,4 +30,5 @@ public class PedidoDAO {
             return a;
         }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
     }
+    
 }
