@@ -5,13 +5,11 @@
  */
 package cachitodelivery;
 
-import Ventana_clases.Fondo_caja_liquidacion;
 import Ventana_clases.Fondo_listado_pedidos_admin;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import modelos.Fecha;
 import modelos.Usuario;
-import modelos.UsuarioDAO;
 
 /**
  *
@@ -309,6 +307,11 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jButton6.setContentAreaFilled(false);
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton6.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Pedido_nuevo_hover.png"))); // NOI18N
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         JL_Fecha_Admin1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Fecha_Admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -562,6 +565,12 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        setVisible(false);
+        Listado_clientes vent = new Listado_clientes();
+        vent.mostrar();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
