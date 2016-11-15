@@ -86,9 +86,9 @@ public class PedidoDAO {
     
     public Object[][] buscarPedidoCod(int cod, String estado) throws DataAccessException{
         try{
+            Connection con = BaseDeDatos.getInstance();
             Object[][] lista = new Object[1][11];
             if(estado.equals("Entregado") || estado.equals("No entregado") || estado.equals("Enviado")){
-                Connection con = BaseDeDatos.getInstance();
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("SELECT pedidos.observacion_pedido, pedidos.cod_detalle_pedido, "
                         + "clientes.cod_cliente, clientes.apellido_cliente, clientes.nombre_cliente, cadetes.cod_cadete, "
@@ -99,20 +99,21 @@ public class PedidoDAO {
                         + "pedidos.estado_pedido>2 AND pedidos.estado_pedido<6 AND pedidos.cod_pedido='"+cod+"'");
                 if(rs.next()){
                             lista[0][0]=rs.getString(1);
-                            lista[0][1]=rs.getInt(2);
+                            lista[0][1]=rs.getInt(2); //Codigo del detalle del pedido
                             lista[0][2]=rs.getInt(3);
-//                            lista[0][3]=rs.
-//                            lista[0][4]
-//                            lista[0][5]
-//                            lista[0][6]
-//                            lista[0][7]
-//                            lista[0][8]
-//                            lista[0][9]
-//                            lista[0][10]
+                            lista[0][3]=rs.getString(4);
+                            lista[0][4]=rs.getString(5);
+                            lista[0][5]=rs.getInt(6);
+                            lista[0][6]=rs.getString(7);
+                            lista[0][7]=rs.getString(8);
+                            lista[0][8]=rs.getInt(9);
+                            lista[0][9]=rs.getString(10);
+                            lista[0][10]=rs.getString(11);
                 }
+                rs.close();
+                st.close();
             }
             else{
-                 Connection con = BaseDeDatos.getInstance();
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("SELECT pedidos.observacion_pedido, pedidos.cod_detalle_pedido, "
                         + "clientes.cod_cliente, clientes.apellido_cliente, clientes.nombre_cliente,"
@@ -121,16 +122,46 @@ public class PedidoDAO {
                         + "pedidos.cod_cliente=clientes.cod_cliente AND "
                         + "pedidos.cod_usuario=usuarios.cod_usuario AND "
                         + "pedidos.estado_pedido<3 AND pedidos.cod_pedido='"+cod+"'");
+                if(rs.next()){   
+                    lista[0][0]=rs.getString(1);
+                    lista[0][1]=rs.getInt(2); //Codigo del detalle del pedido
+                    lista[0][2]=rs.getInt(3);
+                    lista[0][3]=rs.getString(4);
+                    lista[0][4]=rs.getString(5);
+                    lista[0][5]=rs.getInt(6);
+                    lista[0][6]=rs.getString(7);
+                    lista[0][7]=rs.getString(8);
+                }
+                rs.close();
+                st.close(); 
             }
-
-//            if(rs.next()){
-
-//            }   
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT comidas.descripcion_comida,detalle_pedido.cantidad_comida FROM comidas, "
+                    + "detalle_pedido WHERE detalle_pedido.cod_comida=comidas.cod_comida "
+                    + "AND detalle_pedido.cod_detalle_pedido='"+lista[0][1]+"'");
             
-//            rs.close();
-//            st.close();
+            int tam=0;
+            while(rs.next())
+                tam++;
+            Object[][] comidas = new Object[tam][2];
+            
+            rs.close();
+            st.close();
+            
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT comidas.descripcion_comida,detalle_pedido.cantidad_comida FROM comidas, "
+                    + "detalle_pedido WHERE detalle_pedido.cod_comida=comidas.cod_comida "
+                    + "AND detalle_pedido.cod_detalle_pedido='"+lista[0][1]+"'");
+            int i=0;
+            while(rs.next()){
+                comidas[i][0]=rs.getString(1);
+                comidas[i][1]=rs.getInt(2);
+            }
+            
+            lista[0][1]=comidas;
+            
             return lista;
-        }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
+        }catch (Exception ex){throw new DataAccessException("Error en PedidoDAO.buscarPedidoCod() "+ex);}
     }
     
 }

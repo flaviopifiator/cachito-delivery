@@ -1331,8 +1331,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                 user.setActivo(true); 
                 user.setFis(fis);
                 user.setLongitud(longitudBytes);        
-                GestorUsuario gesus = new GestorUsuario();
-                gesus.agregarNuevoUsuario(user);            
+                GestorUsuario gesus = new GestorUsuario();         
                 Telefono_UsuarioDAO tel = new Telefono_UsuarioDAO();
                 UsuarioDAO usuario = new UsuarioDAO();
                 int codigo = usuario.lastUser();
@@ -1343,7 +1342,8 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                     aux[i][2]=telefono[i][1]; 
                 }
                 tel.agregarGabe(aux);
-                JOptionPane.showMessageDialog(null, "El usuario fue agregado con éxito.");
+                gesus.agregarNuevoUsuario(user); 
+
 
                 try {
                     clearAgregar();
@@ -1353,7 +1353,8 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }catch(TelefonoUsuarioInexistenteException ex){JOptionPane.showMessageDialog(null, ex.getMessage());
             }catch(DataAccessException ex){JOptionPane.showMessageDialog(null, "Error al Insertar "+ex);
             }catch(UsuarioExistenteException ex){JOptionPane.showMessageDialog(null, "EL DOCUMENTO de usuario ya fue registrado.");
-            }
+            JOptionPane.showMessageDialog(null, "El usuario fue agregado con éxito.");
+            }         
         }
     }//GEN-LAST:event_jBRegistrarKeyPressed
 

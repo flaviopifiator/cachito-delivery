@@ -334,7 +334,7 @@ public class Listado_clientes extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
-        Pedido_nuevo vent = new Pedido_nuevo();
+        Pedido_nuevo vent = new Pedido_nuevo(cuentaOficial);
         vent.mostrar(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -369,7 +369,7 @@ public class Listado_clientes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Listado_clientes().setVisible(true);
+//                new Listado_clientes().setVisible(true);
             }
         });
     }

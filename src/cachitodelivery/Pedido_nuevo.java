@@ -466,7 +466,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         setVisible(false);
-        Listado_clientes vent = new Listado_clientes();
+        Listado_clientes vent = new Listado_clientes(cuentaOficial);
         vent.mostrar();
     }//GEN-LAST:event_jButton6ActionPerformed
 

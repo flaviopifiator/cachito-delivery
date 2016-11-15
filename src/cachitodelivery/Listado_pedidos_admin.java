@@ -130,19 +130,25 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                 jButton3.setEnabled(false);
                 jButton4.setEnabled(false);
             }else{
-//                PedidoDAO pedidos = new PedidoDAO();
-//                Object[][] = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
-//                        jTable1.getValueAt(jTable1.getSelectedRow(),4).toString());
-//
+                PedidoDAO pedidos = new PedidoDAO();
+                System.out.println(jTable1.getValueAt(jTable1.getSelectedRow(),0));
+                Object[][] lista = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
+                        jTable1.getValueAt(jTable1.getSelectedRow(),0).toString());
+
+                Cadena cad = new Cadena();
+                System.out.println("NOMBRES: "+lista[0][4].toString().trim());
+                jLabel15.setText("CODIGO: "+lista[0][2].toString().trim());
+                jLabel17.setText("APELLIDOS: "+lista[0][3].toString().trim());
+                jLabel18.setText("NOMBRES: "+lista[0][4].toString().trim());
 //                
-//                String apellido = user.getApellido().trim();
-//                String nombre = user.getNombre().trim();
-//                        
-//                Cadena cad = new Cadena();
+//                jLabel15.setText("CODIGO: "+);
+//                jLabel17.setText("APELLIDOS: "+);
+//                jLabel18.setText("NOMBRES: "+);
 //                
-//                jLabel7.setText("APELLIDOS: "+cad.limitar(apellido, 21));
-//                jLabel8.setText("NOMBRES: "+cad.limitar(nombre, 23));
-//                jLabel9.setText("D.N.I.: "+user.getDni());
+//                jLabel15.setText("CODIGO: "+);
+//                jLabel17.setText("APELLIDOS: "+);
+//                jLabel18.setText("NOMBRES: "+);
+//                
 //                if (user.getCargo()==1)
 //                    jLabel10.setText("CARGO: Cajero");
 //                else
@@ -183,9 +189,9 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 //                    jBEliminarUsuario.setEnabled(true);
 //                }
 //                
-//                
+                
             }
-        }catch (Exception ex){
+        }catch (DataAccessException | NumberFormatException ex){
             System.out.println(ex.getMessage());
         }
     }
@@ -700,7 +706,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         setVisible(false);
-        Listado_clientes vent = new Listado_clientes();
+        Listado_clientes vent = new Listado_clientes(cuentaOficial);
         vent.mostrar();
     }//GEN-LAST:event_jButton6ActionPerformed
 
