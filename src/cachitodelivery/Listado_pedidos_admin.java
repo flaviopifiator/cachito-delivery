@@ -5,11 +5,23 @@
  */
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_listado_pedidos_admin;
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import modelos.Cadena;
 import modelos.Fecha;
+import modelos.Pedido;
+import modelos.PedidoDAO;
+import modelos.Render;
 import modelos.Usuario;
+import modelos.UsuarioDAO;
 
 /**
  *
@@ -20,6 +32,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     Thread h1;
     Fecha fecha = new Fecha();
     Usuario cuentaOficial = new Usuario();
+    Render r = new Render();
     
     public Listado_pedidos_admin(Usuario user) {
         initComponents();
@@ -39,54 +52,142 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         setVisible(b);
     }
     
-    public void iniciarListado() {
-//        jBModificarUsuario.setEnabled(false);
-//        jBEliminarUsuario.setEnabled(false);
-//
-//        
-//        jRadioButton1.setSelected(false);
-//        
+    public void iniciarListado() throws DataAccessException {
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
         jTable1.setTableHeader(null);
-//        jLabel7.setText("USUARIO NO SELECCIONADO");
-//        jLabel8.setText("");
-//        jLabel9.setText("");
-//        jLabel10.setText("");
-//        JL_Foto_empleado.setIcon(null);
-//        try{
-//            UsuarioDAO user =new UsuarioDAO();
-//            Object [][] real = new Object[13][4];
-//            
-//            Object [][] n = user.listadoUsuariosActivo();
-//            if (n.length<13){
-//                int i=0;
-//                for (i=0; i<n.length; i++){
-//                    real[i][0]=n[i][0];
-//                    real[i][1]=n[i][1];
-//                    real[i][2]=n[i][2];
-//                    real[i][3]=n[i][3];
-//                    
+        
+        jLabel15.setText("CODIGO: ");
+        jLabel17.setText("APELLIDOS: ");
+        jLabel18.setText("NOMBRES: ");
+        jLabel22.setText("CODIGO: ");
+        jLabel21.setText("APELLIDOS: ");
+        jLabel20.setText("NOMBRES: ");
+        jLabel25.setText("CODIGO: ");
+        jLabel24.setText("APELLIDOS: ");
+        jLabel23.setText("NOMBRES: ");
+        
+        try{
+            PedidoDAO pedido =new PedidoDAO();
+            Object [][] real = new Object[13][4];
+            
+            Object [][] n = pedido.listadoPedidosActivos();
+            if (n.length<13){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<13; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jTable1.setDefaultRenderer(Object.class, r);
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void seleccionarTabla(){
+        try{
+            if (jTable1.getSelectedRow()==-1){
+                Object[][] detalle =null;
+                jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        detalle, new String[] {"",""}));
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+                return; 
+            }
+            if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
+                Object[][] detalle =null;
+                jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        detalle, new String[] {"",""}));
+                jLabel15.setText("CODIGO: ");
+                jLabel17.setText("APELLIDOS: ");
+                jLabel18.setText("NOMBRES: ");
+                jLabel22.setText("CODIGO: ");
+                jLabel21.setText("APELLIDOS: ");
+                jLabel20.setText("NOMBRES: ");
+                jLabel25.setText("CODIGO: ");
+                jLabel24.setText("APELLIDOS: ");
+                jLabel23.setText("NOMBRES: ");
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+            }else{
+//                PedidoDAO pedidos = new PedidoDAO();
+//                Object[][] = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
+//                        jTable1.getValueAt(jTable1.getSelectedRow(),4).toString());
+//
+//                
+//                String apellido = user.getApellido().trim();
+//                String nombre = user.getNombre().trim();
+//                        
+//                Cadena cad = new Cadena();
+//                
+//                jLabel7.setText("APELLIDOS: "+cad.limitar(apellido, 21));
+//                jLabel8.setText("NOMBRES: "+cad.limitar(nombre, 23));
+//                jLabel9.setText("D.N.I.: "+user.getDni());
+//                if (user.getCargo()==1)
+//                    jLabel10.setText("CARGO: Cajero");
+//                else
+//                    jLabel10.setText("CARGO: Aministrador");
+//                
+//                if(user.getCodFoto()==null)
+//                    JL_Foto_empleado.setIcon(null);
+//                else{
+//                    InputStream binario;
+//                    ImageIcon foto;
+//                
+//                    binario=user.getCodFoto();
+//
+//
+//                    BufferedImage bi = ImageIO.read(binario);
+//                    foto = new ImageIcon(bi);
+//
+//
+//                    Image img = foto.getImage();
+//                    Image newimg = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+//
+//                    ImageIcon newicon = new ImageIcon(newimg);
+//
+//
+//                    JL_Foto_empleado.setIcon(newicon);
 //                }
-//                for (i=n.length; i<13; i++){
-//                    real[i][0]=null;
-//                    real[i][1]=null;
-//                    real[i][2]=null;
-//                    real[i][3]=null;
-//                }      
-//            }else
-//                real=n;
-//            
-//            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-//                    real,new String[] {"","","",""}));
-//            
-//            jTable1.setDefaultRenderer(Object.class, r);
-//            
-//            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-//            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
-//            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
-//            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-//        }catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }
+//                iniciarTel();
+//                
+//                if(jTable1.getValueAt(jTable1.getSelectedRow(),3)=="Eliminado"){
+//                    jBModificarUsuario.setEnabled(false);
+//                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/reac.png")));
+//                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/reac_hover.png")));
+//                    jBEliminarUsuario.setEnabled(true);
+//                }else{
+//                    jBModificarUsuario.setEnabled(true);
+//                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar.png")));
+//                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar_hover.png")));
+//                    jBEliminarUsuario.setEnabled(true);
+//                }
+//                
+//                
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
     /**
@@ -98,6 +199,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -184,8 +286,22 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable1MousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
-        iniciarListado();
+        try
+        {
+            iniciarListado();
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -194,10 +310,18 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jButton1.setContentAreaFilled(false);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        buttonGroup1.add(jRadioButton1);
         jRadioButton1.setBorder(null);
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
 
+        buttonGroup1.add(jRadioButton2);
         jRadioButton2.setBorder(null);
 
+        buttonGroup1.add(jRadioButton3);
         jRadioButton3.setBorder(null);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Buscar.png"))); // NOI18N
@@ -370,7 +494,8 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                                         .addGap(18, 18, 18)
                                         .addComponent(jButton3)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jButton4))
+                                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(55, 55, 55))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -404,7 +529,6 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
@@ -431,7 +555,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                                 .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton7)))
-                        .addGap(0, 94, Short.MAX_VALUE)))
+                        .addGap(94, 94, 94)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 1087, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -562,8 +686,16 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-
+     try {
+            Principal vent;
+        
+            vent = new Principal();
+        
+        vent.MenuAdminVisible(true, cuentaOficial);
         this.dispose();
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -571,6 +703,18 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         Listado_clientes vent = new Listado_clientes();
         vent.mostrar();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        seleccionarTabla();
+    }//GEN-LAST:event_jTable1MousePressed
 
     /**
      * @param args the command line arguments
@@ -612,6 +756,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     private javax.swing.JLabel JL_Fecha_Admin1;
     private javax.swing.JLabel JL_Hora_Admin1;
     private javax.swing.JLabel JL_Usuario_admin1;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

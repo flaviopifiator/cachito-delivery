@@ -838,6 +838,9 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 JTF_IdUserKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                JTF_IdUserKeyTyped(evt);
+            }
         });
 
         JL_Fecha.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -972,8 +975,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             user.setActivo(true); 
             user.setFis(fis);
             user.setLongitud(longitudBytes);        
-            GestorUsuario gesus = new GestorUsuario();
-            gesus.agregarNuevoUsuario(user);            
+            GestorUsuario gesus = new GestorUsuario();         
             Telefono_UsuarioDAO tel = new Telefono_UsuarioDAO();
             UsuarioDAO usuario = new UsuarioDAO();
             int codigo = usuario.lastUser();
@@ -984,7 +986,8 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                 aux[i][2]=telefono[i][1]; 
             }
             tel.agregarGabe(aux);
-            JOptionPane.showMessageDialog(null, "El usuario fue agregado con éxito.");
+            gesus.agregarNuevoUsuario(user); 
+            
         
             try {
                 clearAgregar();
@@ -994,6 +997,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         }catch(TelefonoUsuarioInexistenteException ex){JOptionPane.showMessageDialog(null, ex.getMessage());
         }catch(DataAccessException ex){JOptionPane.showMessageDialog(null, "Error al Insertar "+ex);
         }catch(UsuarioExistenteException ex){JOptionPane.showMessageDialog(null, "EL DOCUMENTO de usuario ya fue registrado.");
+        JOptionPane.showMessageDialog(null, "El usuario fue agregado con éxito.");
         }         
     }//GEN-LAST:event_jBRegistrarActionPerformed
 
@@ -1370,6 +1374,11 @@ public class Principal extends javax.swing.JFrame implements Runnable{
         vent.mostrar(true);
         
     }//GEN-LAST:event_JB_PedidosActionPerformed
+
+    private void JTF_IdUserKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_JTF_IdUserKeyTyped
+        if((evt.getKeyChar()>'9' || evt.getKeyChar()<'0') && (evt.getKeyChar() != evt.VK_BACK_SPACE))
+            evt.consume();
+    }//GEN-LAST:event_JTF_IdUserKeyTyped
 
     /**
      * @param args the command line arguments
