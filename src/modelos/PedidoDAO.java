@@ -8,6 +8,7 @@ package modelos;
 import Excepciones.DataAccessException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
@@ -88,6 +89,7 @@ public class PedidoDAO {
         try{
             Connection con = BaseDeDatos.getInstance();
             Object[][] lista = new Object[1][11];
+            estado=estado.trim();
             if(estado.equals("Entregado") || estado.equals("No entregado") || estado.equals("Enviado")){
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery("SELECT pedidos.observacion_pedido, pedidos.cod_detalle_pedido, "
@@ -128,40 +130,49 @@ public class PedidoDAO {
                     lista[0][2]=rs.getInt(3);
                     lista[0][3]=rs.getString(4);
                     lista[0][4]=rs.getString(5);
-                    lista[0][5]=rs.getInt(6);
-                    lista[0][6]=rs.getString(7);
-                    lista[0][7]=rs.getString(8);
+                    lista[0][5]="";
+                    lista[0][6]="";
+                    lista[0][7]="";
+                    lista[0][8]=rs.getInt(9);
+                    lista[0][9]=rs.getString(10);
+                    lista[0][10]=rs.getString(11);
                 }
                 rs.close();
                 st.close(); 
             }
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT comidas.descripcion_comida,detalle_pedido.cantidad_comida FROM comidas, "
-                    + "detalle_pedido WHERE detalle_pedido.cod_comida=comidas.cod_comida "
-                    + "AND detalle_pedido.cod_detalle_pedido='"+lista[0][1]+"'");
-            
-            int tam=0;
-            while(rs.next())
-                tam++;
-            Object[][] comidas = new Object[tam][2];
-            
-            rs.close();
-            st.close();
-            
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT comidas.descripcion_comida,detalle_pedido.cantidad_comida FROM comidas, "
-                    + "detalle_pedido WHERE detalle_pedido.cod_comida=comidas.cod_comida "
-                    + "AND detalle_pedido.cod_detalle_pedido='"+lista[0][1]+"'");
-            int i=0;
-            while(rs.next()){
-                comidas[i][0]=rs.getString(1);
-                comidas[i][1]=rs.getInt(2);
-            }
-            
-            lista[0][1]=comidas;
-            
+
             return lista;
         }catch (Exception ex){throw new DataAccessException("Error en PedidoDAO.buscarPedidoCod() "+ex);}
+    }
+    
+    public Object[][] buscarComidasPedidoCod(int cod) throws ClassNotFoundException, SQLException, DataAccessException{
+         try{
+            Connection con = BaseDeDatos.getInstance();
+            Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("SELECT comidas.descripcion_comida,detalle_pedido.cantidad_comida FROM comidas, "
+                        + "detalle_pedido WHERE detalle_pedido.cod_comida=comidas.cod_comida "
+                        + "AND detalle_pedido.cod_detalle_pedido='"+cod+"'");
+                int tam=0;
+                while(rs.next())
+                    tam++;
+                Object[][] comidas = new Object[tam][2];
+
+                rs.close();
+                st.close();
+
+                st = con.createStatement();
+                rs = st.executeQuery("SELECT comidas.descripcion_comida,detalle_pedido.cantidad_comida FROM comidas, "
+                        + "detalle_pedido WHERE detalle_pedido.cod_comida=comidas.cod_comida "
+                        + "AND detalle_pedido.cod_detalle_pedido='"+cod+"'");
+                int i=0;
+                while(rs.next()){
+                    comidas[i][0]=rs.getString(1);
+                    comidas[i][1]=rs.getInt(2);
+                    i++;
+                }
+
+                return comidas;
+        }catch (Exception ex){throw new DataAccessException("Error en PedidoDAO.buscarComidasPedidoCod() "+ex);}
     }
     
 }

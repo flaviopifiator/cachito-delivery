@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -130,69 +131,39 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                 jButton3.setEnabled(false);
                 jButton4.setEnabled(false);
             }else{
+                jButton3.setEnabled(true);
+                jButton4.setEnabled(true);
                 PedidoDAO pedidos = new PedidoDAO();
-                System.out.println(jTable1.getValueAt(jTable1.getSelectedRow(),0));
                 Object[][] lista = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
-                        jTable1.getValueAt(jTable1.getSelectedRow(),0).toString());
+                        jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
 
                 Cadena cad = new Cadena();
-                System.out.println("NOMBRES: "+lista[0][4].toString().trim());
                 jLabel15.setText("CODIGO: "+lista[0][2].toString().trim());
-                jLabel17.setText("APELLIDOS: "+lista[0][3].toString().trim());
-                jLabel18.setText("NOMBRES: "+lista[0][4].toString().trim());
-//                
-//                jLabel15.setText("CODIGO: "+);
-//                jLabel17.setText("APELLIDOS: "+);
-//                jLabel18.setText("NOMBRES: "+);
-//                
-//                jLabel15.setText("CODIGO: "+);
-//                jLabel17.setText("APELLIDOS: "+);
-//                jLabel18.setText("NOMBRES: "+);
-//                
-//                if (user.getCargo()==1)
-//                    jLabel10.setText("CARGO: Cajero");
-//                else
-//                    jLabel10.setText("CARGO: Aministrador");
-//                
-//                if(user.getCodFoto()==null)
-//                    JL_Foto_empleado.setIcon(null);
-//                else{
-//                    InputStream binario;
-//                    ImageIcon foto;
-//                
-//                    binario=user.getCodFoto();
-//
-//
-//                    BufferedImage bi = ImageIO.read(binario);
-//                    foto = new ImageIcon(bi);
-//
-//
-//                    Image img = foto.getImage();
-//                    Image newimg = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
-//
-//                    ImageIcon newicon = new ImageIcon(newimg);
-//
-//
-//                    JL_Foto_empleado.setIcon(newicon);
-//                }
-//                iniciarTel();
-//                
-//                if(jTable1.getValueAt(jTable1.getSelectedRow(),3)=="Eliminado"){
-//                    jBModificarUsuario.setEnabled(false);
-//                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/reac.png")));
-//                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/reac_hover.png")));
-//                    jBEliminarUsuario.setEnabled(true);
-//                }else{
-//                    jBModificarUsuario.setEnabled(true);
-//                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar.png")));
-//                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar_hover.png")));
-//                    jBEliminarUsuario.setEnabled(true);
-//                }
-//                
+                jLabel17.setText("APELLIDOS: "+cad.limitar(lista[0][3].toString(), 14));
+                jLabel18.setText("NOMBRES: "+cad.limitar(lista[0][4].toString(), 15));
                 
+                jLabel22.setText("CODIGO: "+lista[0][5].toString().trim());
+                jLabel21.setText("APELLIDOS: "+cad.limitar(lista[0][6].toString(), 14));
+                jLabel20.setText("NOMBRES: "+cad.limitar(lista[0][7].toString(), 15));   
+                
+                jLabel25.setText("CODIGO: "+lista[0][8].toString().trim());
+                jLabel24.setText("APELLIDOS: "+cad.limitar(lista[0][9].toString(), 14));
+                jLabel23.setText("NOMBRES: "+cad.limitar(lista[0][10].toString(), 15)); 
+                
+                int cod=Integer.parseInt(lista[0][1].toString());
+                Object[][] comidas=pedidos.buscarComidasPedidoCod(cod);
+                
+                jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                    comidas,new String[] {"",""}));
+                 jTable2.getColumnModel().getColumn(0).setPreferredWidth(250);
+                 jTable2.getColumnModel().getColumn(1).setPreferredWidth(30);
             }
         }catch (DataAccessException | NumberFormatException ex){
             System.out.println(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -353,16 +324,16 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
             },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+            new String [] {"",""
             }
         ));
         jTable2.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        jTable2.getTableHeader().setResizingAllowed(false);
+        jTable2.getTableHeader().setReorderingAllowed(false);
+        jTable2.setTableHeader(null);
+        jTable2.getColumnModel().getColumn(0).setPreferredWidth(250);
+        jTable2.getColumnModel().getColumn(1).setPreferredWidth(30);
         jTable2.setPreferredSize(new java.awt.Dimension(310, 64));
         jScrollPane2.setViewportView(jTable2);
 
