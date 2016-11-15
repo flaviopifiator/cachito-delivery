@@ -67,6 +67,10 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jLabel25.setText("CODIGO: ");
         jLabel24.setText("APELLIDOS: ");
         jLabel23.setText("NOMBRES: ");
+        jLabel9.setText("SUBTOTAL: ");
+        jLabel10.setText("TOTAL: ");
+        jLabel11.setText("FECHA: ");
+        jLabel12.setText("HORA: ");
         
         try{
             PedidoDAO pedido =new PedidoDAO();
@@ -128,6 +132,10 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                 jLabel25.setText("CODIGO: ");
                 jLabel24.setText("APELLIDOS: ");
                 jLabel23.setText("NOMBRES: ");
+                jLabel9.setText("SUBTOTAL: ");
+                jLabel10.setText("TOTAL: ");
+                jLabel11.setText("FECHA: ");
+                jLabel12.setText("HORA: ");
                 jButton3.setEnabled(false);
                 jButton4.setEnabled(false);
             }else{
@@ -139,19 +147,31 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
                 Cadena cad = new Cadena();
                 jLabel15.setText("CODIGO: "+lista[0][2].toString().trim());
-                jLabel17.setText("APELLIDOS: "+cad.limitar(lista[0][3].toString(), 14));
-                jLabel18.setText("NOMBRES: "+cad.limitar(lista[0][4].toString(), 15));
+                jLabel17.setText("APELLIDOS: "+cad.limitar(lista[0][3].toString().trim(), 14));
+                jLabel18.setText("NOMBRES: "+cad.limitar(lista[0][4].toString().trim(), 15));
                 
                 jLabel22.setText("CODIGO: "+lista[0][5].toString().trim());
-                jLabel21.setText("APELLIDOS: "+cad.limitar(lista[0][6].toString(), 14));
-                jLabel20.setText("NOMBRES: "+cad.limitar(lista[0][7].toString(), 15));   
+                jLabel21.setText("APELLIDOS: "+cad.limitar(lista[0][6].toString().trim(), 14));
+                jLabel20.setText("NOMBRES: "+cad.limitar(lista[0][7].toString().trim(), 15));   
                 
                 jLabel25.setText("CODIGO: "+lista[0][8].toString().trim());
-                jLabel24.setText("APELLIDOS: "+cad.limitar(lista[0][9].toString(), 14));
-                jLabel23.setText("NOMBRES: "+cad.limitar(lista[0][10].toString(), 15)); 
+                jLabel24.setText("APELLIDOS: "+cad.limitar(lista[0][9].toString().trim(), 14));
+                jLabel23.setText("NOMBRES: "+cad.limitar(lista[0][10].toString().trim(), 15)); 
+                
+                
+                jLabel11.setText("FECHA: "+lista[0][11]);
+                jLabel12.setText("HORA: "+lista[0][12]);
                 
                 int cod=Integer.parseInt(lista[0][1].toString());
                 Object[][] comidas=pedidos.buscarComidasPedidoCod(cod);
+                
+                float total=0;
+                for(int i=0; i<comidas.length;i++){
+                    total=total+Float.valueOf(comidas[i][2].toString());
+                }
+                
+                jLabel9.setText("SUBTOTAL: "+total);
+                jLabel10.setText("TOTAL: "+(total+Float.valueOf(lista[0][13].toString())));
                 
                 jTable2.setModel(new javax.swing.table.DefaultTableModel(
                     comidas,new String[] {"",""}));
