@@ -5,13 +5,20 @@
  */
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_caja_liquidacion;
 import Ventana_clases.Fondo_listado_pedidos_admin;
 import Ventana_clases.Fondo_listado_pedidos_cajero;
 import java.awt.BorderLayout;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import modelos.Cadena;
 import modelos.Cliente;
 import modelos.Fecha;
+import modelos.PedidoDAO;
+import modelos.Render;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
 
@@ -24,6 +31,7 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
     Thread h1;
     Fecha fecha = new Fecha();
     Usuario cuentaOficial = new Usuario();
+    Render r = new Render();
     
     public Listado_pedidos_cajero(Usuario user) {
         initComponents();
@@ -32,6 +40,7 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
         Fondo_listado_pedidos_cajero fondo = new Fondo_listado_pedidos_cajero(1028,600);
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
+        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido().trim()+" "+cuentaOficial.getNombre().trim());
     }
     
     public void mostrar(boolean b){
@@ -44,53 +53,115 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
     }
     
     public void iniciarListado() {
-//        jBModificarUsuario.setEnabled(false);
-//        jBEliminarUsuario.setEnabled(false);
-//
-//        
-//        jRadioButton1.setSelected(false);
-//        
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
         jTable1.setTableHeader(null);
-//        jLabel7.setText("USUARIO NO SELECCIONADO");
-//        jLabel8.setText("");
-//        jLabel9.setText("");
-//        jLabel10.setText("");
-//        JL_Foto_empleado.setIcon(null);
-//        try{
-//            UsuarioDAO user =new UsuarioDAO();
-//            Object [][] real = new Object[13][4];
-//            
-//            Object [][] n = user.listadoUsuariosActivo();
-//            if (n.length<13){
-//                int i=0;
-//                for (i=0; i<n.length; i++){
-//                    real[i][0]=n[i][0];
-//                    real[i][1]=n[i][1];
-//                    real[i][2]=n[i][2];
-//                    real[i][3]=n[i][3];
-//                    
-//                }
-//                for (i=n.length; i<13; i++){
-//                    real[i][0]=null;
-//                    real[i][1]=null;
-//                    real[i][2]=null;
-//                    real[i][3]=null;
-//                }      
-//            }else
-//                real=n;
-//            
-//            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-//                    real,new String[] {"","","",""}));
-//            
-//            jTable1.setDefaultRenderer(Object.class, r);
-//            
-//            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-//            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
-//            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
-//            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-//        }catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }
+        
+        jLabel14.setText("PEDIDO NO SELECCIONADO ");
+        jLabel15.setText("");
+        jLabel9.setText("");
+        jLabel10.setText("");
+        jLabel12.setText("");
+        jLabel11.setText("");
+        
+        try{
+            PedidoDAO pedido =new PedidoDAO();
+            Object [][] real = new Object[15][4];
+            
+            Object [][] n = pedido.listadoPedidosActivos();
+            if (n.length<15){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<15; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jTable1.setDefaultRenderer(Object.class, r);
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void seleccionarTabla(){
+        try{
+            if (jTable1.getSelectedRow()==-1){
+                Object[][] detalle =null;
+                jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        detalle, new String[] {"",""}));
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+                return; 
+            }
+            if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
+                Object[][] detalle =null;
+                jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        detalle, new String[] {"",""}));
+                jLabel14.setText("PEDIDO NO SELECCIONADO ");
+                jLabel15.setText("");
+                jLabel9.setText("");
+                jLabel10.setText("");
+                jLabel12.setText("");
+                jLabel11.setText("");
+                jTextArea2.setText("");
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+            }else{
+                jButton3.setEnabled(true);
+                jButton4.setEnabled(true);
+                PedidoDAO pedidos = new PedidoDAO();
+                Object[][] lista = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
+                        jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
+
+                Cadena cad = new Cadena();
+                jLabel14.setText("APELLIDOS Y NOMBRES: "+cad.limitar(lista[0][3].toString().trim(), 30));
+                jLabel15.setText("DOMICILIO: "+cad.limitar(lista[0][4].toString().trim(), 40));
+                
+                int cod=Integer.parseInt(lista[0][1].toString());
+                Object[][] comidas=pedidos.buscarComidasPedidoCod(cod);
+                
+                float total=0;
+                int demora=0;
+                for(int i=0; i<comidas.length;i++){
+                    total=total+(Float.valueOf(comidas[i][2].toString())*Integer.parseInt(comidas[i][1].toString()));
+                    demora=demora+(Integer.parseInt(comidas[i][3].toString().trim()));
+                }
+                
+                jLabel9.setText("SUBTOTAL: "+total);
+                jLabel10.setText("TOTAL: "+(total+Float.valueOf(lista[0][13].toString())));
+                jLabel11.setText("DEMORA: "+demora);
+                jTextArea2.setText(lista[0][0].toString().trim());
+                
+                jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                    comidas,new String[] {"",""}));
+                 jTable2.getColumnModel().getColumn(0).setPreferredWidth(250);
+                 jTable2.getColumnModel().getColumn(1).setPreferredWidth(30);
+            }
+        }catch (DataAccessException | NumberFormatException ex){
+            System.out.println(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -139,7 +210,7 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
         jLabel4 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         JL_Usuario_admin1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -151,6 +222,10 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        jTable1 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -172,6 +247,16 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable1MousePressed(evt);
+            }
+        });
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTable1KeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         iniciarListado();
 
@@ -208,36 +293,38 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Estado_hover.png"))); // NOI18N
 
+        jTable2 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "", ""
             }
         ));
         jTable2.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        jTable2.getTableHeader().setResizingAllowed(false);
+        jTable2.getTableHeader().setReorderingAllowed(false);
+        jTable2.setTableHeader(null);
+        jTable2.getColumnModel().getColumn(0).setPreferredWidth(250);
+        jTable2.getColumnModel().getColumn(1).setPreferredWidth(30);
         jTable2.setPreferredSize(new java.awt.Dimension(310, 64));
         jScrollPane2.setViewportView(jTable2);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel9.setText("SUBTOTAL: 1000,41");
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel10.setText("TOTAL: 1000,41");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel11.setText("DEMORA: 15 min");
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel12.setText("HORA: 12:23");
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Ticket.png"))); // NOI18N
         jButton5.setBorder(null);
@@ -278,17 +365,17 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
             }
         });
 
+        jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane4.setViewportView(jTextArea2);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel14.setText("APELLIDO Y NOMBRE:");
+        jLabel14.setText("USUARIO NO SELECCIONADO");
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel15.setText("DOMICILIO:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -465,8 +552,15 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-
+     try {
+            Menu_cajero vent;
+        
+            vent = new Menu_cajero(cuentaOficial);
+            vent.setVisible(true);
         this.dispose();
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_empleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -480,6 +574,14 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
         Pedido_modificar vent = new Pedido_modificar(cuentaOficial, new Cliente());
         vent.mostrar(true);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        seleccionarTabla();
+    }//GEN-LAST:event_jTable1MousePressed
+
+    private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
+        seleccionarTabla();
+    }//GEN-LAST:event_jTable1KeyReleased
 
     /**
      * @param args the command line arguments

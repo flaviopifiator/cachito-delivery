@@ -43,6 +43,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         Fondo_listado_pedidos_admin fondo = new Fondo_listado_pedidos_admin(1248,600);
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
+        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido().trim()+" "+cuentaOficial.getNombre().trim());
     }
     
     public void mostrar(boolean b){
@@ -58,27 +59,28 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jButton3.setEnabled(false);
         jButton4.setEnabled(false);
         jTable1.setTableHeader(null);
+        jRadioButton1.setSelected(true);
         
-        jLabel15.setText("CODIGO: ");
-        jLabel17.setText("APELLIDOS: ");
-        jLabel18.setText("NOMBRES: ");
-        jLabel22.setText("CODIGO: ");
-        jLabel21.setText("APELLIDOS: ");
-        jLabel20.setText("NOMBRES: ");
-        jLabel25.setText("CODIGO: ");
-        jLabel24.setText("APELLIDOS: ");
-        jLabel23.setText("NOMBRES: ");
-        jLabel9.setText("SUBTOTAL: ");
-        jLabel10.setText("TOTAL: ");
-        jLabel11.setText("FECHA: ");
-        jLabel12.setText("HORA: ");
+        jLabel15.setText("PEDIDO NO SELECCIONADO");
+        jLabel17.setText("");
+        jLabel18.setText("");
+        jLabel22.setText("");
+        jLabel21.setText("");
+        jLabel20.setText("");
+        jLabel25.setText("");
+        jLabel24.setText("");
+        jLabel23.setText("");
+        jLabel9.setText("");
+        jLabel10.setText("");
+        jLabel11.setText("");
+        jLabel12.setText("");
         
         try{
             PedidoDAO pedido =new PedidoDAO();
-            Object [][] real = new Object[13][4];
+            Object [][] real = new Object[15][4];
             
             Object [][] n = pedido.listadoPedidosActivos();
-            if (n.length<13){
+            if (n.length<15){
                 int i=0;
                 for (i=0; i<n.length; i++){
                     real[i][0]=n[i][0];
@@ -87,7 +89,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                     real[i][3]=n[i][3];
                     
                 }
-                for (i=n.length; i<13; i++){
+                for (i=n.length; i<15; i++){
                     real[i][0]=null;
                     real[i][1]=null;
                     real[i][2]=null;
@@ -124,24 +126,33 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                 Object[][] detalle =null;
                 jTable2.setModel(new javax.swing.table.DefaultTableModel(
                         detalle, new String[] {"",""}));
-                jLabel15.setText("CODIGO: ");
-                jLabel17.setText("APELLIDOS: ");
-                jLabel18.setText("NOMBRES: ");
-                jLabel22.setText("CODIGO: ");
-                jLabel21.setText("APELLIDOS: ");
-                jLabel20.setText("NOMBRES: ");
-                jLabel25.setText("CODIGO: ");
-                jLabel24.setText("APELLIDOS: ");
-                jLabel23.setText("NOMBRES: ");
-                jLabel9.setText("SUBTOTAL: ");
-                jLabel10.setText("TOTAL: ");
-                jLabel11.setText("FECHA: ");
-                jLabel12.setText("HORA: ");
+                jLabel15.setText("PEDIDO NO SELECCIONADO");
+                jLabel17.setText("");
+                jLabel18.setText("");
+                jLabel22.setText("");
+                jLabel21.setText("");
+                jLabel20.setText("");
+                jLabel25.setText("");
+                jLabel24.setText("");
+                jLabel23.setText("");
+                jLabel9.setText("");
+                jLabel10.setText("");
+                jLabel11.setText("");
+                jLabel12.setText("");
+                jTextArea2.setText("");
                 jButton3.setEnabled(false);
                 jButton4.setEnabled(false);
             }else{
-                jButton3.setEnabled(true);
-                jButton4.setEnabled(true);
+                String estado=jTable1.getValueAt(jTable1.getSelectedRow(),3).toString();
+                if(estado.equals("Entregado") || estado.equals("No entregado") || estado.equals("Cancelado")){
+                    jButton3.setEnabled(false);
+                    jButton4.setEnabled(false);
+                }
+                else{
+                    jButton3.setEnabled(true);
+                    jButton4.setEnabled(true);
+                }
+                
                 PedidoDAO pedidos = new PedidoDAO();
                 Object[][] lista = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
                         jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
@@ -168,11 +179,13 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                 
                 float total=0;
                 for(int i=0; i<comidas.length;i++){
-                    total=total+Float.valueOf(comidas[i][2].toString());
+                    total=total+(Float.valueOf(comidas[i][2].toString())*Integer.parseInt(comidas[i][1].toString()));
                 }
                 
                 jLabel9.setText("SUBTOTAL: "+total);
                 jLabel10.setText("TOTAL: "+(total+Float.valueOf(lista[0][13].toString())));
+                
+                jTextArea2.setText(lista[0][0].toString().trim());
                 
                 jTable2.setModel(new javax.swing.table.DefaultTableModel(
                     comidas,new String[] {"",""}));
@@ -185,6 +198,118 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
             Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void listadoCancelados(){
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
+        jTable1.setTableHeader(null);
+        
+        jLabel15.setText("CODIGO: ");
+        jLabel17.setText("APELLIDOS: ");
+        jLabel18.setText("NOMBRES: ");
+        jLabel22.setText("CODIGO: ");
+        jLabel21.setText("APELLIDOS: ");
+        jLabel20.setText("NOMBRES: ");
+        jLabel25.setText("CODIGO: ");
+        jLabel24.setText("APELLIDOS: ");
+        jLabel23.setText("NOMBRES: ");
+        jLabel9.setText("SUBTOTAL: ");
+        jLabel10.setText("TOTAL: ");
+        jLabel11.setText("FECHA: ");
+        jLabel12.setText("HORA: ");
+        
+        try{
+            PedidoDAO pedido =new PedidoDAO();
+            Object [][] real = new Object[15][4];
+            
+            Object [][] n = pedido.listadoPedidosActivos();
+            if (n.length<15){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<15; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jTable1.setDefaultRenderer(Object.class, r);
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
+        }catch (Exception ex){
+                System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void listadoHistoricos(){
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
+        jTable1.setTableHeader(null);
+        
+        jLabel15.setText("CODIGO: ");
+        jLabel17.setText("APELLIDOS: ");
+        jLabel18.setText("NOMBRES: ");
+        jLabel22.setText("CODIGO: ");
+        jLabel21.setText("APELLIDOS: ");
+        jLabel20.setText("NOMBRES: ");
+        jLabel25.setText("CODIGO: ");
+        jLabel24.setText("APELLIDOS: ");
+        jLabel23.setText("NOMBRES: ");
+        jLabel9.setText("SUBTOTAL: ");
+        jLabel10.setText("TOTAL: ");
+        jLabel11.setText("FECHA: ");
+        jLabel12.setText("HORA: ");
+        
+        try{
+            PedidoDAO pedido =new PedidoDAO();
+            Object [][] real = new Object[15][4];
+            
+            Object [][] n = pedido.listadoPedidosActivos();
+            if (n.length<15){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<15; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jTable1.setDefaultRenderer(Object.class, r);
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
+        }catch (Exception ex){
+                System.out.println(ex.getMessage());
         }
     }
 
@@ -251,7 +376,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         JL_Usuario_admin1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -263,6 +388,10 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        jTable1 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -292,6 +421,11 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                 jTable1MousePressed(evt);
             }
         });
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTable1KeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         try
         {
@@ -318,9 +452,19 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
         buttonGroup1.add(jRadioButton2);
         jRadioButton2.setBorder(null);
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(jRadioButton3);
         jRadioButton3.setBorder(null);
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Buscar.png"))); // NOI18N
         jButton2.setBorder(null);
@@ -348,6 +492,10 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Estado_hover.png"))); // NOI18N
 
+        jTable2 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
             },
@@ -365,58 +513,46 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel9.setText("SUBTOTAL: 1000,41");
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel10.setText("TOTAL: 1000,41");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel11.setText("FECHA: 22/05/2016");
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel12.setText("HORA: 12:23");
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel15.setText("CODIGO: 000001");
+        jLabel15.setText("PEDIDO NO SELECCIONADO");
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel17.setText("Arista");
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel18.setText("De Fla");
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(53, 95, 123));
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel20.setText("Hijo de De");
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel21.setText("Dios");
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel22.setText("CODIGO: 000066");
 
         jLabel23.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel23.setText("Nombre");
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel24.setText("Apellido");
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel25.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel25.setText("CODIGO: 000955");
 
         jLabel26.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel26.setForeground(new java.awt.Color(53, 95, 123));
@@ -460,6 +596,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
             }
         });
 
+        jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane4.setViewportView(jTextArea2);
@@ -708,7 +845,11 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        // TODO add your handling code here:
+        try {
+            iniciarListado();
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -724,6 +865,18 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         Pedido_modificar vent = new Pedido_modificar(cuentaOficial, new Cliente());
         vent.mostrar(true);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        listadoHistoricos();
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        listadoCancelados();
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
+        seleccionarTabla();
+    }//GEN-LAST:event_jTable1KeyReleased
 
     /**
      * @param args the command line arguments
