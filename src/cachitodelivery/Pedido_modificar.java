@@ -8,6 +8,7 @@ package cachitodelivery;
 import Ventana_clases.Fondo_caja_liquidacion;
 import Ventana_clases.Fondo_listado_pedidos_admin;
 import Ventana_clases.Fondo_listado_pedidos_cajero;
+import Ventana_clases.Fondo_pedido_modificar;
 import Ventana_clases.Fondo_pedido_nuevo;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
@@ -20,18 +21,18 @@ import modelos.UsuarioDAO;
  *
  * @author Cusipuma
  */
-public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
+public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
     
     Thread h1;
     Fecha fecha = new Fecha();
     Usuario cuentaOficial = new Usuario();
     Cliente clientePedido = new Cliente();
     
-    public Pedido_nuevo(Usuario user, Cliente cli) {
+    public Pedido_modificar(Usuario user, Cliente cli) {
         initComponents();
         h1= new Thread(this);
 //        h1.start();
-        Fondo_pedido_nuevo fondo = new Fondo_pedido_nuevo (1028,600);
+        Fondo_pedido_modificar fondo = new Fondo_pedido_modificar (1028,600);
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
         clientePedido = cli;
@@ -231,12 +232,12 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jLabel11.setForeground(new java.awt.Color(53, 95, 123));
         jLabel11.setText("DEMORA: 15 min");
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar.png"))); // NOI18N
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Guardar2.png"))); // NOI18N
         jButton6.setBorder(null);
         jButton6.setBorderPainted(false);
         jButton6.setContentAreaFilled(false);
         jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton6.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar_hover.png"))); // NOI18N
+        jButton6.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Guardar2_hover.png"))); // NOI18N
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -468,14 +469,22 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Pedido_nuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pedido_modificar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Pedido_nuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pedido_modificar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Pedido_nuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pedido_modificar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Pedido_nuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pedido_modificar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

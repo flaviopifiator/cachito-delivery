@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import modelos.Cadena;
+import modelos.Cliente;
 import modelos.Fecha;
 import modelos.Pedido;
 import modelos.PedidoDAO;
@@ -334,6 +335,11 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jButton3.setContentAreaFilled(false);
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Modificar_hover.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Estado.png"))); // NOI18N
         jButton4.setBorder(null);
@@ -712,6 +718,12 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
         seleccionarTabla();
     }//GEN-LAST:event_jTable1MousePressed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        setVisible(false);
+        Pedido_modificar vent = new Pedido_modificar(cuentaOficial, new Cliente());
+        vent.mostrar(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

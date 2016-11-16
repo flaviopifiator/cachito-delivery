@@ -8,6 +8,7 @@ package cachitodelivery;
 import Ventana_clases.Fondo_listado_clientes;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import modelos.Cliente;
 import modelos.Usuario;
 
 /**
@@ -334,7 +335,7 @@ public class Listado_clientes extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
-        Pedido_nuevo vent = new Pedido_nuevo(cuentaOficial);
+        Pedido_nuevo vent = new Pedido_nuevo(cuentaOficial, new Cliente());
         vent.mostrar(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
