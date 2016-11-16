@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import modelos.Cadena;
 import modelos.Cliente;
 import modelos.Fecha;
@@ -152,6 +153,8 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
                     jButton3.setEnabled(true);
                     jButton4.setEnabled(true);
                 }
+                if(!estado.equals("En espera"))
+                    jButton3.setEnabled(false);
                 
                 PedidoDAO pedidos = new PedidoDAO();
                 Object[][] lista = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
@@ -224,7 +227,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
             PedidoDAO pedido =new PedidoDAO();
             Object [][] real = new Object[15][4];
             
-            Object [][] n = pedido.listadoPedidosActivos();
+            Object [][] n = pedido.listadoPedidosCancelados();
             if (n.length<15){
                 int i=0;
                 for (i=0; i<n.length; i++){
@@ -280,7 +283,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
             PedidoDAO pedido =new PedidoDAO();
             Object [][] real = new Object[15][4];
             
-            Object [][] n = pedido.listadoPedidosActivos();
+            Object [][] n = pedido.listadoPedidosHistoricos();
             if (n.length<15){
                 int i=0;
                 for (i=0; i<n.length; i++){
@@ -491,6 +494,11 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jButton4.setContentAreaFilled(false);
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Estado_hover.png"))); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jTable2 = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex,int columnIndex){
@@ -868,15 +876,59 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         listadoHistoricos();
+        jLabel15.setText("PEDIDO NO SELECCIONADO");
+        jLabel17.setText("");
+        jLabel18.setText("");
+        jLabel22.setText("");
+        jLabel21.setText("");
+        jLabel20.setText("");
+        jLabel25.setText("");
+        jLabel24.setText("");
+        jLabel23.setText("");
+        jLabel9.setText("");
+        jLabel10.setText("");
+        jLabel11.setText("");
+        jLabel12.setText("");
+        jTextArea2.setText("");
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         listadoCancelados();
+        jLabel15.setText("PEDIDO NO SELECCIONADO");
+        jLabel17.setText("");
+        jLabel18.setText("");
+        jLabel22.setText("");
+        jLabel21.setText("");
+        jLabel20.setText("");
+        jLabel25.setText("");
+        jLabel24.setText("");
+        jLabel23.setText("");
+        jLabel9.setText("");
+        jLabel10.setText("");
+        jLabel11.setText("");
+        jLabel12.setText("");
+        jTextArea2.setText("");
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
         seleccionarTabla();
     }//GEN-LAST:event_jTable1KeyReleased
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        Object seleccion = JOptionPane.showInputDialog(
+        jButton4,
+        "Seleccione el nuevo estado del pedido",
+        "Estados",
+        JOptionPane.QUESTION_MESSAGE,
+        null,  // null para icono defecto
+        new Object[] { "En preparacion", "Listo para enviar", "Entregado", "No entregado", "Cancelado" }, 
+        "En preparacion");
+        System.out.println(seleccion);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

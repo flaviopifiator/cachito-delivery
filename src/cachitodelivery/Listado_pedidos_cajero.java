@@ -125,8 +125,14 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
                 jButton3.setEnabled(false);
                 jButton4.setEnabled(false);
             }else{
+                String estado=jTable1.getValueAt(jTable1.getSelectedRow(),3).toString();
+                    
                 jButton3.setEnabled(true);
                 jButton4.setEnabled(true);
+                
+                if(!estado.equals("En espera"))
+                    jButton3.setEnabled(false);
+                
                 PedidoDAO pedidos = new PedidoDAO();
                 Object[][] lista = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
                         jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
