@@ -132,6 +132,41 @@ public class ClienteDAO {
             return cliente;
         }catch (Exception ex){throw new DataAccessException("Error en ClienteDAO.buscarCliente() "+ex);}
    
-    } 
+    }
+    public Object[][] listadoClientes() throws DataAccessException{
+        try{
+            Connection con = BaseDeDatos.getInstance();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM clientes order by cod_cliente asc");
+            int tam=0;
+            while(rs.next())
+                tam++;
+            Object[][] lista = new Object[tam][4];
+            int i=0;
+            rs.close();
+            rs = st.executeQuery("SELECT * FROM clientes order by cod_cliente asc");
+            while(rs.next())
+            {
+                lista[i][0] = rs.getInt("cod_cliente");
+                lista[i][1] = rs.getString("apellido_cliente").trim();
+                lista[i][2] = rs.getString("nombre_cliente").trim();
+                lista[i][3] = rs.getString("calle_cliente").trim()+" "+
+                              rs.getString("num_calle_cliente").trim()+" "+
+                              rs.getString("barrio_cliente").trim()+" "+
+                              rs.getString("departamento_cliente").trim()+" "+
+                              rs.getString("casa_cliente").trim()+" "+
+                              rs.getString("localidad_cliente").trim();
+                i++;
+            }
+            rs.close();
+            st.close();
+            
+            
+            return lista;
+            
+        }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
+    }
+    
+    
 }
 

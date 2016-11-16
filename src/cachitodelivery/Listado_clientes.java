@@ -5,11 +5,21 @@
  */
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_listado_clientes;
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import modelos.Cadena;
 import modelos.Cliente;
+import modelos.ClienteDAO;
 import modelos.Usuario;
+import modelos.UsuarioDAO;
 
 /**
  *
@@ -38,10 +48,120 @@ public class Listado_clientes extends javax.swing.JFrame {
         setVisible(true);
     }
     
-    public void iniciarListado(){
-        
+    public void iniciarListado() throws DataAccessException{
+        jTable1.setTableHeader(null);
+        ClienteDAO pedido =new ClienteDAO();
+            Object [][] real = new Object[15][4];
+            
+            Object [][] n = pedido.listadoClientes();
+            if (n.length<15){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<15; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(25);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(175);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(175);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(310);
     }
-    
+    public void seleccionar(){
+//        try{
+//            if (jTable1.getSelectedRow()==-1){
+//                Object[][] tel =null;
+//                jTable3.setModel(new javax.swing.table.DefaultTableModel(
+//                        tel, new String[] {"",""}));
+//                jBModificarUsuario.setEnabled(false);
+//                jBEliminarUsuario.setEnabled(false);
+//                return; 
+//            }
+//            if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
+//                Object[][] tel =null;
+//                jTable3.setModel(new javax.swing.table.DefaultTableModel(
+//                        tel, new String[] {"",""}));
+//                jBModificarUsuario.setEnabled(false);
+//                jBEliminarUsuario.setEnabled(false);
+//                jLabel7.setText("USUARIO NO SELECCIONADO");
+//                jLabel8.setText("");
+//                jLabel9.setText("");
+//                jLabel10.setText("");
+//                JL_Foto_empleado.setIcon(null);
+//                jBModificarUsuario.setEnabled(false);
+//                jBEliminarUsuario.setEnabled(false);                
+//            }else{
+//                UsuarioDAO users = new UsuarioDAO();
+//                Usuario user = null;
+//                user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
+//                
+//                String apellido = user.getApellido().trim();
+//                String nombre = user.getNombre().trim();
+//                        
+//                Cadena cad = new Cadena();
+//                
+//                jLabel7.setText("APELLIDOS: "+cad.limitar(apellido, 21));
+//                jLabel8.setText("NOMBRES: "+cad.limitar(nombre, 23));
+//                jLabel9.setText("D.N.I.: "+user.getDni());
+//                if (user.getCargo()==1)
+//                    jLabel10.setText("CARGO: Cajero");
+//                else
+//                    jLabel10.setText("CARGO: Aministrador");
+//                
+//                if(user.getCodFoto()==null)
+//                    JL_Foto_empleado.setIcon(null);
+//                else{
+//                    InputStream binario;
+//                    ImageIcon foto;
+//                
+//                    binario=user.getCodFoto();
+//
+//
+//                    BufferedImage bi = ImageIO.read(binario);
+//                    foto = new ImageIcon(bi);
+//
+//
+//                    Image img = foto.getImage();
+//                    Image newimg = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+//
+//                    ImageIcon newicon = new ImageIcon(newimg);
+//
+//
+//                    JL_Foto_empleado.setIcon(newicon);
+//                }
+//                iniciarTel();
+//                
+//                if(jTable1.getValueAt(jTable1.getSelectedRow(),3)=="Eliminado"){
+//                    jBModificarUsuario.setEnabled(false);
+//                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/reac.png")));
+//                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/reac_hover.png")));
+//                    jBEliminarUsuario.setEnabled(true);
+//                }else{
+//                    jBModificarUsuario.setEnabled(true);
+//                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar.png")));
+//                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar_hover.png")));
+//                    jBEliminarUsuario.setEnabled(true);
+//                }
+//                
+//                
+//            }
+//        }catch (Exception ex){
+//            System.out.println(ex.getMessage());
+//        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,7 +240,13 @@ public class Listado_clientes extends javax.swing.JFrame {
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
-        iniciarListado();
+        try
+        {
+            iniciarListado();
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -253,8 +379,7 @@ public class Listado_clientes extends javax.swing.JFrame {
                                 .addComponent(jScrollPane5))
                             .addComponent(jButton1))
                         .addGap(39, 39, 39)
-                        .addComponent(jButton2)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jButton2))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,13 +388,9 @@ public class Listado_clientes extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 1020, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JL_Hora_Admin1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(JL_Usuario_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 1170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(JL_Hora_Admin1))
+                            .addComponent(JL_Usuario_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 1170, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

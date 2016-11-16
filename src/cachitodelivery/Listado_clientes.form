@@ -66,7 +66,6 @@
                       </Group>
                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -78,13 +77,8 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="JL_Hora_Admin1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="JL_Usuario_admin1" min="-2" pref="535" max="-2" attributes="0"/>
-                                  <Component id="jLabel27" alignment="0" min="-2" pref="1170" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="JL_Usuario_admin1" min="-2" pref="535" max="-2" attributes="0"/>
+                          <Component id="jLabel27" alignment="0" min="-2" pref="1170" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -230,7 +224,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="iniciarListado();"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="try&#xa;{&#xa;iniciarListado();&#xa;}&#xa;catch (Exception ex){&#xa;            System.out.println(ex.getMessage());&#xa;        }"/>
           </AuxValues>
         </Component>
       </SubComponents>
