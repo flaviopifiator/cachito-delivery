@@ -1015,7 +1015,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
             if(jTable1.getValueAt(jTable1.getSelectedRow(), 3).toString().equals("Listo para enviar")){
-                    Asignar_pedido vent = new Asignar_pedido();
+                    Asignar_pedido vent = new Asignar_pedido(cuentaOficial);
                     vent.mostrar(true);
                     this.dispose();
                     return;

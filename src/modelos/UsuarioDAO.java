@@ -29,9 +29,6 @@ public class UsuarioDAO {
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
         
     }
-    
-    
-    
     public void actualizar (Usuario usuario) throws DataAccessException{
     
         try{

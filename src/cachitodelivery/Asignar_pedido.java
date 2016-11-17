@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import modelos.Cadena;
 import modelos.FacturaDAO;
 import modelos.Fecha;
@@ -36,12 +37,13 @@ public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
     Thread h1;
     Fecha fecha = new Fecha();
     
-    public Asignar_pedido() {
+    public Asignar_pedido(Usuario user) {
         initComponents();
         h1= new Thread(this);
         h1.start();
         Fondo_asignar fondo = new Fondo_asignar(1161,600);
         this.add(fondo, BorderLayout.CENTER);
+        cuentaOficial = user;
     }
     
     public void mostrar(boolean b){
@@ -333,6 +335,11 @@ public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
         jButton3.setContentAreaFilled(false);
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Atras2_hover.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar.png"))); // NOI18N
         jButton4.setBorder(null);
@@ -377,15 +384,16 @@ public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 921, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(JL_Usuario_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(JL_Fecha_Admin1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JL_Hora_Admin1)))
-                        .addGap(0, 259, Short.MAX_VALUE))
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(JL_Usuario_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(JL_Fecha_Admin1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(JL_Hora_Admin1)))
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 259, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -444,7 +452,7 @@ public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         FacturaDAO factura = new FacturaDAO();
-        for (int i = 0; i < pedidos.length; i++) {
+        for (int i = 0; i < mochila.length; i++) {
             try {
                 factura.agregarFactura(fecha.getFecha(), fecha.getHora(),
                         Integer.parseInt(mochila[i][0].toString()), 100,
@@ -456,8 +464,9 @@ public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
             } catch (SQLException ex) {
                 Logger.getLogger(Asignar_pedido.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+         
         }
+        JOptionPane.showMessageDialog(rootPane, "Pedidos enviados.", "Facturas",JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
@@ -471,6 +480,17 @@ public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
         compQuitar();
     }//GEN-LAST:event_jTable2MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if(cuentaOficial.getCargo()==0){
+            Listado_pedidos_admin vent = new Listado_pedidos_admin(cuentaOficial);
+            vent.mostrar(true);
+        }else{
+            Listado_pedidos_cajero vent = new Listado_pedidos_cajero(cuentaOficial);
+            vent.mostrar(true);
+        }
+       dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -502,7 +522,7 @@ public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Asignar_pedido().setVisible(true);
+//                new Asignar_pedido().setVisible(true);
             }
         });
     }
