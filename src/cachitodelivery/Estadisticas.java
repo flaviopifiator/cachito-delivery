@@ -238,6 +238,7 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
             }
         });
         jTable1.setRowHeight(20);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);

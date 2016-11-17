@@ -381,6 +381,7 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
             new String [] { "", ""
             }
         ));
+        jTable2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable2.setTableHeader(null);
         jScrollPane3.setViewportView(jTable2);
 

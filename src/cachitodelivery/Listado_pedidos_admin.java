@@ -414,6 +414,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
             }
         ));
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -517,6 +518,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
         jTable2.getColumnModel().getColumn(0).setPreferredWidth(250);
         jTable2.getColumnModel().getColumn(1).setPreferredWidth(30);
         jTable2.setPreferredSize(new java.awt.Dimension(310, 64));
+        jTable2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jTable2);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N

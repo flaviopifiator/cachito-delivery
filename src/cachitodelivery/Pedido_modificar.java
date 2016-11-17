@@ -172,6 +172,7 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
             }
         ));
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
@@ -218,6 +219,7 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
         ));
         jTable2.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         jTable2.setPreferredSize(new java.awt.Dimension(310, 64));
+        jTable2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jTable2);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
