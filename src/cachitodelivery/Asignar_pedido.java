@@ -27,6 +27,7 @@ public class Asignar_pedido extends javax.swing.JFrame {
 
     Object[][] pedidos;
     Object[][] mochila = new Object[0][0];
+    Usuario cuentaOficial = new Usuario();
     
     public Asignar_pedido() {
         initComponents();
@@ -127,6 +128,8 @@ public class Asignar_pedido extends javax.swing.JFrame {
             iniciarListado();
             iniciarMochila();
         }
+        compAgregar();
+        compQuitar();
     }
     public void quitar(){
         if (jTable2.getSelectedRow()==-1){
@@ -178,9 +181,31 @@ public class Asignar_pedido extends javax.swing.JFrame {
             iniciarListado();
             iniciarMochila();
         }
+        compAgregar();
+        compQuitar();
     }
-    
-    
+    public void compAgregar(){
+        if (jTable1.getSelectedRow()==-1){
+            jButton1.setEnabled(false);
+            return;
+        }
+        if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
+            jButton1.setEnabled(false);
+            return;
+        }
+        jButton1.setEnabled(true);
+    }
+    public void compQuitar(){
+        if (jTable2.getSelectedRow()==-1){
+            jButton2.setEnabled(false);
+            return;
+        }
+        if (jTable2.getValueAt(jTable2.getSelectedRow(),0)==null){
+            jButton2.setEnabled(false);
+            return;
+        }
+        jButton2.setEnabled(true);
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -207,6 +232,7 @@ public class Asignar_pedido extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         JL_Hora_Admin1 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -225,6 +251,11 @@ public class Asignar_pedido extends javax.swing.JFrame {
                 jTable1MouseClicked(evt);
             }
         });
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTable1KeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         try
         {
@@ -241,6 +272,16 @@ public class Asignar_pedido extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
+        jTable2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTable2KeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Agregar_caja.png"))); // NOI18N
@@ -248,6 +289,7 @@ public class Asignar_pedido extends javax.swing.JFrame {
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setEnabled(false);
         jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Agregar_caja_hover.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -260,6 +302,7 @@ public class Asignar_pedido extends javax.swing.JFrame {
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setEnabled(false);
         jButton2.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar2_hover.png"))); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -282,6 +325,18 @@ public class Asignar_pedido extends javax.swing.JFrame {
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Atras2_hover.png"))); // NOI18N
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar.png"))); // NOI18N
+        jButton4.setBorder(null);
+        jButton4.setBorderPainted(false);
+        jButton4.setContentAreaFilled(false);
+        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar_hover.png"))); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -296,15 +351,14 @@ public class Asignar_pedido extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton2)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(166, 166, 166)
-                                .addComponent(jButton3)))))
+                                .addComponent(jButton4)
+                                .addGap(67, 67, 67)
+                                .addComponent(jButton3))
+                            .addComponent(jButton1)
+                            .addComponent(jButton2))))
                 .addGap(0, 254, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -346,9 +400,12 @@ public class Asignar_pedido extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton4))
                     .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -365,7 +422,7 @@ public class Asignar_pedido extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        // TODO add your handling code here:
+        compAgregar();
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -375,6 +432,22 @@ public class Asignar_pedido extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         quitar();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
+        compAgregar();
+    }//GEN-LAST:event_jTable1KeyReleased
+
+    private void jTable2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable2KeyPressed
+        compQuitar();
+    }//GEN-LAST:event_jTable2KeyPressed
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        compQuitar();
+    }//GEN-LAST:event_jTable2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -418,6 +491,7 @@ public class Asignar_pedido extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;

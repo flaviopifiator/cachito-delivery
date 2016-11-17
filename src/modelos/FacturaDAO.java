@@ -20,5 +20,8 @@ public class FacturaDAO {
     Factura facfac = new Factura();
     PedidoDAO pedido = new PedidoDAO();
     
-    
+//    public float total(int cod){
+//        PedidoDAO ped = new PedidoDAO();
+//        Pedido pedido = ped.buscarPedidoCod(cod, estado)
+//    }
 }
