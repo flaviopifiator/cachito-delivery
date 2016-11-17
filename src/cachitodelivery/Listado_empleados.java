@@ -40,7 +40,7 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
     public Listado_empleados(Usuario user) throws SQLException {
         initComponents();
         h1= new Thread(this);
-//        h1.start();
+        h1.start();
         Fondo_listado_empleados fondo = new Fondo_listado_empleados(1000,559);
         add(fondo, BorderLayout.CENTER);
         cuentaOficial= user;
@@ -788,7 +788,7 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
             Principal vent;
-        
+            this.h1.stop();
             vent = new Principal();
         
         vent.MenuAdminVisible(true, cuentaOficial);
@@ -800,6 +800,7 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
 
     private void jBAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAgregarUsuarioActionPerformed
         try {
+            this.h1.stop();
             Principal vent;
             vent = new Principal();
             vent.setCuenta(cuentaOficial);
@@ -1016,7 +1017,7 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
         Thread ct = Thread.currentThread();
         while(ct==h1){
             JL_Fecha_Admin1.setText(fecha.getFecha());
-        JL_Hora_Admin1.setText(fecha.getHora());
+            JL_Hora_Admin1.setText(fecha.getHora());
         }
     }
 

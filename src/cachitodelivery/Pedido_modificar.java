@@ -31,7 +31,7 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
     public Pedido_modificar(Usuario user, Cliente cli) {
         initComponents();
         h1= new Thread(this);
-//        h1.start();
+        h1.start();
         Fondo_pedido_modificar fondo = new Fondo_pedido_modificar (1028,600);
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
@@ -444,12 +444,13 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-
+        this.h1.stop();
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         setVisible(false);
+        this.h1.stop();
         Listado_clientes vent = new Listado_clientes(cuentaOficial);
         vent.mostrar();
     }//GEN-LAST:event_jButton6ActionPerformed

@@ -186,6 +186,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             }
             
             if(ban && cuentaOficial.getActivo()==true){
+                this.h1.stop();
                 if(cuentaOficial.getCargo()==1){
                     Menu_cajero menu = new Menu_cajero(cuentaOficial);
                     menu.setVisible(true);
@@ -928,7 +929,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private void JB_PersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_PersonalActionPerformed
         
         JF_Menu_admin.setVisible(false);
-      
+        this.h1.stop();
         try {        
             vtListaEmpleados= new Listado_empleados(cuentaOficial);
             vtListaEmpleados.mostrar(true);
@@ -940,7 +941,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     private void jBAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAtrasActionPerformed
         try {
             clearAgregar();
-        
+            this.h1.stop();
             JF_Agregar_Usuario.dispose();
             vtListaEmpleados = new Listado_empleados(cuentaOficial);
             vtListaEmpleados.clearBusqueda();
@@ -1365,8 +1366,9 @@ public class Principal extends javax.swing.JFrame implements Runnable{
 
     private void JB_EstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_EstadisticasActionPerformed
         JF_Menu_admin.setVisible(false);
-      
+        
         try {        
+            this.h1.stop();
             Estadisticas est= new Estadisticas(cuentaOficial);
             est.mostrar(true);
         } catch (SQLException ex) {
@@ -1376,6 +1378,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
 
     private void JB_PedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_PedidosActionPerformed
         JF_Menu_admin.setVisible(false);
+        this.h1.stop();
         Listado_pedidos_admin vent = new Listado_pedidos_admin(cuentaOficial);
         vent.mostrar(true);
         

@@ -34,7 +34,7 @@ public class Menu_cajero extends javax.swing.JFrame implements Runnable{
     public Menu_cajero(Usuario user) throws DataAccessException {
         initComponents();
         h1= new Thread(this);
-//        h1.start();
+        h1.start();
         setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         Fondo_menu_cajero fondo = new Fondo_menu_cajero(673,260);
         setSize(673,285);
@@ -248,6 +248,7 @@ public class Menu_cajero extends javax.swing.JFrame implements Runnable{
     private void JB_Cerrar_sesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_Cerrar_sesionActionPerformed
         Principal p;
         try {
+            this.h1.stop();
             p = new Principal();
             p.setSize(399,629);
             p.setTitle("Cachito Delivery");
@@ -262,6 +263,7 @@ public class Menu_cajero extends javax.swing.JFrame implements Runnable{
     private void JB_CajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_CajaActionPerformed
         try {
             CajaDAO caja = new CajaDAO();
+            this.h1.stop();
             if(!caja.primera()){
                 Abrir_caja ventana;
                 ventana = new Abrir_caja(user);
@@ -289,6 +291,7 @@ public class Menu_cajero extends javax.swing.JFrame implements Runnable{
 
     private void JB_ClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_ClientesActionPerformed
         setVisible(false);
+        this.h1.stop();
         Listado_pedidos_cajero vent = new Listado_pedidos_cajero(user);
         vent.mostrar(true);
     }//GEN-LAST:event_JB_ClientesActionPerformed

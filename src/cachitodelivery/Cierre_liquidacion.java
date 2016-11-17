@@ -35,7 +35,7 @@ public class Cierre_liquidacion extends javax.swing.JFrame implements Runnable  
     public Cierre_liquidacion(Usuario user) throws DataAccessException {
         initComponents();
         h1= new Thread(this);
-//        h1.start();
+        h1.start();
         Fondo_caja_liquidacion fondo = new Fondo_caja_liquidacion(700,368);
         this.add(fondo, BorderLayout.CENTER);
         setSize(700,395);
@@ -340,6 +340,7 @@ public class Cierre_liquidacion extends javax.swing.JFrame implements Runnable  
             caja.nuevaCaja(ca);
             JOptionPane.showMessageDialog(null, "CAJA CERRADA\n\nRECAUDACION: "+num+" pesos\n");
             this.setVisible(false);
+            this.h1.stop();
             if(cuentaOficial.getCargo()==0){
                 Principal ven = new Principal();
                 ven.MenuAdminVisible(true, cuentaOficial);
@@ -356,6 +357,7 @@ public class Cierre_liquidacion extends javax.swing.JFrame implements Runnable  
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
+            this.h1.stop();
             if(cuentaOficial.getCargo()==0){
                 Principal ven  = new Principal();           
                 ven.MenuAdminVisible(true, cuentaOficial);
