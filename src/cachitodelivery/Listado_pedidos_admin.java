@@ -40,7 +40,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     public Listado_pedidos_admin(Usuario user) {
         initComponents();
         h1= new Thread(this);
-//        h1.start();
+        h1.start();
         Fondo_listado_pedidos_admin fondo = new Fondo_listado_pedidos_admin(1248,600);
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
@@ -838,7 +838,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
      try {
             Principal vent;
-        
+            this.h1.stop();
             vent = new Principal();
         
         vent.MenuAdminVisible(true, cuentaOficial);
@@ -850,6 +850,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         setVisible(false);
+        this.h1.stop();
         Listado_clientes vent = new Listado_clientes(cuentaOficial);
         vent.mostrar();
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -872,6 +873,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         setVisible(false);
+        this.h1.stop();
         Pedido_modificar vent = new Pedido_modificar(cuentaOficial, new Cliente());
         vent.mostrar(true);
     }//GEN-LAST:event_jButton3ActionPerformed

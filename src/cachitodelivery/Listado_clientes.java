@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import modelos.Cadena;
 import modelos.Cliente;
 import modelos.ClienteDAO;
+import modelos.Fecha;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
 
@@ -26,13 +27,15 @@ import modelos.UsuarioDAO;
  *
  * @author Cusipuma
  */
-public class Listado_clientes extends javax.swing.JFrame {
-
-    
+public class Listado_clientes extends javax.swing.JFrame implements Runnable{
+    Fecha fecha = new Fecha();
+    Thread h1;
     Usuario cuentaOficial = new Usuario();
     
     public Listado_clientes(Usuario user) {
         initComponents();
+        h1 = new Thread(this);
+        h1.start();
         Fondo_listado_clientes fondo = new Fondo_listado_clientes(1253,600);
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial=user;
@@ -575,6 +578,7 @@ public class Listado_clientes extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         dispose();
+        this.h1.stop();
         if(cuentaOficial.getCargo()==0){
             Listado_pedidos_admin vent = new Listado_pedidos_admin(cuentaOficial);
             vent.mostrar(true);
@@ -690,4 +694,16 @@ public class Listado_clientes extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
+
+
+     @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            JL_Fecha_Admin1.setText(fecha.getFecha());
+            JL_Hora_Admin1.setText(fecha.getHora());
+        }
+    }
 }
