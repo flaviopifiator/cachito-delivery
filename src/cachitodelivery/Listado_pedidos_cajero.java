@@ -6,21 +6,19 @@
 package cachitodelivery;
 
 import Excepciones.DataAccessException;
-import Ventana_clases.Fondo_caja_liquidacion;
-import Ventana_clases.Fondo_listado_pedidos_admin;
 import Ventana_clases.Fondo_listado_pedidos_cajero;
 import java.awt.BorderLayout;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import modelos.Cadena;
 import modelos.Cliente;
 import modelos.Fecha;
 import modelos.PedidoDAO;
 import modelos.Render;
 import modelos.Usuario;
-import modelos.UsuarioDAO;
 
 /**
  *
@@ -133,6 +131,8 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
                 if(!estado.equals("En espera"))
                     jButton3.setEnabled(false);
                 
+                
+                
                 PedidoDAO pedidos = new PedidoDAO();
                 Object[][] lista = pedidos.buscarPedidoCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()),
                         jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
@@ -154,6 +154,7 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
                 jLabel9.setText("SUBTOTAL: "+total);
                 jLabel10.setText("TOTAL: "+(total+Float.valueOf(lista[0][13].toString())));
                 jLabel11.setText("DEMORA: "+demora);
+                jLabel12.setText("HORA: "+lista[0][12]);
                 jTextArea2.setText(lista[0][0].toString().trim());
                 
                 jTable2.setModel(new javax.swing.table.DefaultTableModel(
@@ -167,6 +168,51 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
             Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void buscar(){
+        try{
+            PedidoDAO pedidos = new PedidoDAO();
+            Object [][] real = new Object[14][4];
+            int tipo=0;
+            
+            Object [][] n = pedidos.buscarPedidoText(jTextField1.getText(), jTextField2.getText(), jTextField3.getText(), jTextField4.getText(),1);
+            if (n.length<14){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<13; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+                
+                
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jButton3.setEnabled(false);
+            jButton4.setEnabled(false);
+            
+            jTable1.changeSelection(0, 0, false, false);
+            seleccionarTabla();
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -223,10 +269,25 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
         JL_Usuario_admin1.setText("USUARIO: ");
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
 
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField3KeyReleased(evt);
+            }
+        });
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
+            }
+        });
 
         jTable1 = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex,int columnIndex){
@@ -267,6 +328,11 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
         iniciarListado();
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jButton1.setBorder(null);
         jButton1.setBorderPainted(false);
@@ -298,6 +364,11 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
         jButton4.setContentAreaFilled(false);
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Estado_hover.png"))); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jTable2 = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex,int columnIndex){
@@ -588,6 +659,109 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
         seleccionarTabla();
     }//GEN-LAST:event_jTable1KeyReleased
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        buscar();
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+        buscar();
+    }//GEN-LAST:event_jTextField2KeyReleased
+
+    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
+        buscar();
+    }//GEN-LAST:event_jTextField3KeyReleased
+
+    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
+        buscar();
+    }//GEN-LAST:event_jTextField4KeyReleased
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            if(jTable1.getValueAt(jTable1.getSelectedRow(), 3).equals("Listo para enviar")){
+                    Asignar_pedido vent = new Asignar_pedido();
+                    vent.mostrar(true);
+                    this.dispose();
+                    return;
+                }
+            
+            int estado=0;
+            if(jTable1.getValueAt(jTable1.getSelectedRow(), 3).equals("En espera"))
+                estado=0;
+            if(jTable1.getValueAt(jTable1.getSelectedRow(), 3).equals("En preparacion"))
+                estado=1;             
+            if(jTable1.getValueAt(jTable1.getSelectedRow(), 3).equals("Enviado"))
+                estado=2;
+            Object seleccion=null;
+            switch (estado){
+                case 0:{
+                    seleccion = JOptionPane.showInputDialog(
+                    jButton4,
+                    "Seleccione el nuevo estado del pedido",
+                    "Estados",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new Object[] { "En preparacion", "Listo para enviar", "Enviado", "Entregado", "No entregado", "Cancelado" }, 
+                    "En preparacion");
+                    break;
+                    }
+                case 1:{
+                    seleccion = JOptionPane.showInputDialog(
+                    jButton4,
+                    "Seleccione el nuevo estado del pedido",
+                    "Estados",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new Object[] { "Listo para enviar", "Enviado", "Entregado", "No entregado", "Cancelado" }, 
+                    "Listo para enviar");
+                    break;
+                    }
+                case 2:{
+                    seleccion = JOptionPane.showInputDialog(
+                    jButton4,
+                    "Seleccione el nuevo estado del pedido",
+                    "Estados",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new Object[] {"Entregado", "No entregado", "Cancelado" }, 
+                    "Entregado");
+                    break;
+                    }
+                }
+            if(seleccion==null)
+                return;
+            if(seleccion.equals("En espera"))
+                estado=0;
+            if(seleccion.equals("En preparacion"))
+                estado=1;
+            if(seleccion.equals("Listo para enviar"))
+                estado=2;
+            if(seleccion.equals("Enviado"))
+                estado=3;
+            if(seleccion.equals("Entregado"))
+                estado=4;
+            if(seleccion.equals("No entregado"))
+                estado=5;
+            if(seleccion.equals("Cancelado"))
+                estado=9;
+
+
+
+            int cod= Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
+            PedidoDAO pedido = new PedidoDAO(); 
+            pedido.actualizarEstadoPedido(cod, estado);
+            iniciarListado();
+
+       } catch (SQLException ex) {
+           Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (ClassNotFoundException ex) {
+           Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        JOptionPane.showMessageDialog(rootPane, "Se ha actualizado satisfactoriamente\n el estado del pedido","Actualizar estado pedido",JOptionPane.INFORMATION_MESSAGE);     
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
