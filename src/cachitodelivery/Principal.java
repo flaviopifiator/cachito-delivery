@@ -982,7 +982,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             int codigo = usuario.lastUser();
             Object[][] aux = new Object[telefono.length][3];
             for(int i=0; i<telefono.length;i++){
-                aux[i][0]=codigo;
+                aux[i][0]=codigo+1;
                 aux[i][1]=telefono[i][0];
                 aux[i][2]=telefono[i][1]; 
             }

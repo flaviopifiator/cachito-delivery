@@ -11,6 +11,8 @@ import Ventana_clases.Fondo_listado_pedidos_cajero;
 import Ventana_clases.Fondo_pedido_nuevo;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import modelos.Cadena;
 import modelos.Cliente;
 import modelos.ClienteDAO;
 import modelos.Fecha;
@@ -28,7 +30,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     Usuario cuentaOficial = new Usuario();
     Cliente clientePedido = new Cliente();
     Object[][] menu;
-    Object[][] comidas;
+    Object[][] comidas = new Object[0][2];
     
     public Pedido_nuevo(Usuario user, Cliente cli) {
         initComponents();
@@ -36,6 +38,13 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
 //        h1.start();
         Fondo_pedido_nuevo fondo = new Fondo_pedido_nuevo (1028,600);
         this.add(fondo, BorderLayout.CENTER);
+        JL_Usuario_admin1.setText("USUARIO: "+user.getApellido().trim()+" "+user.getNombre().trim());
+        String nombre ="APPELIDO Y NOMBRE: "+cli.getApellido().trim()+" "+cli.getNombre().trim();
+        String domicilio= "DOMICILIO: "+cli.getCalle().trim()+" "+cli.getNumero_calle().trim()+" "+
+                cli.getBarrio().trim()+" "+cli.getCasa().trim()+" "+cli.getDepartamento().trim()+" "+cli.getLocalidad().trim();
+        Cadena cadena = new Cadena();
+        jLabel14.setText(cadena.limitar(nombre, 40));
+        jLabel15.setText(cadena.limitar(domicilio, 50));
         cuentaOficial = user;
         clientePedido = cli;
     }
@@ -81,12 +90,9 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     }
     
     public void iniciarListado() {
-//        jBModificarUsuario.setEnabled(false);
-//        jBEliminarUsuario.setEnabled(false);
-//
-//        
-//        jRadioButton1.setSelected(false);
-//       
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
+
         jTable1.setTableHeader(null);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -96,6 +102,26 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
         jTable1.getColumnModel().getColumn(2).setPreferredWidth(30);
         jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
+    }
+    
+    public void seleccionarTabla1(){
+        if (jTable1.getSelectedRow()==-1 || jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+                return; 
+            }
+        jButton3.setEnabled(true);
+        jButton4.setEnabled(false);
+    }
+    
+        public void seleccionarTabla2(){
+        if (jTable2.getSelectedRow()==-1){
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+                return; 
+            }
+        jButton4.setEnabled(true);
+        jButton3.setEnabled(false);
     }
 
     /**
@@ -142,7 +168,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jLabel4 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         JL_Usuario_admin1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -180,6 +206,16 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable1MousePressed(evt);
+            }
+        });
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTable1KeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         menu();
         iniciarListado();
@@ -203,14 +239,26 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jButton3.setBorderPainted(false);
         jButton3.setContentAreaFilled(false);
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.setEnabled(false);
         jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Agregar_hover.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar.png"))); // NOI18N
         jButton4.setBorder(null);
         jButton4.setBorderPainted(false);
         jButton4.setContentAreaFilled(false);
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton4.setEnabled(false);
         jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar_hover.png"))); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jTable2 = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex,int columnIndex){
@@ -225,20 +273,30 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jTable2.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         jTable2.setPreferredSize(new java.awt.Dimension(310, 64));
         jTable2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable2MousePressed(evt);
+            }
+        });
+        jTable2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTable2KeyReleased(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
         jTable2.setTableHeader(null);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel9.setText("SUBTOTAL: 1000,41");
+        jLabel9.setText("SUBTOTAL: ");
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel10.setText("TOTAL: 1000,41");
+        jLabel10.setText("TOTAL: ");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(53, 95, 123));
-        jLabel11.setText("DEMORA: 15 min");
+        jLabel11.setText("DEMORA: ");
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Finalizar.png"))); // NOI18N
         jButton6.setBorder(null);
@@ -450,7 +508,8 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-
+        Listado_clientes vent = new Listado_clientes(cuentaOficial);
+        vent.mostrar();
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -459,6 +518,89 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         Listado_clientes vent = new Listado_clientes(cuentaOficial);
         vent.mostrar();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String seleccion = JOptionPane.showInputDialog(jButton3,"Cantidad de comidas",1);
+        
+        if(seleccion==null)
+            return;
+        
+        int cant=0;
+        try{
+            cant = Integer.parseInt(seleccion);
+        }
+        catch(NumberFormatException e){ 
+            JOptionPane.showMessageDialog (null, "El valor ingresado no es un número entero", "Valor invalido", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+        int cantMenu=(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 3).toString()))-cant;
+        if(cantMenu<0){
+            JOptionPane.showMessageDialog (null, "Cantidad insuficiente", "Valor invalido", JOptionPane.ERROR_MESSAGE); 
+            return;
+        }
+
+        if(comidas.length==0){
+           comidas = new Object[comidas.length+1][2];
+           comidas[0][0]=jTable1.getValueAt(jTable1.getSelectedRow(), 1);
+           comidas[0][1]=cant;
+           for(int i=0; i<menu.length;i++)
+                if(menu[i][1].equals(jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim()))
+                    menu[i][3]=cantMenu;     
+        }
+        else{
+            
+            for(int i=0; i<comidas.length;i++){
+                if(comidas[i][0].equals(jTable1.getValueAt(jTable1.getSelectedRow(), 1))){
+                    JOptionPane.showMessageDialog (null, "Comida ya agregada", "Comida repetida", JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }       
+            }
+            
+            Object[][] com = comidas;
+
+            comidas = new Object[comidas.length+1][2];
+            
+            for(int i=0; i<menu.length;i++)
+                if(menu[i][1].equals(jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim()))
+                    menu[i][3]=cantMenu;
+            
+            for(int i=0; i<comidas.length;i++){
+                
+                if(i==comidas.length-1){
+                    comidas[i][0]=jTable1.getValueAt(jTable1.getSelectedRow(), 1);
+                    comidas[i][1]=cant;
+                }else{
+                    comidas[i][1]=com[i][1];
+                    comidas[i][0]=com[i][0];
+                }    
+            }
+        }
+        iniciarListado();
+                
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        comidas,new String[] {"",""}));
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
+        seleccionarTabla1();
+    }//GEN-LAST:event_jTable1KeyReleased
+
+    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        seleccionarTabla1();
+    }//GEN-LAST:event_jTable1MousePressed
+
+    private void jTable2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable2KeyReleased
+        seleccionarTabla2();
+    }//GEN-LAST:event_jTable2KeyReleased
+
+    private void jTable2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MousePressed
+        seleccionarTabla2();
+    }//GEN-LAST:event_jTable2MousePressed
 
     /**
      * @param args the command line arguments

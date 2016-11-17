@@ -343,14 +343,14 @@ public class ClienteDAO {
     public Object[][] comidasMenu() throws ClassNotFoundException, SQLException{
         Connection con = BaseDeDatos.getInstance();
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("SELECT * FROM comidas WHERE activo= true ORDER BY cod_comida ASC");
+        ResultSet rs = st.executeQuery("SELECT * FROM comidas WHERE cantidad_comida>0 ORDER BY cod_comida ASC");
         int tam=0;
         while(rs.next())
             tam++;
         Object[][] lista = new Object[tam][4];
         int i=0;
         rs.close();
-        rs = st.executeQuery("SELECT * FROM comidas WHERE activo= true ORDER BY cod_comida ASC");
+        rs = st.executeQuery("SELECT * FROM comidas WHERE cantidad_comida>0 ORDER BY cod_comida ASC");
         while(rs.next())
         {
             lista[i][0] = rs.getInt("cod_comida");

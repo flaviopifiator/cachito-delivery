@@ -260,7 +260,7 @@ public class Listado_clientes extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         JL_Fecha_Admin1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         JL_Usuario_admin1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -564,9 +564,16 @@ public class Listado_clientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        setVisible(false);
-        Pedido_nuevo vent = new Pedido_nuevo(cuentaOficial, new Cliente());
-        vent.mostrar(true);
+        try {
+            setVisible(false);
+            ClienteDAO user = new ClienteDAO();
+            int codigo=Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
+            Pedido_nuevo vent = new Pedido_nuevo(cuentaOficial, user.buscarCliente(codigo));
+            vent.mostrar(true);
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_clientes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
