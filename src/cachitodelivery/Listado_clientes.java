@@ -569,6 +569,7 @@ public class Listado_clientes extends javax.swing.JFrame implements Runnable{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             setVisible(false);
+            this.h1.stop();
             ClienteDAO user = new ClienteDAO();
             int codigo=Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
             Pedido_nuevo vent = new Pedido_nuevo(cuentaOficial, user.buscarCliente(codigo));
