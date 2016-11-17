@@ -12,9 +12,14 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import modelos.Cadena;
+import modelos.FacturaDAO;
+import modelos.Fecha;
 import modelos.PedidoDAO;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
@@ -23,14 +28,18 @@ import modelos.UsuarioDAO;
  *
  * @author Gabe50
  */
-public class Asignar_pedido extends javax.swing.JFrame {
+public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
 
     Object[][] pedidos;
     Object[][] mochila = new Object[0][0];
     Usuario cuentaOficial = new Usuario();
+    Thread h1;
+    Fecha fecha = new Fecha();
     
     public Asignar_pedido() {
         initComponents();
+        h1= new Thread(this);
+        h1.start();
         Fondo_asignar fondo = new Fondo_asignar(1161,600);
         this.add(fondo, BorderLayout.CENTER);
     }
@@ -434,7 +443,21 @@ public class Asignar_pedido extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+        FacturaDAO factura = new FacturaDAO();
+        for (int i = 0; i < pedidos.length; i++) {
+            try {
+                factura.agregarFactura(fecha.getFecha(), fecha.getHora(),
+                        Integer.parseInt(mochila[i][0].toString()), 100,
+                        factura.zona(mochila[i][3].toString()), cuentaOficial.getCod());
+            } catch (DataAccessException ex) {
+                Logger.getLogger(Asignar_pedido.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Asignar_pedido.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Asignar_pedido.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
@@ -503,4 +526,15 @@ public class Asignar_pedido extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
+
+ @Override
+    public void run() {
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            JL_Fecha_Admin1.setText(fecha.getFecha());
+            JL_Hora_Admin1.setText(fecha.getHora());
+        }
+    }
 }

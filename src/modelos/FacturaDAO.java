@@ -42,7 +42,8 @@ public class FacturaDAO {
         rs.close();
         for (int j = 0; j < tabla.length; j++) {
             rs = st.executeQuery("SELECT * FROM comidas WHERE cod_comida = "+Integer.parseInt(tabla[j][0].toString()));
-            tabla[j][0]=rs.getFloat("precio_comida");
+            while(rs.next())
+                tabla[j][0]=rs.getFloat("precio_comida");
             rs.close();
         }
         for (int j = 0; j < tabla.length; j++) {
@@ -51,21 +52,52 @@ public class FacturaDAO {
         st.close();
         return total;
     }
-//    public void agregarFactura(String f, String h, int pedido, int cadete,  float total, int zona, int usuario){
-//        try{
-//            Connection con = BaseDeDatos.getInstance();
-//            PreparedStatement ps = con.prepareStatement("INSERT INTO facturas (cod_factura, "
-//                    + "cod_pedido, cod_cadete, fecha_factura, hora_factura, "
-//                    + "foto_usuario, activo ) VALUES (?,?,?,?,?,?,?)");
-//            ps.setInt(1, usuario.getDni());
-//            ps.setString(2, usuario.getNombre());
-//            ps.setString(3, usuario.getApellido());
-//            ps.setString(4, usuario.getPass());
-//            ps.setInt(5, usuario.getCargo());
-//            ps.setBinaryStream(6, usuario.getFis(),usuario.getLongitud());
-//            ps.setBoolean(7, usuario.getActivo()); 
-//            ps.execute();
-//            ps.close();
-//        }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
-//    }
+    public float tarifaZona(int cod) throws ClassNotFoundException, SQLException{
+        PedidoDAO ped = new PedidoDAO();
+        Pedido pedido = ped.buscarPedido(cod);
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM zonas WHERE cod_zona = "+pedido.getCod_zona());
+        float total = 0;
+        while(rs.next())
+            total = rs.getFloat("tarifa_zona");
+        rs.close();
+        st.close();
+        return total;
+    }
+    
+    public void agregarFactura(String fecha, String hora, int pedido, int cadete, int zona, int usuario) throws DataAccessException{
+        try{
+            float total = total(pedido);
+            float tarifa = tarifaZona(zona);
+            Connection con = BaseDeDatos.getInstance();
+            PreparedStatement ps = con.prepareStatement("INSERT INTO facturas (cod_usuario, "
+                    + "cod_pedido, cod_cadete, fecha_factura, hora_factura, "
+                    + "tarifa_zona, importe_total_facturado ) VALUES (?,?,?,?,?,?,?)");
+            ps.setInt(1, usuario);
+            ps.setInt(2, pedido);
+            ps.setInt(3, cadete);
+            ps.setString(4, fecha);
+            ps.setString(5, hora);
+            ps.setFloat(6, tarifa);
+            ps.setFloat(7, total); 
+            ps.execute();
+            ps.close();
+            PedidoDAO ped = new PedidoDAO();
+            ped.actualizarEstadoPedido(pedido, 3);
+        }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
+    }
+    
+    public int zona(String zona) throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM zonas WHERE descripcion_zona = '"+zona+"'");
+        int i =-1;
+        while(rs.next()){
+            i=rs.getInt("cod_zona");
+        }
+        rs.close();
+        st.close();
+        return i;
+    }
 }
