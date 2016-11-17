@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import modelos.Cadena;
+import modelos.Cadete;
+import modelos.CadeteDAO;
 import modelos.Cliente;
 import modelos.Fecha;
 import modelos.PedidoDAO;
@@ -990,8 +992,9 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
+            CadeteDAO cadete = new CadeteDAO();
             if(jTable1.getValueAt(jTable1.getSelectedRow(), 3).toString().equals("Listo para enviar")){
-                    Asignar_pedido vent = new Asignar_pedido();
+                    Asignar_pedido vent = new Asignar_pedido(new Cadete(), cuentaOficial);
                     vent.mostrar(true);
                     this.dispose();
                     return;

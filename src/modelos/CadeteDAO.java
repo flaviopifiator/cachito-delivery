@@ -87,7 +87,7 @@ public class CadeteDAO {
         try{
             Connection con = BaseDeDatos.getInstance();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM cadetes where cod_cadete='"+cod+"'");
+            ResultSet rs = st.executeQuery("SELECT * FROM cadetes where cod_cadete="+cod);
             Cadete cadete = null;
              while(rs.next())
             {
