@@ -29,9 +29,6 @@ public class UsuarioDAO {
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
         
     }
-    
-    
-    
     public void actualizar (Usuario usuario) throws DataAccessException{
     
         try{
@@ -187,18 +184,18 @@ public class UsuarioDAO {
             int k=0;
             
             for (int j = 0; j < cad.length; j++) {
-                nueva[j][0]=cad[j][0];
-                nueva[j][1]=cad[j][1];
-                nueva[j][2]=cad[j][2];
-                nueva[j][3]=cad[j][3];
+                nueva[j][0]=cad[j][0].toString().trim();
+                nueva[j][1]=cad[j][1].toString().trim();
+                nueva[j][2]=cad[j][2].toString().trim();
+                nueva[j][3]=cad[j][3].toString().trim();
                 k++;
             }
             
             for (int j = 0; j < lista.length; j++) {
-                nueva[k][0]=lista[j][0];
-                nueva[k][1]=lista[j][1];
-                nueva[k][2]=lista[j][2];
-                nueva[k][3]=lista[j][3];
+                nueva[k][0]=lista[j][0].toString().trim();
+                nueva[k][1]=lista[j][1].toString().trim();
+                nueva[k][2]=lista[j][2].toString().trim();
+                nueva[k][3]=lista[j][3].toString().trim();
                 k++;
             }
             
@@ -243,18 +240,18 @@ public class UsuarioDAO {
             int k=0;
             
             for (int j = 0; j < cad.length; j++) {
-                nueva[j][0]=cad[j][0];
-                nueva[j][1]=cad[j][1];
-                nueva[j][2]=cad[j][2];
-                nueva[j][3]=cad[j][3];
+                nueva[j][0]=cad[j][0].toString().trim();
+                nueva[j][1]=cad[j][1].toString().trim();
+                nueva[j][2]=cad[j][2].toString().trim();
+                nueva[j][3]=cad[j][3].toString().trim();
                 k++;
             }
             
             for (int j = 0; j < lista.length; j++) {
-                nueva[k][0]=lista[j][0];
-                nueva[k][1]=lista[j][1];
-                nueva[k][2]=lista[j][2];
-                nueva[k][3]=lista[j][3];
+                nueva[k][0]=lista[j][0].toString().trim();
+                nueva[k][1]=lista[j][1].toString().trim();
+                nueva[k][2]=lista[j][2].toString().trim();
+                nueva[k][3]=lista[j][3].toString().trim();
                 k++;
             }
             
@@ -309,10 +306,10 @@ public class UsuarioDAO {
                         int j=0;
                         for (int i=0; i<tam; i++){
                             if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
-                                real[j][0]=real[i][0];
-                                real[j][1]=real[i][1];
-                                real[j][2]=real[i][2];
-                                real[j][3]=real[i][3];
+                                real[j][0]=real[i][0].toString().trim();
+                                real[j][1]=real[i][1].toString().trim();
+                                real[j][2]=real[i][2].toString().trim();
+                                real[j][3]=real[i][3].toString().trim();
                                 j++;
                             }                            
                         }
@@ -331,10 +328,10 @@ public class UsuarioDAO {
                         int j=0;
                         for (int i=0; i<tam2; i++){
                             if (real[i][1].toString().toLowerCase().indexOf(ape.toLowerCase())==0){
-                                real[j][0]=real[i][0];
-                                real[j][1]=real[i][1];
-                                real[j][2]=real[i][2];
-                                real[j][3]=real[i][3];
+                                real[j][0]=real[i][0].toString().trim();
+                                real[j][1]=real[i][1].toString().trim();
+                                real[j][2]=real[i][2].toString().trim();
+                                real[j][3]=real[i][3].toString().trim();
                                 j++;
 
                             }
@@ -354,10 +351,10 @@ public class UsuarioDAO {
                         int j=0;
                         for (int i=0; i<tam3; i++){
                             if (real[i][2].toString().toLowerCase().indexOf(nom.toLowerCase())==0){
-                                real[j][0]=real[i][0];
-                                real[j][1]=real[i][1];
-                                real[j][2]=real[i][2];
-                                real[j][3]=real[i][3];
+                                real[j][0]=real[i][0].toString().trim();
+                                real[j][1]=real[i][1].toString().trim();
+                                real[j][2]=real[i][2].toString().trim();
+                                real[j][3]=real[i][3].toString().trim();
                                 j++;
 
                             }
@@ -377,10 +374,10 @@ public class UsuarioDAO {
                         int j=0;
                         for (int i=0; i<tam4; i++){
                             if (real[i][3].toString().toLowerCase().indexOf(car.toLowerCase())==0){
-                                real[j][0]=real[i][0];
-                                real[j][1]=real[i][1];
-                                real[j][2]=real[i][2];
-                                real[j][3]=real[i][3];
+                                real[j][0]=real[i][0].toString().trim();
+                                real[j][1]=real[i][1].toString().trim();
+                                real[j][2]=real[i][2].toString().trim();
+                                real[j][3]=real[i][3].toString().trim();
                                 j++;
 
                             }
@@ -415,10 +412,10 @@ public class UsuarioDAO {
                             int j=0;
                             for (int i=0; i<tam; i++){
                                 if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
-                                    real[j][0]=real[i][0];
-                                    real[j][1]=real[i][1];
-                                    real[j][2]=real[i][2];
-                                    real[j][3]=real[i][3];
+                                    real[j][0]=real[i][0].toString().trim();
+                                    real[j][1]=real[i][1].toString().trim();
+                                    real[j][2]=real[i][2].toString().trim();
+                                    real[j][3]=real[i][3].toString().trim();
                                     j++;
                                 }                            
                             }
@@ -437,10 +434,10 @@ public class UsuarioDAO {
                             int j=0;
                             for (int i=0; i<tam2; i++){
                                 if (real[i][1].toString().toLowerCase().indexOf(ape.toLowerCase())==0){
-                                    real[j][0]=real[i][0];
-                                    real[j][1]=real[i][1];
-                                    real[j][2]=real[i][2];
-                                    real[j][3]=real[i][3];
+                                    real[j][0]=real[i][0].toString().trim();
+                                    real[j][1]=real[i][1].toString().trim();
+                                    real[j][2]=real[i][2].toString().trim();
+                                    real[j][3]=real[i][3].toString().trim();
                                     j++;
 
                                 }
@@ -460,10 +457,10 @@ public class UsuarioDAO {
                             int j=0;
                             for (int i=0; i<tam3; i++){
                                 if (real[i][2].toString().toLowerCase().indexOf(nom.toLowerCase())==0){
-                                    real[j][0]=real[i][0];
-                                    real[j][1]=real[i][1];
-                                    real[j][2]=real[i][2];
-                                    real[j][3]=real[i][3];
+                                    real[j][0]=real[i][0].toString().trim();
+                                    real[j][1]=real[i][1].toString().trim();
+                                    real[j][2]=real[i][2].toString().trim();
+                                    real[j][3]=real[i][3].toString().trim();
                                     j++;
 
                                 }
@@ -483,10 +480,10 @@ public class UsuarioDAO {
                             int j=0;
                             for (int i=0; i<tam4; i++){
                                 if (real[i][3].toString().toLowerCase().indexOf(car.toLowerCase())==0){
-                                    real[j][0]=real[i][0];
-                                    real[j][1]=real[i][1];
-                                    real[j][2]=real[i][2];
-                                    real[j][3]=real[i][3];
+                                    real[j][0]=real[i][0].toString().trim();
+                                    real[j][1]=real[i][1].toString().trim();
+                                    real[j][2]=real[i][2].toString().trim();
+                                    real[j][3]=real[i][3].toString().trim();
                                     j++;
 
                                 }
@@ -549,9 +546,9 @@ public class UsuarioDAO {
             for(j=0;j<lista.length-i-1;j++)
                 if(Integer.parseInt(lista[j+1][0].toString())<Integer.parseInt(lista[j][0].toString())){
                     for (int k=0; k<cant; k++) {
-                        aux[0][k]=lista[j+1][k];
-                        lista[j+1][k]=lista[j][k];
-                        lista[j][k]=aux[0][k];
+                        aux[0][k]=lista[j+1][k].toString().trim();
+                        lista[j+1][k]=lista[j][k].toString().trim();
+                        lista[j][k]=aux[0][k].toString().trim();
                     }
                 }
         return lista;

@@ -95,13 +95,14 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
             Object [][] real = new Object[13][4];
             
             Object [][] n = user.listadoUsuariosActivo();
+            
             if (n.length<13){
                 int i=0;
                 for (i=0; i<n.length; i++){
-                    real[i][0]=n[i][0];
-                    real[i][1]=n[i][1];
-                    real[i][2]=n[i][2];
-                    real[i][3]=n[i][3];
+                    real[i][0]=n[i][0].toString().trim();
+                    real[i][1]=n[i][1].toString().trim();
+                    real[i][2]=n[i][2].toString().trim();
+                    real[i][3]=n[i][3].toString().trim();
                     
                 }
                 for (i=n.length; i<13; i++){
@@ -150,10 +151,10 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
             if (n.length<13){
                 int i=0;
                 for (i=0; i<n.length; i++){
-                    real[i][0]=n[i][0];
-                    real[i][1]=n[i][1];
-                    real[i][2]=n[i][2];
-                    real[i][3]=n[i][3];
+                    real[i][0]=n[i][0].toString().trim();
+                    real[i][1]=n[i][1].toString().trim();
+                    real[i][2]=n[i][2].toString().trim();
+                    real[i][3]=n[i][3].toString().trim();
                     
                 }
                 for (i=n.length; i<13; i++){
@@ -202,6 +203,24 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
                 jBEliminarUsuario.setEnabled(false);
                 return; 
             }
+           
+            if (jTable1.getValueAt(jTable1.getSelectedRow(),3).toString().trim().equalsIgnoreCase("cadete")){
+                Object[][] tel =null;
+                jTable3.setModel(new javax.swing.table.DefaultTableModel(
+                        tel, new String[] {"",""}));
+                jBModificarUsuario.setEnabled(false);
+                jBEliminarUsuario.setEnabled(false);
+                jLabel7.setText("CARGO: "+"CADETE");
+                jLabel8.setText("");
+                jLabel9.setText("");
+                jLabel10.setText("");
+                JL_Foto_empleado.setIcon(null);
+                jBModificarUsuario.setEnabled(false);
+                jBEliminarUsuario.setEnabled(false);
+                                
+            }
+            
+            
             if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
                 Object[][] tel =null;
                 jTable3.setModel(new javax.swing.table.DefaultTableModel(
@@ -214,7 +233,8 @@ public class Listado_empleados extends javax.swing.JFrame implements Runnable  {
                 jLabel10.setText("");
                 JL_Foto_empleado.setIcon(null);
                 jBModificarUsuario.setEnabled(false);
-                jBEliminarUsuario.setEnabled(false);                
+                jBEliminarUsuario.setEnabled(false);  
+                
             }else{
                 UsuarioDAO users = new UsuarioDAO();
                 Usuario user = null;

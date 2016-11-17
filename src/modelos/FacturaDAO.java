@@ -26,13 +26,13 @@ public class FacturaDAO {
         Pedido pedido = ped.buscarPedido(cod);
         Connection con = BaseDeDatos.getInstance();
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("SELECT * FROM detalle_pedido WHERE cod_detalle_pedido = "+pedido.getCod_ped());
+        ResultSet rs = st.executeQuery("SELECT * FROM detalle_pedido WHERE cod_detalle_pedido = "+pedido.getCod_detalle());
         float total = 0;
         int tam=0, i=0;
         while(rs.next())
             tam++;
         rs.close();
-        rs = st.executeQuery("SELECT * FROM detalle_pedido WHERE cod_detalle_pedido = "+pedido.getCod_ped());
+        rs = st.executeQuery("SELECT * FROM detalle_pedido WHERE cod_detalle_pedido = "+pedido.getCod_detalle());
         Object[][] tabla = new Object[tam][2];
         while(rs.next()){
             tabla[i][0]=rs.getInt("cod_comida");
@@ -41,7 +41,7 @@ public class FacturaDAO {
         }
         rs.close();
         for (int j = 0; j < tabla.length; j++) {
-            rs = st.executeQuery("SELECT * FROM comidas WHERE cod_comida = "+Integer.parseInt(tabla[j][0].toString()));
+            rs = st.executeQuery("SELECT * FROM comidas WHERE cod_comida = "+Integer.parseInt(tabla[j][0].toString())); 
             while(rs.next())
                 tabla[j][0]=rs.getFloat("precio_comida");
             rs.close();
@@ -53,16 +53,15 @@ public class FacturaDAO {
         return total;
     }
     public float tarifaZona(int cod) throws ClassNotFoundException, SQLException{
-        PedidoDAO ped = new PedidoDAO();
-        Pedido pedido = ped.buscarPedido(cod);
         Connection con = BaseDeDatos.getInstance();
-        Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("SELECT * FROM zonas WHERE cod_zona = "+pedido.getCod_zona());
-        float total = 0;
-        while(rs.next())
-            total = rs.getFloat("tarifa_zona");
-        rs.close();
-        st.close();
+        float total;
+        try (Statement st = con.createStatement()) {
+            ResultSet rs = st.executeQuery("SELECT * FROM zonas WHERE cod_zona = "+cod);
+            total = 0;
+            while(rs.next())
+                total = rs.getFloat("tarifa_zona");
+            rs.close();
+        }
         return total;
     }
     
