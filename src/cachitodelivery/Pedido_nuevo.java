@@ -11,6 +11,7 @@ import Ventana_clases.Fondo_listado_pedidos_cajero;
 import Ventana_clases.Fondo_pedido_nuevo;
 import java.awt.BorderLayout;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -657,7 +658,8 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
 
      if (JOptionPane.OK_OPTION != confirmado)
         return;
-     
+
+    
             Object[][] com = comidas;
             comidas = new Object[com.length-1][2];
             int cant = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 1).toString());
@@ -672,11 +674,13 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
                     k++;
                 }    
             }
-
             
+            int codigo=0;
+
             for(int i=0; i<menu.length;i++){
                 if(menu[i][1].toString().trim().equals(jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString().trim())){
                     menu[i][3]=Integer.parseInt(menu[i][3].toString())+cant;
+                    codigo=Integer.parseInt(menu[i][0].toString().trim());
                     i=menu.length;
                 }
                     
@@ -686,13 +690,13 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
             float precio=0;
             if(comidas.length>0){
                 try {
-            
+
                 precio=cliente.obtenerPrecio(cliente.obtenerCodComida(jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString().trim()));
                 total=total-precio*cant;
                 jLabel9.setText("SUBTOTAL: "+total);
 
                 float tarifa=cliente.obtenerTarifa(clientePedido.getCodigo());
-                int dem=cliente.obtenerDemora(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().trim()))*cant;
+                int dem=cliente.obtenerDemora(codigo)*cant;   //pasar codigo comida
                 demora=demora-dem;
                 jLabel10.setText("TOTAL: "+(total+tarifa));
                 jLabel11.setText("DEMORA: "+demora);

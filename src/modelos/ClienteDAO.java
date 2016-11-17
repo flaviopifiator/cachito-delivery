@@ -465,7 +465,33 @@ public class ClienteDAO {
             if(tam<rs.getInt(1))
                 tam=rs.getInt(1);
         }
+        rs.close();
         return tam;
+    }
+    
+    public Object[][] obtenerDetalle(int cod) throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM detalle_pedido WHERE cod_detalle_pedido="+cod);
+        int tam=0;
+        while(rs.next()){
+            tam++;
+        }
+        st.close();
+        rs.close();
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT comidas.descripcion_comida, detalle_pedido.cantidad_comida  FROM comidas, detalle_pedido WHERE "
+                + "comidas.cod_comida=detalle_pedido.cod_comida AND cod_detalle_pedido="+cod);
+        Object[][] detalle = new Object[tam][2];
+        int i=0;
+        while(rs.next()){
+            detalle[i][0]=rs.getString(1);
+            detalle[i][1]=rs.getInt(2);
+            i++;
+        }
+        st.close();
+        rs.close();
+        return detalle;
     }
     
     public Cliente buscarClienteCod(int codigo) throws DataAccessException{
@@ -497,6 +523,15 @@ public class ClienteDAO {
             return cliente;
         }catch (Exception ex){throw new DataAccessException("Error en ClienteDAO.buscarCliente() "+ex);}
    
+    }
+
+    public void borrarDetalle(int cod_detalle) throws DataAccessException {
+        try{
+            Connection con = BaseDeDatos.getInstance();
+            Statement st = con.createStatement();
+            st.executeUpdate("DELETE FROM detalle_pedido WHERE cod_detalle_pedido="+cod_detalle);
+            st.close();
+        }catch (Exception ex){throw new DataAccessException("Error en Telefono_ClienteDAO.eliminar() "+ex);}
     }
 }
 
