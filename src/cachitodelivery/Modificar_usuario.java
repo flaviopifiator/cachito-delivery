@@ -91,7 +91,6 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
 
 
     public void mostrar(boolean b){
-        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         setResizable(false);
         setSize(1000,690);
         setLocationRelativeTo(null);
