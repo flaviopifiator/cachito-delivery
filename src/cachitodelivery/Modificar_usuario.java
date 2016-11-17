@@ -568,7 +568,7 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
         
         try {        
             
-            Listado_empleados vtListaEmpleados= new Listado_empleados(cuentaOficial);
+            Listado_empleados vtListaEmpleados= new Listado_empleados(cuenta);
             vtListaEmpleados.mostrar(true);
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
