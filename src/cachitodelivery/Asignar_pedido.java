@@ -15,6 +15,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import modelos.Cadena;
+import modelos.Fecha;
 import modelos.PedidoDAO;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
@@ -23,14 +24,18 @@ import modelos.UsuarioDAO;
  *
  * @author Gabe50
  */
-public class Asignar_pedido extends javax.swing.JFrame {
+public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
 
     Object[][] pedidos;
     Object[][] mochila = new Object[0][0];
     Usuario cuentaOficial = new Usuario();
+    Thread h1;
+    Fecha fecha = new Fecha();
     
     public Asignar_pedido() {
         initComponents();
+        h1= new Thread(this);
+        h1.start();
         Fondo_asignar fondo = new Fondo_asignar(1161,600);
         this.add(fondo, BorderLayout.CENTER);
     }
@@ -503,4 +508,9 @@ public class Asignar_pedido extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
+
+ @Override
+    public void run() {
+
+    }
 }
