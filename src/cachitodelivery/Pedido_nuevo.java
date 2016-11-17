@@ -38,7 +38,6 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
         clientePedido = cli;
-        menu();
     }
     
     public void mostrar(boolean b){
@@ -87,7 +86,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
 //
 //        
 //        jRadioButton1.setSelected(false);
-//        
+//       
         jTable1.setTableHeader(null);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -181,6 +180,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
+        menu();
         iniciarListado();
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
