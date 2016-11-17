@@ -12,7 +12,9 @@ import Ventana_clases.Fondo_pedido_modificar;
 import Ventana_clases.Fondo_pedido_nuevo;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import modelos.Cadena;
 import modelos.Cliente;
+import modelos.ClienteDAO;
 import modelos.Fecha;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
@@ -27,13 +29,24 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
     Fecha fecha = new Fecha();
     Usuario cuentaOficial = new Usuario();
     Cliente clientePedido = new Cliente();
+    Object[][] menu;
+    Object[][] comidas = new Object[0][2];
+    float total=0;
+    int demora=0;
     
     public Pedido_modificar(Usuario user, Cliente cli) {
         initComponents();
         h1= new Thread(this);
         h1.start();
-        Fondo_pedido_modificar fondo = new Fondo_pedido_modificar (1028,600);
+        Fondo_pedido_nuevo fondo = new Fondo_pedido_nuevo (1028,600);
         this.add(fondo, BorderLayout.CENTER);
+        JL_Usuario_admin1.setText("USUARIO: "+user.getApellido().trim()+" "+user.getNombre().trim());
+        String nombre ="APPELIDO Y NOMBRE: "+cli.getApellido().trim()+" "+cli.getNombre().trim();
+        String domicilio= "DOMICILIO: "+cli.getCalle().trim()+" "+cli.getNumero_calle().trim()+" "+
+                cli.getBarrio().trim()+" "+cli.getCasa().trim()+" "+cli.getDepartamento().trim()+" "+cli.getLocalidad().trim();
+        Cadena cadena = new Cadena();
+        jLabel14.setText(cadena.limitar(nombre, 40));
+        jLabel15.setText(cadena.limitar(domicilio, 50));
         cuentaOficial = user;
         clientePedido = cli;
     }
@@ -48,54 +61,72 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
     }
     
     public void iniciarListado() {
-//        jBModificarUsuario.setEnabled(false);
-//        jBEliminarUsuario.setEnabled(false);
-//
-//        
-//        jRadioButton1.setSelected(false);
-//        
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
+
         jTable1.setTableHeader(null);
-//        jLabel7.setText("USUARIO NO SELECCIONADO");
-//        jLabel8.setText("");
-//        jLabel9.setText("");
-//        jLabel10.setText("");
-//        JL_Foto_empleado.setIcon(null);
-//        try{
-//            UsuarioDAO user =new UsuarioDAO();
-//            Object [][] real = new Object[13][4];
-//            
-//            Object [][] n = user.listadoUsuariosActivo();
-//            if (n.length<13){
-//                int i=0;
-//                for (i=0; i<n.length; i++){
-//                    real[i][0]=n[i][0];
-//                    real[i][1]=n[i][1];
-//                    real[i][2]=n[i][2];
-//                    real[i][3]=n[i][3];
-//                    
-//                }
-//                for (i=n.length; i<13; i++){
-//                    real[i][0]=null;
-//                    real[i][1]=null;
-//                    real[i][2]=null;
-//                    real[i][3]=null;
-//                }      
-//            }else
-//                real=n;
-//            
-//            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-//                    real,new String[] {"","","",""}));
-//            
-//            jTable1.setDefaultRenderer(Object.class, r);
-//            
-//            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-//            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
-//            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
-//            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-//        }catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }
+        
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                menu,new String[] {"","","",""}));
+
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(30);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
     }
+    
+       public void menu(){
+        try{
+            ClienteDAO user =new ClienteDAO();
+            Object [][] real = new Object[13][4];
+            
+            Object [][] n = user.comidasMenu();
+            if (n.length<13){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<13; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+            
+            menu=real;
+            
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void seleccionarTabla1(){
+        if (jTable1.getSelectedRow()==-1 || jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+                return; 
+            }
+        jButton3.setEnabled(true);
+        jButton4.setEnabled(false);
+    }
+    
+        public void seleccionarTabla2(){
+        if (jTable2.getSelectedRow()==-1){
+                jButton3.setEnabled(false);
+                jButton4.setEnabled(false);
+                return; 
+            }
+        jButton4.setEnabled(true);
+        jButton3.setEnabled(false);
+    }
+        
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -444,6 +475,16 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        Listado_pedidos_admin vent1;
+        Listado_pedidos_cajero vent2;
+        if(cuentaOficial.getCargo()==0){
+            vent1 = new Listado_pedidos_admin(cuentaOficial);
+            vent1.mostrar(true);
+        }
+        else{
+            vent2 = new Listado_pedidos_cajero(cuentaOficial);
+            vent2.mostrar(true);
+        }            
         this.h1.stop();
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
