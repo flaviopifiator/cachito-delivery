@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import modelos.Cadena;
+import modelos.CajaDAO;
 import modelos.Cliente;
 import modelos.Fecha;
 import modelos.PedidoDAO;
@@ -915,6 +916,16 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+                CajaDAO caja = new CajaDAO();
+        try {
+            if(!caja.seba()){
+                JOptionPane.showMessageDialog(jButton6,"Aun no se abrió la caja","Error al generar pedido",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         setVisible(false);
         this.h1.stop();
         Listado_clientes vent = new Listado_clientes(cuentaOficial);
@@ -938,6 +949,7 @@ public class Listado_pedidos_admin extends javax.swing.JFrame implements Runnabl
     }//GEN-LAST:event_jTable1MousePressed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
         setVisible(false);
         this.h1.stop();
         Pedido_modificar vent = new Pedido_modificar(cuentaOficial, new Cliente());

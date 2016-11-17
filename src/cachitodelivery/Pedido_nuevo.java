@@ -703,9 +703,9 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
                 }
             }
             else{
-                jLabel9.setText("");
-                jLabel10.setText("");
-                jLabel11.setText("");
+                jLabel9.setText("SUBTOTAL: ");
+                jLabel10.setText("TOTAL: ");
+                jLabel11.setText("DEMORA: ");
             }
  
             jTable2.setModel(new javax.swing.table.DefaultTableModel(
