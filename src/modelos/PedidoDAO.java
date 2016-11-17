@@ -653,6 +653,25 @@ public class PedidoDAO {
 	catch (Exception ex){throw new DataAccessException("Error en PedidoDAO.ListadoPedidosActivos() "+ex);}
   	 
     }
-
+    public Pedido buscarPedido(int cod) throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM pedidos WHERE cod_pedido= "+cod);
+        Pedido pedido = new Pedido();
+        while(rs.next()){
+            pedido.setCod_cliente(rs.getInt("cod_cliente"));
+            pedido.setCod_detalle(rs.getInt("cod_detalle_pedido"));
+            pedido.setCod_ped(rs.getInt("cod_pedido"));
+            pedido.setCod_usuario(rs.getInt("cod_usuario"));
+            pedido.setCod_zona(rs.getInt("cod_zona"));
+            pedido.setEstado(rs.getInt("estado_pedido"));
+            pedido.setFecha(rs.getString("fecha_pedido"));
+            pedido.setHora(rs.getString("hora_pedido"));
+            pedido.setObservacion(rs.getString("observacion_pedido"));
+        }
+        rs.close();
+        st.close();
+        return pedido;
+    }
     
 }

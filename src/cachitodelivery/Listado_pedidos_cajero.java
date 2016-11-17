@@ -35,7 +35,7 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
     public Listado_pedidos_cajero(Usuario user) {
         initComponents();
         h1= new Thread(this);
-//        h1.start();
+        h1.start();
         Fondo_listado_pedidos_cajero fondo = new Fondo_listado_pedidos_cajero(1028,600);
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
@@ -634,7 +634,7 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
      try {
             Menu_cajero vent;
-        
+            this.h1.stop();
             vent = new Menu_cajero(cuentaOficial);
             vent.setVisible(true);
         this.dispose();
@@ -654,12 +654,14 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
             Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
         }
         setVisible(false);
+        this.h1.stop();
         Listado_clientes vent = new Listado_clientes(cuentaOficial);
         vent.mostrar();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         setVisible(false);
+        this.h1.stop();
         Pedido_modificar vent = new Pedido_modificar(cuentaOficial, new Cliente());
         vent.mostrar(true);
     }//GEN-LAST:event_jButton3ActionPerformed
