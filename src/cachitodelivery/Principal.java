@@ -161,6 +161,9 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     
     private void ingresoSistema(){
         try{
+            if(JTF_IdUser.getText().isEmpty() || JPF_PassUser.getText().isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "No se permiten campos vacios.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
+            }
             Usuario user = new Usuario();
 
             String pass;
@@ -200,7 +203,8 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                 JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
             }
         }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
-        }  
+        }
+         catch(NumberFormatException ex){}
     }
     
     
@@ -982,7 +986,7 @@ public class Principal extends javax.swing.JFrame implements Runnable{
             int codigo = usuario.lastUser();
             Object[][] aux = new Object[telefono.length][3];
             for(int i=0; i<telefono.length;i++){
-                aux[i][0]=codigo;
+                aux[i][0]=codigo+1;
                 aux[i][1]=telefono[i][0];
                 aux[i][2]=telefono[i][1]; 
             }

@@ -166,8 +166,8 @@ public class UsuarioDAO {
             while(rs.next())
             {
                 lista[i][0] = rs.getInt(8);
-                lista[i][1] = rs.getString(3);
-                lista[i][2] = rs.getString(2);
+                lista[i][1] = rs.getString(3).trim();
+                lista[i][2] = rs.getString(2).trim();
                 if(rs.getBoolean(7)==true){
                     if (rs.getInt(5)==0)
                         lista[i][3]="Administrador";
@@ -224,8 +224,8 @@ public class UsuarioDAO {
             while(rs.next())
             {
                 lista[i][0] = rs.getInt(8);
-                lista[i][1] = rs.getString(3);
-                lista[i][2] = rs.getString(2);
+                lista[i][1] = rs.getString(3).trim();
+                lista[i][2] = rs.getString(2).trim();
                 if (rs.getInt(5)==0)
                     lista[i][3]="Administrador";
                 else
