@@ -91,7 +91,6 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
 
 
     public void mostrar(boolean b){
-        setIconImage (new ImageIcon(getClass().getResource("/Ventanas/Icono.png")).getImage());
         setResizable(false);
         setSize(1000,690);
         setLocationRelativeTo(null);
@@ -568,7 +567,7 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
         
         try {        
             this.h1.stop();
-            Listado_empleados vtListaEmpleados= new Listado_empleados(cuentaOficial);
+            Listado_empleados vtListaEmpleados= new Listado_empleados(cuenta);
             vtListaEmpleados.mostrar(true);
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);

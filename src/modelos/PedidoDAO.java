@@ -7,6 +7,7 @@ package modelos;
 
 import Excepciones.DataAccessException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -85,7 +86,7 @@ public class PedidoDAO {
     catch (Exception ex){throw new DataAccessException("Error en PedidoDAO.ListadoPedidosActivos() "+ex);}
     }
     
-        public Object [][] listadoPedidosCancelados() throws DataAccessException{
+    public Object [][] listadoPedidosCancelados() throws DataAccessException{
         try{
             Connection con = BaseDeDatos.getInstance();
             Statement st = con.createStatement();
@@ -121,7 +122,7 @@ public class PedidoDAO {
     catch (Exception ex){throw new DataAccessException("Error en PedidoDAO.ListadoPedidosActivos() "+ex);}
     }
         
-            public Object [][] listadoPedidosHistoricos() throws DataAccessException{
+    public Object [][] listadoPedidosHistoricos() throws DataAccessException{
         try{
             Connection con = BaseDeDatos.getInstance();
             Statement st = con.createStatement();
@@ -266,6 +267,344 @@ public class PedidoDAO {
 
                 return comidas;
         }catch (Exception ex){throw new DataAccessException("Error en PedidoDAO.buscarComidasPedidoCod() "+ex);}
+    }
+
+    
+    public Object[][] buscarPedidoText(String cod, String apeNom, String dom, String estado, int tipo) throws DataAccessException{
+        try{
+            switch (tipo){
+                case 1:{        //ACTIVOS
+                    if(cod==null && apeNom==null && dom==null && estado==null)
+                        return listadoPedidosActivos();
+                    Object [][] real = null;
+                    real= listadoPedidosActivos();
+                    int tam=real.length;
+                    int tam2=real.length;
+                    int tam3=real.length;
+                    int tam4=real.length;
+                    if(real==null)
+                        return real;
+                    if (!cod.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam; i++){
+                            if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+                            }                            
+                        }
+                        for(int k=j; k<tam; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam2--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!apeNom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam2; i++){
+                            if (real[i][1].toString().toLowerCase().indexOf(apeNom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam2; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!dom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam3; i++){
+                            if (real[i][2].toString().toLowerCase().indexOf(dom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam3; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!estado.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam4; i++){
+                            if (real[i][3].toString().toLowerCase().indexOf(estado.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam4; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam3--;
+                        }
+
+                    }
+
+                    return real;
+                }
+                case 2:{        //HISTORICOS
+                    if(cod==null && apeNom==null && dom==null && estado==null)
+                        return listadoPedidosHistoricos();
+                    Object [][] real = null;
+                    real= listadoPedidosHistoricos();
+                    int tam=real.length;
+                    int tam2=real.length;
+                    int tam3=real.length;
+                    int tam4=real.length;
+                    if(real==null)
+                        return real;
+                    if (!cod.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam; i++){
+                            if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+                            }                            
+                        }
+                        for(int k=j; k<tam; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam2--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!apeNom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam2; i++){
+                            if (real[i][1].toString().toLowerCase().indexOf(apeNom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam2; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!dom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam3; i++){
+                            if (real[i][2].toString().toLowerCase().indexOf(dom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam3; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!estado.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam4; i++){
+                            if (real[i][3].toString().toLowerCase().indexOf(estado.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam4; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam3--;
+                        }
+
+                    }
+
+                    return real;
+                }
+                case 3:{        //CANCELADOS
+                    if(cod==null && apeNom==null && dom==null && estado==null)
+                        return listadoPedidosCancelados();
+                    Object [][] real = null;
+                    real= listadoPedidosCancelados();
+                    int tam=real.length;
+                    int tam2=real.length;
+                    int tam3=real.length;
+                    int tam4=real.length;
+                    if(real==null)
+                        return real;
+                    if (!cod.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam; i++){
+                            if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+                            }                            
+                        }
+                        for(int k=j; k<tam; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam2--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!apeNom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam2; i++){
+                            if (real[i][1].toString().toLowerCase().indexOf(apeNom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam2; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!dom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam3; i++){
+                            if (real[i][2].toString().toLowerCase().indexOf(dom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam3; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!estado.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam4; i++){
+                            if (real[i][3].toString().toLowerCase().indexOf(estado.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam4; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam3--;
+                        }
+
+                    }
+
+                    return real;
+                }
+                    
+            }
+
+                
+         return null;   
+            
+        }catch (Exception ex){throw new DataAccessException("Error en PedidosDAO.buscarPedidoText() "+ex);}
+   
+    } 
+    
+    public void actualizarEstadoPedido(int cod_pedido, int estado) throws SQLException, ClassNotFoundException, DataAccessException{
+        try{
+            Connection con = BaseDeDatos.getInstance();
+            PreparedStatement ps = con.prepareStatement("UPDATE pedidos SET estado_pedido='"+estado+"' WHERE cod_pedido='"+cod_pedido+"'");
+            ps.execute();
+            ps.close();
+        }catch (ClassNotFoundException | SQLException ex){throw new DataAccessException("Error en PedidoDAO.ActualizarEstadoPedido() "+ex);}
     }
     
 

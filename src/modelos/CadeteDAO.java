@@ -152,7 +152,7 @@ public class CadeteDAO {
                 lista[i][0] = rs.getInt("cod_cadete");
                 lista[i][1] = rs.getString("apellido_cadete");
                 lista[i][2] = rs.getString("nombre_cadete");
-                    lista[i][3]="Cajero";
+                lista[i][3]="Cadete";
                 i++;
             }
             rs.close();

@@ -535,7 +535,7 @@ public class UsuarioDAO {
         
     }
     public boolean isOP(Usuario u){
-        int op = 104;
+        int op = 99;
         
         if(u.getCod()==op)
             return false;
