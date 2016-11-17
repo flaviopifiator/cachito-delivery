@@ -4,6 +4,7 @@ import Excepciones.DataAccessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -166,7 +167,201 @@ public class ClienteDAO {
             
         }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarCliente() "+ex);}
     }
-    
-    
+    public Object[][] telefonos(int cod) throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM telefonos_clientes WHERE cod_cliente = "+cod);
+        int tam=0;
+        while(rs.next())
+            tam++;
+        Object[][] lista = new Object[tam][2];
+        int i=0;
+        rs.close();
+        rs = st.executeQuery("SELECT * FROM telefonos_clientes WHERE cod_cliente = "+cod);
+        while(rs.next())
+        {
+            lista[i][0] = rs.getString("descripcion").trim();
+            lista[i][1] = rs.getString("telefono_cliente").trim();
+            i++;
+        }
+        rs.close();
+        st.close();
+        return lista;
+    }
+    public Object[][] correo(int cod) throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM correos WHERE cod_cliente = "+cod);
+        int tam=0;
+        while(rs.next())
+            tam++;
+        Object[][] lista = new Object[tam][2];
+        int i=0;
+        rs.close();
+        rs = st.executeQuery("SELECT * FROM correos WHERE cod_cliente = "+cod);
+        while(rs.next())
+        {
+            lista[i][0] = rs.getString("correo").trim();
+            i++;
+        }
+        rs.close();
+        st.close();
+        return lista;
+    }
+    public Object[][] faltas(int cod) throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM faltas WHERE cod_cliente = "+cod);
+        int tam=0;
+        while(rs.next())
+            tam++;
+        Object[][] lista = new Object[tam][2];
+        int i=0;
+        rs.close();
+        rs = st.executeQuery("SELECT * FROM faltas WHERE cod_cliente = "+cod);
+        while(rs.next())
+        {
+            lista[i][0] = rs.getString("descripcion_falta").trim();
+            i++;
+        }
+        rs.close();
+        st.close();
+        return lista;
+    }
+    public Object[][] buscarText(String cod, String ape, String nom, String dom) throws DataAccessException{
+        try{
+                if(cod==null && ape==null && nom==null && dom==null)
+                    return this.listadoClientes();
+                else{
+                    Object [][] real = null;
+                    real=this.listadoClientes();
+                    int tam=real.length;
+                    int tam2=real.length;
+                    int tam3=real.length;
+                    int tam4=real.length;
+                    if(real==null)
+                        return real;
+                    if (!cod.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam; i++){
+                            if (real[i][0].toString().toLowerCase().indexOf(cod.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+                            }                            
+                        }
+                        for(int k=j; k<tam; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam2--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!ape.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam2; i++){
+                            if (real[i][1].toString().toLowerCase().indexOf(ape.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam2; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam3--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!nom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam3; i++){
+                            if (real[i][2].toString().toLowerCase().indexOf(nom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam3; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam4--;
+                        }
+
+                    }
+                    if (!dom.isEmpty()){
+                        int j=0;
+                        for (int i=0; i<tam4; i++){
+                            if (real[i][3].toString().toLowerCase().indexOf(dom.toLowerCase())==0){
+                                real[j][0]=real[i][0];
+                                real[j][1]=real[i][1];
+                                real[j][2]=real[i][2];
+                                real[j][3]=real[i][3];
+                                j++;
+
+                            }
+                        }
+                        for(int k=j; k<tam4; k++){
+                            real[k][0]=null;
+                            real[k][1]=null;
+                            real[k][2]=null;
+                            real[k][3]=null;
+                            tam--;
+                            tam2--;
+                            tam3--;
+                        }
+
+                    }
+
+                    return real;
+                }
+            
+            
+            
+        }catch (Exception ex){throw new DataAccessException("Error en UsuarioDAO.buscarUsuarioText() "+ex);}
+    }
+    public Object[][] comidasMenu() throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM comidas WHERE activo= true ORDER BY cod_comida ASC");
+        int tam=0;
+        while(rs.next())
+            tam++;
+        Object[][] lista = new Object[tam][4];
+        int i=0;
+        rs.close();
+        rs = st.executeQuery("SELECT * FROM comidas WHERE activo= true ORDER BY cod_comida ASC");
+        while(rs.next())
+        {
+            lista[i][0] = rs.getInt("cod_comida");
+            lista[i][1] = rs.getString("descripcion_comida").trim();
+            lista[i][2] = rs.getFloat("precio_comida");
+            lista[i][3] = rs.getInt("cantidad_comida");
+            i++;
+        }
+        rs.close();
+        st.close();
+        return lista;
+    }
 }
 

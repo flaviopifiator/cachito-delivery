@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -35,7 +36,7 @@ public class Listado_clientes extends javax.swing.JFrame {
         Fondo_listado_clientes fondo = new Fondo_listado_clientes(1253,600);
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial=user;
-        
+        JL_Usuario_admin1.setText("USUARIO: "+cuentaOficial.getApellido()+" "+cuentaOficial.getNombre());
         
     }
     
@@ -50,6 +51,9 @@ public class Listado_clientes extends javax.swing.JFrame {
     
     public void iniciarListado() throws DataAccessException{
         jTable1.setTableHeader(null);
+        jTable2.setTableHeader(null);
+        jTable3.setTableHeader(null);
+        jTable4.setTableHeader(null);
         ClienteDAO pedido =new ClienteDAO();
             Object [][] real = new Object[15][4];
             
@@ -81,87 +85,139 @@ public class Listado_clientes extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(3).setPreferredWidth(310);
     }
     public void seleccionar(){
-//        try{
-//            if (jTable1.getSelectedRow()==-1){
-//                Object[][] tel =null;
-//                jTable3.setModel(new javax.swing.table.DefaultTableModel(
-//                        tel, new String[] {"",""}));
-//                jBModificarUsuario.setEnabled(false);
-//                jBEliminarUsuario.setEnabled(false);
-//                return; 
-//            }
-//            if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
-//                Object[][] tel =null;
-//                jTable3.setModel(new javax.swing.table.DefaultTableModel(
-//                        tel, new String[] {"",""}));
-//                jBModificarUsuario.setEnabled(false);
-//                jBEliminarUsuario.setEnabled(false);
-//                jLabel7.setText("USUARIO NO SELECCIONADO");
-//                jLabel8.setText("");
-//                jLabel9.setText("");
-//                jLabel10.setText("");
-//                JL_Foto_empleado.setIcon(null);
-//                jBModificarUsuario.setEnabled(false);
-//                jBEliminarUsuario.setEnabled(false);                
-//            }else{
-//                UsuarioDAO users = new UsuarioDAO();
-//                Usuario user = null;
-//                user=users.buscarUsuarioCod(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
-//                
-//                String apellido = user.getApellido().trim();
-//                String nombre = user.getNombre().trim();
-//                        
-//                Cadena cad = new Cadena();
-//                
-//                jLabel7.setText("APELLIDOS: "+cad.limitar(apellido, 21));
-//                jLabel8.setText("NOMBRES: "+cad.limitar(nombre, 23));
-//                jLabel9.setText("D.N.I.: "+user.getDni());
-//                if (user.getCargo()==1)
-//                    jLabel10.setText("CARGO: Cajero");
-//                else
-//                    jLabel10.setText("CARGO: Aministrador");
-//                
-//                if(user.getCodFoto()==null)
-//                    JL_Foto_empleado.setIcon(null);
-//                else{
-//                    InputStream binario;
-//                    ImageIcon foto;
-//                
-//                    binario=user.getCodFoto();
-//
-//
-//                    BufferedImage bi = ImageIO.read(binario);
-//                    foto = new ImageIcon(bi);
-//
-//
-//                    Image img = foto.getImage();
-//                    Image newimg = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
-//
-//                    ImageIcon newicon = new ImageIcon(newimg);
-//
-//
-//                    JL_Foto_empleado.setIcon(newicon);
-//                }
-//                iniciarTel();
-//                
-//                if(jTable1.getValueAt(jTable1.getSelectedRow(),3)=="Eliminado"){
-//                    jBModificarUsuario.setEnabled(false);
-//                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/reac.png")));
-//                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/reac_hover.png")));
-//                    jBEliminarUsuario.setEnabled(true);
-//                }else{
-//                    jBModificarUsuario.setEnabled(true);
-//                    jBEliminarUsuario.setIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar.png")));
-//                    jBEliminarUsuario.setRolloverIcon(new ImageIcon(getClass().getResource("/Botones/Eliminar_hover.png")));
-//                    jBEliminarUsuario.setEnabled(true);
-//                }
-//                
-//                
-//            }
-//        }catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }
+        try{
+            if (jTable1.getSelectedRow()==-1){
+                iniciarTel(-1);
+                iniciarCorreo(-1);
+                iniciarFaltas(-1);
+                jButton1.setEnabled(false);
+                
+                return; 
+                
+            }
+            if (jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
+                iniciarTel(-1);
+                iniciarCorreo(-1);
+                iniciarFaltas(-1);
+                //Botones
+                jLabel6.setText("LOCALIDAD: -");
+                jLabel7.setText("CALLE: -");
+                jLabel8.setText("BARRIO: -");
+                jLabel9.setText("DEPARTAMENTO: -");
+                jLabel11.setText("");
+                jTextArea1.setText("");
+                jButton1.setEnabled(false);
+                
+            }else{
+                ClienteDAO clientes = new ClienteDAO();
+                Cliente cliente = clientes.buscarCliente(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString()));
+                
+                jLabel6.setText("LOCALIDAD; "+cliente.getLocalidad().trim());
+                jLabel7.setText("CALLE: "+cliente.getCalle().trim()+" "+cliente.getNumero_calle().trim());
+                jLabel8.setText("BARRIO: "+cliente.getBarrio().trim()+" "+cliente.getCasa().trim());
+                jLabel9.setText("DEPTO: "+cliente.getDepartamento().trim());
+                jLabel11.setText("");
+                jTextArea1.setText(cliente.getObservacion());
+                
+                int cod= Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString());
+                
+                jTable2.setTableHeader(null);
+                jTable3.setTableHeader(null);
+                jTable4.setTableHeader(null);
+                
+                iniciarTel(cod);
+                iniciarCorreo(cod);
+                iniciarFaltas(cod);
+                
+                jButton1.setEnabled(true);
+            }
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
+    
+    
+    public void iniciarTel(int cod) throws ClassNotFoundException, SQLException{
+        if(cod==-1){
+            jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        null,new String[] {"",""}));
+        }else{
+            ClienteDAO cli = new ClienteDAO();
+            Object[][] lista = cli.telefonos(cod);
+            jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        lista,new String[] {"",""}));
+        }
+        
+    }
+    public void iniciarCorreo(int cod) throws ClassNotFoundException, SQLException{
+        if(cod==-1){
+            jTable3.setModel(new javax.swing.table.DefaultTableModel(
+                        null,new String[] {""}));
+        }else{
+            ClienteDAO cli = new ClienteDAO();
+            Object[][] lista = cli.correo(cod);
+            jTable3.setModel(new javax.swing.table.DefaultTableModel(
+                        lista,new String[] {""}));
+        } 
+    }
+    
+    public void iniciarFaltas(int cod) throws ClassNotFoundException, SQLException{
+        if(cod==-1){
+            jTable4.setModel(new javax.swing.table.DefaultTableModel(
+                        null,new String[] {""}));
+        }else{
+            ClienteDAO cli = new ClienteDAO();
+            Object[][] lista = cli.faltas(cod);
+            jTable4.setModel(new javax.swing.table.DefaultTableModel(
+                        lista,new String[] {""}));
+        } 
+    }
+    private void buscar(){
+        jTable1.setTableHeader(null);
+        try{
+            ClienteDAO user =new ClienteDAO();
+            Object [][] real = new Object[13][4];
+            
+            Object [][] n = user.buscarText(jTextField1.getText(), jTextField2.getText(), jTextField3.getText(), jTextField4.getText());
+            if (n.length<13){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<13; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+                
+                
+            
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                    real,new String[] {"","","",""}));
+            
+            jButton1.setEnabled(false);
+            
+            jTable1.changeSelection(0, 0, false, false);
+            seleccionar();
+            
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(25);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(175);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(175);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(310);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -211,13 +267,49 @@ public class Listado_clientes extends javax.swing.JFrame {
         JL_Usuario_admin1.setText("USUARIO: ");
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField2KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
+            }
+        });
 
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField3KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField3KeyReleased(evt);
+            }
+        });
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField4KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
+        jTable1 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -239,6 +331,16 @@ public class Listado_clientes extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable1MousePressed(evt);
+            }
+        });
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTable1KeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         try
         {
@@ -248,65 +350,65 @@ public class Listado_clientes extends javax.swing.JFrame {
             System.out.println(ex.getMessage());
         }
 
+        jTable2 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            null,
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         jScrollPane2.setViewportView(jTable2);
+        jTable2.setTableHeader(null);
 
+        jTable3 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            null,
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         jScrollPane3.setViewportView(jTable3);
+        jTable3.setTableHeader(null);
 
+        jTable4 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            null,
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
         jScrollPane4.setViewportView(jTable4);
+        jTable4.setTableHeader(null);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel6.setText("AAAAAAAAAAAAAAAAAAAAAAAAAA");
+        jLabel6.setText("LOCALIDAD: -");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel7.setText("AAAAAAAAAAAAAAAAAAAAAAAAAA");
+        jLabel7.setText("CALLE: -");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel8.setText("AAAAAAAAAAAAAAAAAAAAAAAAAA");
+        jLabel8.setText("BARRIO: -");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel9.setText("AAAAAAAAAAAAAAAAAAAAAAAAAA");
+        jLabel9.setText("DEPARTAMENTO: -");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(53, 94, 122));
-        jLabel11.setText("AAAAAAAAAAAAAAAAAAAAAAAAAA");
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane5.setViewportView(jTextArea1);
@@ -316,6 +418,7 @@ public class Listado_clientes extends javax.swing.JFrame {
         jButton1.setBorderPainted(false);
         jButton1.setContentAreaFilled(false);
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setEnabled(false);
         jButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Pedido_nuevo_hover.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -329,6 +432,11 @@ public class Listado_clientes extends javax.swing.JFrame {
         jButton2.setContentAreaFilled(false);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Atras2_hover.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         JL_Hora_Admin1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         JL_Hora_Admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -425,7 +533,7 @@ public class Listado_clientes extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel6)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel7)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -433,7 +541,7 @@ public class Listado_clientes extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel9)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jLabel11)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -459,6 +567,57 @@ public class Listado_clientes extends javax.swing.JFrame {
         Pedido_nuevo vent = new Pedido_nuevo(cuentaOficial, new Cliente());
         vent.mostrar(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        seleccionar();
+    }//GEN-LAST:event_jTable1MousePressed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        dispose();
+        if(cuentaOficial.getCargo()==0){
+            Listado_pedidos_admin vent = new Listado_pedidos_admin(cuentaOficial);
+            vent.mostrar(true);
+        }else{
+            Listado_pedidos_cajero vent = new Listado_pedidos_cajero(cuentaOficial);
+            vent.mostrar(true);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyPressed
+        seleccionar();
+    }//GEN-LAST:event_jTable1KeyPressed
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        
+    }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
+        
+    }//GEN-LAST:event_jTextField2KeyPressed
+
+    private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
+        
+    }//GEN-LAST:event_jTextField3KeyPressed
+
+    private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
+        
+    }//GEN-LAST:event_jTextField4KeyPressed
+
+    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
+        buscar();
+    }//GEN-LAST:event_jTextField4KeyReleased
+
+    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
+        buscar();
+    }//GEN-LAST:event_jTextField3KeyReleased
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+        buscar();
+    }//GEN-LAST:event_jTextField2KeyReleased
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        buscar();
+    }//GEN-LAST:event_jTextField1KeyReleased
 
     /**
      * @param args the command line arguments

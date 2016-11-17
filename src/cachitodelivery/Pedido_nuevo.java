@@ -12,6 +12,7 @@ import Ventana_clases.Fondo_pedido_nuevo;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import modelos.Cliente;
+import modelos.ClienteDAO;
 import modelos.Fecha;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
@@ -26,6 +27,8 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     Fecha fecha = new Fecha();
     Usuario cuentaOficial = new Usuario();
     Cliente clientePedido = new Cliente();
+    Object[][] menu;
+    Object[][] comidas;
     
     public Pedido_nuevo(Usuario user, Cliente cli) {
         initComponents();
@@ -35,6 +38,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         this.add(fondo, BorderLayout.CENTER);
         cuentaOficial = user;
         clientePedido = cli;
+        menu();
     }
     
     public void mostrar(boolean b){
@@ -46,6 +50,37 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         setVisible(b);
     }
     
+    public void menu(){
+        try{
+            ClienteDAO user =new ClienteDAO();
+            Object [][] real = new Object[13][4];
+            
+            Object [][] n = user.comidasMenu();
+            if (n.length<13){
+                int i=0;
+                for (i=0; i<n.length; i++){
+                    real[i][0]=n[i][0];
+                    real[i][1]=n[i][1];
+                    real[i][2]=n[i][2];
+                    real[i][3]=n[i][3];
+                    
+                }
+                for (i=n.length; i<13; i++){
+                    real[i][0]=null;
+                    real[i][1]=null;
+                    real[i][2]=null;
+                    real[i][3]=null;
+                }      
+            }else
+                real=n;
+            
+            menu=real;
+            
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
     public void iniciarListado() {
 //        jBModificarUsuario.setEnabled(false);
 //        jBEliminarUsuario.setEnabled(false);
@@ -54,46 +89,14 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
 //        jRadioButton1.setSelected(false);
 //        
         jTable1.setTableHeader(null);
-//        jLabel7.setText("USUARIO NO SELECCIONADO");
-//        jLabel8.setText("");
-//        jLabel9.setText("");
-//        jLabel10.setText("");
-//        JL_Foto_empleado.setIcon(null);
-//        try{
-//            UsuarioDAO user =new UsuarioDAO();
-//            Object [][] real = new Object[13][4];
-//            
-//            Object [][] n = user.listadoUsuariosActivo();
-//            if (n.length<13){
-//                int i=0;
-//                for (i=0; i<n.length; i++){
-//                    real[i][0]=n[i][0];
-//                    real[i][1]=n[i][1];
-//                    real[i][2]=n[i][2];
-//                    real[i][3]=n[i][3];
-//                    
-//                }
-//                for (i=n.length; i<13; i++){
-//                    real[i][0]=null;
-//                    real[i][1]=null;
-//                    real[i][2]=null;
-//                    real[i][3]=null;
-//                }      
-//            }else
-//                real=n;
-//            
-//            jTable1.setModel(new javax.swing.table.DefaultTableModel(
-//                    real,new String[] {"","","",""}));
-//            
-//            jTable1.setDefaultRenderer(Object.class, r);
-//            
-//            jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-//            jTable1.getColumnModel().getColumn(1).setPreferredWidth(166);
-//            jTable1.getColumnModel().getColumn(2).setPreferredWidth(166);
-//            jTable1.getColumnModel().getColumn(3).setPreferredWidth(80);
-//        }catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                menu,new String[] {"","","",""}));
+
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(30);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
     }
 
     /**
@@ -152,6 +155,10 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        jTable1 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -204,13 +211,12 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton4.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Botones/Quitar_hover.png"))); // NOI18N
 
+        jTable2 = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex,int columnIndex){
+                return false;}
+        };
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            null,
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
@@ -218,6 +224,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jTable2.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         jTable2.setPreferredSize(new java.awt.Dimension(310, 64));
         jScrollPane2.setViewportView(jTable2);
+        jTable2.setTableHeader(null);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(53, 95, 123));
