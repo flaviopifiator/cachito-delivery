@@ -511,6 +511,12 @@ public class Asignar_pedido extends javax.swing.JFrame implements Runnable{
 
  @Override
     public void run() {
-
+        Fecha f = new Fecha();
+        fecha=f;
+        Thread ct = Thread.currentThread();
+        while(ct==h1){
+            JL_Fecha_Admin1.setText(fecha.getFecha());
+            JL_Hora_Admin1.setText(fecha.getHora());
+        }
     }
 }
