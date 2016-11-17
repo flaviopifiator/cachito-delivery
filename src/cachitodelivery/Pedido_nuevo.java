@@ -522,6 +522,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
         String seleccion = JOptionPane.showInputDialog(jButton3,"Cantidad de comidas",1);
         
         if(seleccion==null)
@@ -603,6 +604,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     private void jTable2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MousePressed
         seleccionarTabla2();
     }//GEN-LAST:event_jTable2MousePressed
+
 
     /**
      * @param args the command line arguments

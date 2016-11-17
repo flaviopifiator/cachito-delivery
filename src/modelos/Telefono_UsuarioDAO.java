@@ -129,9 +129,9 @@ public class Telefono_UsuarioDAO {
                 PreparedStatement ps = con.prepareStatement("INSERT INTO telefonos_usuarios"
                     + "            (cod_usuario, telefono_usuario, descripcion)"
                     + "             VALUES (?,?,?) ");
-                ps.setInt(1, Integer.parseInt(telefonos[i][0].toString()));
-                ps.setString(2, telefonos[i][1].toString());
-                ps.setString(3, telefonos[i][2].toString());
+                ps.setInt(1, Integer.parseInt(telefonos[i][0].toString().trim()));
+                ps.setString(2, telefonos[i][1].toString().trim());
+                ps.setString(3, telefonos[i][2].toString().trim());
                 ps.execute();
                 ps.close();
                 
@@ -162,8 +162,8 @@ public class Telefono_UsuarioDAO {
         Object[][] tel = new Object[tam][2];
         int i=0;
         while(rs.next()){
-            tel[i][0]=rs.getString(3);
-            tel[i][1]=rs.getString(2);
+            tel[i][0]=rs.getString(3).trim();
+            tel[i][1]=rs.getString(2).trim();
             i++;
         }
         rs.close();

@@ -48,6 +48,7 @@ public class Fecha {
                 
             if(Calendar.PM==1)
                 hora=Integer.toString(fecha.get(Calendar.HOUR)+12);
+                
             else
                 if(Calendar.HOUR<10)
                     hora="0"+Integer.toString(fecha.get(Calendar.HOUR));

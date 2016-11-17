@@ -161,6 +161,9 @@ public class Principal extends javax.swing.JFrame implements Runnable{
     
     private void ingresoSistema(){
         try{
+            if(JTF_IdUser.getText().isEmpty() || JPF_PassUser.getText().isEmpty()){
+                JOptionPane.showMessageDialog(rootPane, "No se permiten campos vacios.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
+            }
             Usuario user = new Usuario();
 
             String pass;
@@ -201,7 +204,8 @@ public class Principal extends javax.swing.JFrame implements Runnable{
                 JOptionPane.showMessageDialog(rootPane, "USUARIO o CONTRASEÑA incorrectos.","Error al iniciar sesión",JOptionPane.ERROR_MESSAGE);
             }
         }catch (DataAccessException | UsuarioInexistenteException ex) {JOptionPane.showMessageDialog(rootPane, ex);
-        }  
+        }
+         catch(NumberFormatException ex){}
     }
     
     
