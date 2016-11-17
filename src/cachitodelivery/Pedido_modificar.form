@@ -2,7 +2,7 @@
 
 <Form version="1.6" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="0"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -295,7 +295,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="iniciarListado();"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="menu();&#xa;iniciarListado();"/>
           </AuxValues>
         </Component>
       </SubComponents>

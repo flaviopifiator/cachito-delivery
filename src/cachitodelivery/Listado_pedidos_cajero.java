@@ -17,6 +17,7 @@ import modelos.Cadena;
 import modelos.CajaDAO;
 import modelos.Cliente;
 import modelos.Fecha;
+import modelos.Pedido;
 import modelos.PedidoDAO;
 import modelos.Render;
 import modelos.Usuario;
@@ -660,10 +661,21 @@ public class Listado_pedidos_cajero extends javax.swing.JFrame implements Runnab
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        setVisible(false);
-        this.h1.stop();
-        Pedido_modificar vent = new Pedido_modificar(cuentaOficial, new Cliente());
-        vent.mostrar(true);
+                PedidoDAO dao = new PedidoDAO();
+        try {
+            Pedido ped = dao.buscarPedido(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().trim()));
+            setVisible(false);
+            this.h1.stop();
+            Pedido_modificar vent = new Pedido_modificar(cuentaOficial, ped);
+            vent.mostrar(true);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Listado_pedidos_admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DataAccessException ex) {
+            Logger.getLogger(Listado_pedidos_cajero.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed

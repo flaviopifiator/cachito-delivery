@@ -467,5 +467,36 @@ public class ClienteDAO {
         }
         return tam;
     }
+    
+    public Cliente buscarClienteCod(int codigo) throws DataAccessException{
+        try{
+            Connection con = BaseDeDatos.getInstance();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM clientes where cod_cliente="+codigo);
+            Cliente cliente = null;
+             while(rs.next())
+            {
+            cliente = new Cliente();
+                cliente.setCodigo(rs.getInt(1));
+                cliente.setNombre(rs.getString(2).trim());
+                cliente.setApellido(rs.getString(3).trim());
+                cliente.setFecha_nacimiento(rs.getString(4).trim());
+                cliente.setCalle(rs.getString(5));
+                cliente.setNumero_calle(rs.getString(6).trim());
+                cliente.setBarrio(rs.getString(7).trim());
+                cliente.setDepartamento(rs.getString(8).trim());
+                cliente.setCasa(rs.getString(9).trim());
+                cliente.setLocalidad(rs.getString(10).trim());
+                cliente.setObservacion(rs.getString(11).trim());
+                cliente.setActivo(rs.getBoolean(12));
+                int cod_zona=rs.getInt(13);
+            }   
+            
+            rs.close();
+            st.close();
+            return cliente;
+        }catch (Exception ex){throw new DataAccessException("Error en ClienteDAO.buscarCliente() "+ex);}
+   
+    }
 }
 

@@ -5,6 +5,7 @@
  */
 package cachitodelivery;
 
+import Excepciones.DataAccessException;
 import Ventana_clases.Fondo_caja_liquidacion;
 import Ventana_clases.Fondo_listado_pedidos_admin;
 import Ventana_clases.Fondo_listado_pedidos_cajero;
@@ -16,6 +17,7 @@ import modelos.Cadena;
 import modelos.Cliente;
 import modelos.ClienteDAO;
 import modelos.Fecha;
+import modelos.Pedido;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
 
@@ -34,12 +36,14 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
     float total=0;
     int demora=0;
     
-    public Pedido_modificar(Usuario user, Cliente cli) {
+    public Pedido_modificar(Usuario user, Pedido ped) throws DataAccessException {
         initComponents();
         h1= new Thread(this);
         h1.start();
         Fondo_pedido_nuevo fondo = new Fondo_pedido_nuevo (1028,600);
         this.add(fondo, BorderLayout.CENTER);
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cli = dao.buscarClienteCod(ped.getCod_cliente());
         JL_Usuario_admin1.setText("USUARIO: "+user.getApellido().trim()+" "+user.getNombre().trim());
         String nombre ="APPELIDO Y NOMBRE: "+cli.getApellido().trim()+" "+cli.getNombre().trim();
         String domicilio= "DOMICILIO: "+cli.getCalle().trim()+" "+cli.getNumero_calle().trim()+" "+
@@ -60,23 +64,7 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
         setVisible(b);
     }
     
-    public void iniciarListado() {
-        jButton3.setEnabled(false);
-        jButton4.setEnabled(false);
-
-        jTable1.setTableHeader(null);
-        
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                menu,new String[] {"","","",""}));
-
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
-        jTable1.getColumnModel().getColumn(2).setPreferredWidth(30);
-        jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
-    }
-    
-       public void menu(){
+    public void menu(){
         try{
             ClienteDAO user =new ClienteDAO();
             Object [][] real = new Object[13][4];
@@ -106,6 +94,24 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
             System.out.println(ex.getMessage());
         }
     }
+    
+    public void iniciarListado() {
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
+
+        jTable1.setTableHeader(null);
+        
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                menu,new String[] {"","","",""}));
+
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(30);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
+    }
+    
+       
     
     public void seleccionarTabla1(){
         if (jTable1.getSelectedRow()==-1 || jTable1.getValueAt(jTable1.getSelectedRow(),0)==null){
@@ -172,7 +178,7 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
         jLabel4 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         JL_Usuario_admin1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         JL_Usuario_admin1.setForeground(new java.awt.Color(255, 255, 255));
@@ -207,6 +213,7 @@ public class Pedido_modificar extends javax.swing.JFrame implements Runnable{
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
+        menu();
         iniciarListado();
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
