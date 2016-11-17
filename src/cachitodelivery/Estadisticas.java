@@ -45,7 +45,7 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
     public Estadisticas(Usuario user) throws SQLException {
         initComponents();
         h1= new Thread(this);
-//        h1.start();
+        h1.start();
 
         colorHeader(3);
         
@@ -399,8 +399,8 @@ public class Estadisticas extends javax.swing.JFrame implements Runnable  {
     
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
+            this.h1.stop();
             Principal vent = new Principal();
-        
             vent.MenuAdminVisible(true, cuentaOficial);
             this.dispose();
         } catch (DataAccessException ex) {

@@ -44,11 +44,14 @@ public class Fecha {
 
             if (fecha.get(Calendar.MINUTE)<10)
                 min="0"+Integer.toString(fecha.get(Calendar.MINUTE));
+            
+                
             if(Calendar.PM==1)
                 hora=Integer.toString(fecha.get(Calendar.HOUR)+12);
             else
-                if(fecha.get(Calendar.HOUR)<10)
+                if(Calendar.HOUR<10)
                     hora="0"+Integer.toString(fecha.get(Calendar.HOUR));
+            
 
 
             return hora+":"+min;

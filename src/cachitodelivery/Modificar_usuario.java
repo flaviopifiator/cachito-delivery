@@ -50,7 +50,7 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
     public Modificar_usuario(Usuario vt, Usuario user) throws IOException, SQLException, ClassNotFoundException {
         initComponents();
         h1= new Thread(this);
-//        h1.start();
+        h1.start();
         Fondo_modificar_usuario fondo = new Fondo_modificar_usuario(1000,667);
         this.add(fondo, BorderLayout.CENTER);
         cuenta = vt;
@@ -566,7 +566,7 @@ public class Modificar_usuario extends javax.swing.JFrame implements Runnable{
         setVisible(false);
         
         try {        
-            
+            this.h1.stop();
             Listado_empleados vtListaEmpleados= new Listado_empleados(cuenta);
             vtListaEmpleados.mostrar(true);
         } catch (SQLException ex) {
