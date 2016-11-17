@@ -96,7 +96,7 @@ public class CadeteDAO {
                 cadete.setNombre(rs.getString("nombre_cadete").trim());
                 cadete.setApellido(rs.getString("apellido_cadete").trim());
                 cadete.setEstado(rs.getInt("estado_cadete"));
-                cadete.setFoto(rs.getString("foto_cadete").trim());
+                //adete.setFoto(rs.getString("foto_cadete").trim());
                 cadete.setActivo(rs.getBoolean("activo"));
             }   
             
@@ -121,8 +121,8 @@ public class CadeteDAO {
             while(rs.next())
             {
                 lista[i][0] = rs.getInt("cod_cadete");
-                lista[i][1] = rs.getString("apellido_cadete");
-                lista[i][2] = rs.getString("nombre_cadete");
+                lista[i][1] = rs.getString("apellido_cadete").trim();
+                lista[i][2] = rs.getString("nombre_cadete").trim();
                 if(rs.getBoolean("activo")==true){
                     lista[i][3]="Cadete";
                 }else
@@ -150,8 +150,8 @@ public class CadeteDAO {
             while(rs.next())
             {
                 lista[i][0] = rs.getInt("cod_cadete");
-                lista[i][1] = rs.getString("apellido_cadete");
-                lista[i][2] = rs.getString("nombre_cadete");
+                lista[i][1] = rs.getString("apellido_cadete").trim();
+                lista[i][2] = rs.getString("nombre_cadete").trim();
                 lista[i][3]="Cadete";
                 i++;
             }
