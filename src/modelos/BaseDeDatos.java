@@ -20,7 +20,7 @@ public class BaseDeDatos {
             String url = "jdbc:postgresql://localhost:5432/cachito";  
             String driver = "org.postgresql.Driver";
             String user = "postgres";
-            String pass = "postgres";
+            String pass = "1234";
             Class.forName(driver);
             instance = DriverManager.getConnection(url, user, pass);
         }
