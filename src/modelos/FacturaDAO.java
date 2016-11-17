@@ -42,7 +42,8 @@ public class FacturaDAO {
         rs.close();
         for (int j = 0; j < tabla.length; j++) {
             rs = st.executeQuery("SELECT * FROM comidas WHERE cod_comida = "+Integer.parseInt(tabla[j][0].toString()));
-            tabla[j][0]=rs.getFloat("precio_comida");
+            while(rs.next())
+                tabla[j][0]=rs.getFloat("precio_comida");
             rs.close();
         }
         for (int j = 0; j < tabla.length; j++) {
@@ -52,11 +53,14 @@ public class FacturaDAO {
         return total;
     }
     public float tarifaZona(int cod) throws ClassNotFoundException, SQLException{
+        PedidoDAO ped = new PedidoDAO();
+        Pedido pedido = ped.buscarPedido(cod);
         Connection con = BaseDeDatos.getInstance();
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM zonas WHERE cod_zona = "+pedido.getCod_zona());
         float total = 0;
-        total = rs.getFloat("tarifa_zona");
+        while(rs.next())
+            total = rs.getFloat("tarifa_zona");
         rs.close();
         st.close();
         return total;
@@ -82,5 +86,18 @@ public class FacturaDAO {
             PedidoDAO ped = new PedidoDAO();
             ped.actualizarEstadoPedido(pedido, 3);
         }catch(Exception ex){throw new DataAccessException("Error en UsuarioDAO.agregar() "+ex);}
+    }
+    
+    public int zona(String zona) throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM zonas WHERE descripcion_zona = '"+zona+"'");
+        int i =-1;
+        while(rs.next()){
+            i=rs.getInt("cod_zona");
+        }
+        rs.close();
+        st.close();
+        return i;
     }
 }
