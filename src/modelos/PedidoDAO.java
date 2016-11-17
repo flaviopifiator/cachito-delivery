@@ -606,49 +606,7 @@ public class PedidoDAO {
             ps.close();
         }catch (ClassNotFoundException | SQLException ex){throw new DataAccessException("Error en PedidoDAO.ActualizarEstadoPedido() "+ex);}
     }
-    public Object[][] pedidosListos() throws DataAccessException, DataAccessException{
-        try{
-            Connection con = BaseDeDatos.getInstance();
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(
-             "SELECT * FROM clientes, zonas, pedidos WHERE " +
-             "pedidos.cod_cliente = clientes.cod_cliente AND pedidos.cod_zona = zonas.cod_zona AND "+ 
-             "pedidos.estado_pedido = 2 ORDER BY pedidos.cod_pedido ASC");
-            int tam=0;
-            while(rs.next())
-                tam++;
-            Object[][] lista = new Object[tam][4];
-            int i=0;
-            rs.close();
-            rs = st.executeQuery(
-             "SELECT * FROM clientes, zonas, pedidos WHERE " +
-             "pedidos.cod_cliente = clientes.cod_cliente AND pedidos.cod_zona = zonas.cod_zona AND "+ 
-             "pedidos.estado_pedido = 2 ORDER BY pedidos.cod_pedido ASC");
-            
-            while(rs.next())
-            {
-                lista[i][0] = rs.getInt("cod_pedido");
-                lista[i][1] = rs.getString("apellido_cliente").trim()+" "+rs.getString("nombre_cliente").trim();
-                lista[i][2] = rs.getString("calle_cliente").trim()+" "+
-                              rs.getString("num_calle_cliente").trim()+" "+
-                              rs.getString("barrio_cliente").trim()+" "+
-                              rs.getString("departamento_cliente").trim()+" "+
-                              rs.getString("casa_cliente").trim()+" "+
-                              rs.getString("localidad_cliente").trim();
-                lista[i][3] = rs.getString("descripcion_zona");
-                i++;
-            }
-
-
-            rs.close();
-            st.close();
-
-            return lista;
-
-        }
-    catch (Exception ex){throw new DataAccessException("Error en PedidoDAO.ListadoPedidosActivos() "+ex);}
-       
-    }
+    
 
     
 }
