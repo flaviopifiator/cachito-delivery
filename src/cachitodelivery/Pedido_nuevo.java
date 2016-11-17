@@ -10,12 +10,16 @@ import Ventana_clases.Fondo_listado_pedidos_admin;
 import Ventana_clases.Fondo_listado_pedidos_cajero;
 import Ventana_clases.Fondo_pedido_nuevo;
 import java.awt.BorderLayout;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import modelos.Cadena;
 import modelos.Cliente;
 import modelos.ClienteDAO;
 import modelos.Fecha;
+import modelos.Pedido;
 import modelos.Usuario;
 import modelos.UsuarioDAO;
 
@@ -31,6 +35,8 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     Cliente clientePedido = new Cliente();
     Object[][] menu;
     Object[][] comidas = new Object[0][2];
+    float total=0;
+    int demora=0;
     
     public Pedido_nuevo(Usuario user, Cliente cli) {
         initComponents();
@@ -94,6 +100,7 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jButton4.setEnabled(false);
 
         jTable1.setTableHeader(null);
+        
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 menu,new String[] {"","","",""}));
@@ -123,6 +130,8 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         jButton4.setEnabled(true);
         jButton3.setEnabled(false);
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -515,6 +524,48 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            
+            if(comidas.length==0){
+                JOptionPane.showMessageDialog (null, "No se agregaron comidas", "Pedido sin comidas", JOptionPane.ERROR_MESSAGE); 
+                return;
+            }
+ 
+            ClienteDAO cliente = new ClienteDAO();
+            int cod_detalle=cliente.ultimoDetalle()+1;
+            
+            Object[][] aux = new Object[comidas.length][3];
+            
+            for(int i=0; i<comidas.length;i++){
+                aux[i][0]=cod_detalle;
+                aux[i][1]=cliente.obtenerCodComida(comidas[i][0].toString());
+                aux[i][2]=comidas[i][1]; 
+            }
+            cliente.insertarDetalle(aux);
+            
+            cliente.actualizarComidas(menu);
+            Pedido ped = new Pedido();
+            int cod_zona=cliente.buscarZonaCliente(clientePedido.getCodigo());
+            ped.setCod_zona(cod_zona);
+            ped.setCod_cliente(clientePedido.getCodigo());
+            ped.setCod_detalle(cod_detalle);
+            ped.setEstado(0);
+            ped.setFecha(fecha.getFecha());
+            ped.setObservacion(jTextArea2.getText());
+            ped.setCod_usuario(cuentaOficial.getCod());
+            ped.setHora(fecha.getHora());
+
+            cliente.insertarPedido(ped);
+            
+            
+            
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Pedido_nuevo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Pedido_nuevo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JOptionPane.showMessageDialog(jButton6,"Pedido registrado con exito");
         setVisible(false);
         this.h1.stop();
         Listado_clientes vent = new Listado_clientes(cuentaOficial);
@@ -545,15 +596,12 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
         if(comidas.length==0){
            comidas = new Object[comidas.length+1][2];
            comidas[0][0]=jTable1.getValueAt(jTable1.getSelectedRow(), 1);
-           comidas[0][1]=cant;
-           for(int i=0; i<menu.length;i++)
-                if(menu[i][1].equals(jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim()))
-                    menu[i][3]=cantMenu;     
+           comidas[0][1]=cant;    
         }
         else{
             
             for(int i=0; i<comidas.length;i++){
-                if(comidas[i][0].equals(jTable1.getValueAt(jTable1.getSelectedRow(), 1))){
+                if(comidas[i][0].toString().trim().equals(jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim())){
                     JOptionPane.showMessageDialog (null, "Comida ya agregada", "Comida repetida", JOptionPane.ERROR_MESSAGE); 
                     return;
                 }       
@@ -562,10 +610,6 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
             Object[][] com = comidas;
 
             comidas = new Object[comidas.length+1][2];
-            
-            for(int i=0; i<menu.length;i++)
-                if(menu[i][1].equals(jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString().trim()))
-                    menu[i][3]=cantMenu;
             
             for(int i=0; i<comidas.length;i++){
                 
@@ -578,6 +622,27 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
                 }    
             }
         }
+        
+        total=total+(Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString()))*cant;
+        jLabel9.setText("SUBTOTAL: "+total);
+        ClienteDAO cliente = new ClienteDAO();
+        try {
+            float tarifa=cliente.obtenerTarifa(clientePedido.getCodigo());
+            int dem=cliente.obtenerDemora(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().trim()))*cant;
+            demora=demora+dem;
+            jLabel10.setText("TOTAL: "+(total+tarifa));
+            jLabel11.setText("DEMORA: "+demora);
+        } catch (SQLException ex) {
+            Logger.getLogger(Pedido_nuevo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Pedido_nuevo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        for(int i=0; i<menu.length;i++)
+         if(menu[i][0] == jTable1.getValueAt(jTable1.getSelectedRow(), 0))
+             menu[i][3]=cantMenu; 
+        
         iniciarListado();
                 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
@@ -586,7 +651,66 @@ public class Pedido_nuevo extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        int confirmado = JOptionPane.showConfirmDialog(
+        jButton4,
+        "¿Quitar la comida seleccionada?");
+
+     if (JOptionPane.OK_OPTION != confirmado)
+        return;
+     
+            Object[][] com = comidas;
+            comidas = new Object[com.length-1][2];
+            int cant = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 1).toString());
+            int j=0;
+            int k=0;
+            for(int i=0; i<com.length;i++){
+                if(com[i][0].toString().trim().equals(jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString().trim())){
+                    j++;
+                }else{
+                    comidas[k][1]=com[i][1];
+                    comidas[k][0]=com[i][0];
+                    k++;
+                }    
+            }
+
+            
+            for(int i=0; i<menu.length;i++){
+                if(menu[i][1].toString().trim().equals(jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString().trim())){
+                    menu[i][3]=Integer.parseInt(menu[i][3].toString())+cant;
+                    i=menu.length;
+                }
+                    
+            }
+            iniciarListado();
+            ClienteDAO cliente = new ClienteDAO();
+            float precio=0;
+            if(comidas.length>0){
+                try {
+            
+                precio=cliente.obtenerPrecio(cliente.obtenerCodComida(jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString().trim()));
+                total=total-precio*cant;
+                jLabel9.setText("SUBTOTAL: "+total);
+
+                float tarifa=cliente.obtenerTarifa(clientePedido.getCodigo());
+                int dem=cliente.obtenerDemora(Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString().trim()))*cant;
+                demora=demora-dem;
+                jLabel10.setText("TOTAL: "+(total+tarifa));
+                jLabel11.setText("DEMORA: "+demora);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Pedido_nuevo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Pedido_nuevo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else{
+                jLabel9.setText("");
+                jLabel10.setText("");
+                jLabel11.setText("");
+            }
+ 
+            jTable2.setModel(new javax.swing.table.DefaultTableModel(
+                        comidas,new String[] {"",""}));
+         
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased

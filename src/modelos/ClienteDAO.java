@@ -363,5 +363,109 @@ public class ClienteDAO {
         st.close();
         return lista;
     }
+    
+    public void insertarDetalle(Object[][] detalle) throws ClassNotFoundException, SQLException{
+        for(int i=0; i<detalle.length;i++){
+                Connection con = BaseDeDatos.getInstance();
+                PreparedStatement ps = con.prepareStatement("INSERT INTO detalle_pedido "
+                    + "            (cod_detalle_pedido, cod_comida, cantidad_comida)"
+                    + "             VALUES (?,?,?) ");
+                ps.setInt(1, Integer.parseInt(detalle[i][0].toString().trim()));
+                ps.setInt(2, Integer.parseInt(detalle[i][1].toString().trim()));
+                ps.setInt(3, Integer.parseInt(detalle[i][2].toString().trim()));
+                ps.execute();
+                ps.close();  
+            }
+    }
+    
+    public int buscarZonaCliente(int cod) throws SQLException, ClassNotFoundException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT cod_zona FROM clientes WHERE cod_cliente='"+cod+"'");
+        while(rs.next())
+            return rs.getInt(1);
+        return -1;
+    }
+    
+    public void actualizarComidas(Object[][] comidas) throws ClassNotFoundException, SQLException{
+        for(int i=0; i<comidas.length;i++){
+            if(comidas[i][0]!=null){
+                int cod = Integer.parseInt(comidas[i][0].toString().trim());
+                int cant = Integer.parseInt(comidas[i][3].toString().trim());
+                Connection con = BaseDeDatos.getInstance();
+                PreparedStatement ps = con.prepareStatement("UPDATE comidas SET "
+                    + "cantidad_comida = "+cant+" WHERE cod_comida="+cod);
+                ps.execute();
+                ps.close();
+            }
+              
+        }
+    }
+    
+    public void insertarPedido(Pedido ped) throws SQLException, ClassNotFoundException{
+        Connection con = BaseDeDatos.getInstance();
+                PreparedStatement ps = con.prepareStatement("INSERT INTO pedidos "
+                    + "( cod_zona, cod_cliente, cod_detalle_pedido, estado_pedido, fecha_pedido, observacion_pedido, cod_usuario, hora_pedido) "
+                    + "             VALUES (?,?,?,?,?,?,?,?) ");
+                ps.setInt(1, ped.getCod_zona());
+                ps.setInt(2, ped.getCod_cliente());
+                ps.setInt(3, ped.getCod_detalle());
+                ps.setInt(4, ped.getEstado());
+                ps.setString(5, ped.getFecha());
+                ps.setString(6, ped.getObservacion());
+                ps.setInt(7, ped.getCod_usuario());
+                ps.setString(8, ped.getHora());
+                ps.execute();
+                ps.close();  
+    }
+    
+    public int obtenerCodComida(String desc) throws SQLException, ClassNotFoundException{
+        desc=desc.trim();
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT cod_comida FROM comidas WHERE descripcion_comida='"+desc+"'");
+        while(rs.next())
+            return rs.getInt(1);
+        return -1;
+    }
+    
+    public int obtenerDemora(int cod) throws SQLException, ClassNotFoundException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT demora_comida FROM comidas WHERE cod_comida="+cod);
+        while(rs.next())
+            return rs.getInt(1);
+        return -1;
+    }
+    
+    public float obtenerPrecio(int cod) throws SQLException, ClassNotFoundException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT precio_comida FROM comidas WHERE cod_comida="+cod);
+        while(rs.next())
+            return rs.getInt(1);
+        return -1;
+    }
+    
+    public float obtenerTarifa(int cod) throws SQLException, ClassNotFoundException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT zonas.tarifa_zona FROM zonas, clientes WHERE zonas.cod_zona=clientes.cod_zona AND clientes.cod_cliente="+cod);
+        while(rs.next())
+            return rs.getFloat(1);
+        return -1;
+    }
+    
+    public int ultimoDetalle() throws ClassNotFoundException, SQLException{
+        Connection con = BaseDeDatos.getInstance();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM detalle_pedido");
+        int tam=-1;
+        while(rs.next()){
+            if(tam<rs.getInt(1))
+                tam=rs.getInt(1);
+        }
+        return tam;
+    }
 }
 
